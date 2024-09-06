@@ -1,0 +1,185 @@
+<div class="w-12/12">
+  <div class="flex flex-col">
+    <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+      <div class="row" style="width: 100% !important;">
+        <div class="col-sm-12">
+          <div class="buttons-row flex lg:flex-row flex-col mb-3 gap-3 items-start">
+            <mat-form-field appearance="fill" class="w-40">
+              <mat-label>Filtrar Por:</mat-label>
+              <mat-select [(ngModel)]="selectedFiltro" (ngModelChange)="aplicarFiltros()">
+                <mat-option value="MesAnio">MES</mat-option>
+                <!-- <mat-option value="EntreFechas">ENTRE FECHAS</mat-option> -->
+              </mat-select>
+            </mat-form-field>
+          
+            <mat-form-field appearance="fill" class="w-40" *ngIf="selectedFiltro == 'MesAnio'">
+              <mat-label>Fecha</mat-label>
+              <input matInput [matDatepicker]="picker" [formControl]="date">
+              <!-- <mat-hint>MM/YYYY</mat-hint> -->
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker
+                              startView="multi-year"
+                              (monthSelected)="setMonthAndYear($event, picker)"
+                              panelClass="example-month-picker">
+              </mat-datepicker>
+            </mat-form-field>
+          
+            <mat-form-field appearance="fill" class="w-40" *ngIf="selectedFiltro == 'EntreFechas'">
+              <mat-label>Desde</mat-label>
+              <input matInput [matDatepicker]="pickerInicio" [formControl]="dateInicio" [(ngModel)]="selectedFechaInicio" (dateChange)="setDayMonthYear($event.value, pickerInicio)">
+              <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+              <mat-datepicker #pickerInicio></mat-datepicker>
+            </mat-form-field>
+          
+            <mat-form-field appearance="fill" class="w-40" *ngIf="selectedFiltro == 'EntreFechas'">
+              <mat-label>Hasta</mat-label>
+              <input matInput [matDatepicker]="pickerFin" [formControl]="dateFin" [(ngModel)]="selectedFechaFin" (dateChange)="setDayMonthYear($event.value, pickerFin)" >
+              <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFin></mat-datepicker>
+            </mat-form-field>
+          </div>
+          
+        </div>
+      </div>
+      <div class="row" style="width: 100% !important;">
+        <div class="col-sm-12">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-header">
+                    <span class="title">Tickets Totales</span>
+                  </div>
+                  <div class="card-content">
+                    <apx-chart
+                      [series]="chartOptions4.series!"
+                      [chart]="chartOptions4.chart"
+                      [labels]="chartOptions4.labels"
+                      [dataLabels]="chartOptions4.dataLabels"
+                      [title]="chartOptions4.title"
+                      [states]="chartOptions4.states"
+                      [plotOptions]="chartOptions4.plotOptions"
+                      [stroke]="chartOptions4.stroke"
+                      [responsive]="chartOptions4.responsive"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-header">
+                    <span class="title">Tickets por Coordinación</span>
+                  </div>
+                  <div class="card-content">
+                    <apx-chart
+                      [series]="chartOptions2.series!"
+                      [chart]="chartOptions2.chart"
+                      [labels]="chartOptions2.labels"
+                      [responsive]="chartOptions2.responsive">
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="card">
+                  <div class="card-header">
+                    <span class="title">Tickets por Tipología</span>
+                  </div>
+                  <div class="card-content">
+                    <apx-chart
+                      [series]="chartOptions3.series!"
+                      [chart]="chartOptions3.chart"
+                      [labels]="chartOptions3.labels"
+                      [responsive]="chartOptions3.responsive">
+                    </apx-chart>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-header">
+                    <span class="title">Top 10 Organizaciones</span>
+                  </div>
+                  <div class="card-content">
+                    <apx-chart
+                      [series]="chartOptions5.series!"
+                      [chart]="chartOptions5.chart"
+                      [dataLabels]="chartOptions5.dataLabels"
+                      [plotOptions]="chartOptions5.plotOptions"
+                      [yaxis]="chartOptions5.yaxis"
+                      [xaxis]="chartOptions5.xaxis"
+                      [stroke]="chartOptions5.stroke"
+                      [grid]="chartOptions5.grid"
+                      [fill]="chartOptions5.fill"
+                    ></apx-chart>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="card">
+                  <div class="card-header">
+                    <span class="title">Top 10 Servicios</span>
+                  </div>
+                  <div class="card-content">
+                    <table class="catalog-table">
+                      <thead>
+                        <tr>
+                          <th>Descripción</th>
+                          <th>Cantidad</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let catalogo of catalogos">
+                          <td colspan="2">
+                            <mat-expansion-panel class="catalog-panel" [expanded]="catalogo.expanded" (opened)="toggleNode(catalogo)" (closed)="toggleNode(catalogo)" [disabled]="!catalogo.children.length" hideToggle>
+                              <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                  <span class="description">{{ catalogo.name }}</span>
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                  <span class="quantity">{{ catalogo.cantidad }}</span>
+                                </mat-panel-description>
+                                <mat-icon *ngIf="catalogo.children.length" class="expand-icon">expand_more</mat-icon>
+                              </mat-expansion-panel-header>
+                              <div *ngIf="catalogo.children.length" class="child-panel">
+                                <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: catalogo.children }"></ng-container>
+                              </div>
+                            </mat-expansion-panel>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  
+                    <ng-template #recursiveList let-children>
+                      <table class="catalog-table nested">
+                        <tbody>
+                          <tr *ngFor="let child of children">
+                            <td colspan="2">
+                              <mat-expansion-panel class="catalog-panel" hideToggle [expanded]="child.expanded" (opened)="toggleNode(child)" (closed)="toggleNode(child)" [disabled]="!child.children.length">
+                                <mat-expansion-panel-header>
+                                  <mat-panel-title>
+                                    <span class="description">{{ child.name }}</span>
+                                  </mat-panel-title>
+                                  <mat-panel-description>
+                                    <span class="quantity">{{ child.cantidad }}</span>
+                                  </mat-panel-description>
+                                  <mat-icon *ngIf="child.children.length" class="expand-icon">expand_more</mat-icon>
+                                </mat-expansion-panel-header>
+                                <div *ngIf="child.children.length" class="child-panel">
+                                  <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: child.children }"></ng-container>
+                                </div>
+                              </mat-expansion-panel>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </ng-template>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+  </div>
+</div>
+</div>

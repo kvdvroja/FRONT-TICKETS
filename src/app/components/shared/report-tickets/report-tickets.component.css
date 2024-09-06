@@ -1,0 +1,31 @@
+/* archivo report-tickets.component.css */
+.mat-mdc-table .mdc-data-table__header-row {
+    background-color: #166fd4; /* Color de fondo del header */
+    color: white; /* Color del texto */
+    font-weight: bold; /* Texto en negrita */
+    text-align: center; /* Centrar el texto */
+    padding: 10px; /* Padding para el texto */
+    border-right: 1px solid #e0e0e0; /* Borde derecho */
+}
+th.mat-mdc-header-cell.mdc-data-table__header-cell.cdk-header-cell {
+    color: #fff;
+}
+.mat-header-row {
+    height: 50px; /* Altura del header */
+}
+
+.table-container {
+    overflow-x: auto; /* Hacer la tabla responsive */
+}
+
+.mat-cell {
+    text-align: center; /* Centrar el texto de las celdas */
+    padding: 10px; /* Padding para el texto */
+}
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}

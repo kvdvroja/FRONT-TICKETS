@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Editar Respuesta</h1>
+<div mat-dialog-content class="break-all">
+  <quill-editor [(ngModel)]="descEditor"
+    [modules]="editorConfig"
+    (onEditorCreated)="setEditorInstance($event)"
+    (onContentChanged)="onEditorChange($event)"
+    style="height: 300px;">
+  </quill-editor>
+
+  <!-- Lista de archivos adjuntos existentes -->
+  <div *ngIf="existingAdjuntos.length > 0" class="mt-4">
+    <h3>Archivos Adjuntos</h3>
+    <ul>
+      <li *ngFor="let adjunto of existingAdjuntos">
+        <a [href]="adjunto.url" target="_blank">{{ adjunto.nombre }}</a>
+        <button mat-icon-button color="warn" (click)="removeAdjunto(adjunto.id!)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Input para seleccionar nuevos archivos -->
+  <div class="mt-4">
+    <input type="file" (change)="onFileSelected($event)" multiple>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-button (click)="onSave()">Guardar</button>
+</div>

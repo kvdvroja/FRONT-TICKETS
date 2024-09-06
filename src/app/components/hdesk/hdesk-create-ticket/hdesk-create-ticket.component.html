@@ -1,0 +1,230 @@
+<div class="spinner-container" *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<div class="container lg:m-4 w-full">
+  <div class="flex justify-between text-xl my-3 lg:my-5 text-gray-500">
+    <b>Registro Ticket</b>
+    <div class="lg:mr-5">
+      <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
+          <p class="flex justify-center items-center text-center m-auto gap-1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"/></svg>
+              Regresar
+          </p>
+      </button></div>
+</div>
+    <form #ticketForm="ngForm" (ngSubmit)="createTicket()">
+      <div class="lg:flex lg:flex-wrap gap-5">
+
+        <div class="flex flex-col flex-1 gap-3">
+
+          <div class="flex flex-col lg:flex-row gap-2">
+                    <div class="flex gap-2">
+                        <mat-form-field appearance="fill" class="w-full">
+                            <mat-label>ID Usuario</mat-label>
+                            <input matInput maxlength="9" [(ngModel)]="ticket.idUsuario" name="idUsuario" #idUsuario="ngModel" required (change)="buscarUsuarioPorId()" (keyup.enter)="buscarUsuarioPorId()">
+                            <button (click)="buscarUsuarioPorId()" matSuffix class="flex items-center justify-center border-2 bg-blue-600 rounded-md shadow-border mr-2" type="button" style="width:30px; height:30px;">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#ffffff" d="M8 19V5l11 7z"/></svg>
+                            </button>
+                        </mat-form-field>
+                        <div class="mb-3 flex lg:hidden flex-col justify-start">
+                          <button (click)="openUserSearchDialog()" class="flex items-center justify-center border-2 bg-blue-600 rounded-md shadow-border" type="button" style="width:54px; height:54px;">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="#ffffff" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"/></svg>
+                          </button>
+                      </div>
+                    </div>
+                    <mat-form-field appearance="fill" class="w-full">
+                        <mat-label>Nombre</mat-label>
+                        <input matInput [(ngModel)]="ticket.nombre" name="nombre" required [disabled]="true">
+                      </mat-form-field>
+                
+                    <div class="mb-3 hidden lg:flex flex-col justify-start">
+                        <button (click)="openUserSearchDialog()" class="flex items-center justify-center border-2 bg-blue-600 rounded-md shadow-border" type="button" style="width:54px; height:54px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="#ffffff" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Asunto -->
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Asunto</mat-label>
+                    <input matInput [(ngModel)]="ticket.asunto" name="asunto" required>
+                </mat-form-field>
+      
+                <!-- Detalle -->
+                <div class="mb-3 container break-all" style="overflow-wrap: break-word;">
+                  <label for="detalle" class="form-label text-gray-500"><b>Descripción:</b></label>
+                  <quill-editor class="break-all" [(ngModel)]="descEditor"
+                  [modules]="editorConfig"
+                  (onEditorCreated)="setEditorInstance($event)"
+                  (onContentChanged)="onEditorChange($event)"
+                  style="height: 300px;">
+                  </quill-editor>
+              </div>
+    
+                <!-- Adjunto -->
+                <div class="mb-3">
+                  <label for="archivoAdjunto" class="form-label text-gray-500"><b>Adjunto:</b></label>
+                  <input type="file" id="archivoAdjunto" (change)="onFileSelected($event)" multiple>
+                </div>
+
+                <!-- Botón de Envío -->
+                <div class="hidden lg:flex justify-end gap-2 border-t-2 border-gray-300 pt-3">
+                    <button mat-raised-button type="submit" class="text-white" [disabled]="loading || !ticketForm.valid" style="background-color: #166fd4;">Crear Ticket</button>
+                    <button routerLink="/menu/inicio" type="button" style="color: #166fd4">
+                        Cancel
+                      </button>
+                </div>
+            </div>
+
+            <!-- Columna Derecha -->
+            <div class="flex flex-col flex-1 gap-3 border p-3 h-100 shadow-border">
+
+              <mat-form-field appearance="fill" class="w-full">
+                <mat-label>Tipologia</mat-label>
+                <mat-select [(value)]="ticket.tipologia" name="tipologia" required>
+                  <mat-option class="flex items-center" *ngFor="let tipologia of tipologias" [value]="tipologia.codi">
+                    <div class="flex">
+                      <img [src]="tipologia.imagen" style="width: 24px; height: 24px; margin-right: 8px;">
+                      {{ tipologia.descripcion }}
+                    </div>
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <div class="flex gap-2 border-t-2 border-gray-300 pt-3">
+                <div class="text-md text-gray-500">
+                  <b>Catálogo de servicios </b>
+                </div>
+              </div>
+              <div class="flex flex-col lg:flex-row gap-2 w-full">
+                <div class="flex gap-2 lg:w-1/3">
+                  <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Busqueda</mat-label>
+                    <input matInput [(ngModel)]="searchQuery" (input)="search(searchQuery)" name="serviceName">
+                  </mat-form-field>
+                  <div class="mb-3 flex lg:hidden flex-col justify-start">
+                    <button (click)="openCatalogo()" class="flex items-center justify-center border-2 bg-blue-600 rounded-md shadow-border" type="button" style="width:54px; height:54px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="#ffffff" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"/></svg>
+                    </button>
+                </div>
+              </div>
+              <div class="lg:w-2/3">
+                <mat-form-field class="w-full">
+                  <mat-label>Catalogo</mat-label>
+                  <mat-select [(value)]="ticket.catalogo" (selectionChange)="handleCatalogChange($event.value)" required>
+                    <mat-option *ngFor="let catalogo of catalogos" [value]="catalogo.codi">
+                      {{ catalogo.nombre }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div>
+                <div class="mb-3 hidden lg:flex flex-col justify-start">
+                  <button (click)="openCatalogo()" class="flex items-center justify-center border-2 bg-blue-600 rounded-md shadow-border" type="button" style="width:54px; height:54px;">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="#ffffff" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"/></svg>
+                  </button>
+              </div>
+              </div>
+              </div>
+              <div>
+                <label id="lblCatalogo" class="text-blue-600" for=""><b>{{catalogPath}}</b></label>
+              </div>
+
+
+              <!-- Organización -->
+
+              <div class="flex gap-2 border-t-2 border-gray-300 pt-3">
+                  <div class="text-md text-gray-500">
+                    <b>Organizaciones: </b>
+                  </div>
+              </div>
+
+              <div class="flex flex-col lg:flex-row gap-2 w-full">
+                <div class="flex gap-2 lg:w-1/3">
+                  <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Busqueda</mat-label>
+                    <input matInput [(ngModel)]="searchQueryORGN" (input)="searchORGN(searchQueryORGN)" name="orgnName">
+                  </mat-form-field>
+              </div>
+              <div class="lg:w-2/3">
+                <mat-form-field appearance="fill" class="w-full">
+                  <mat-label>Organización</mat-label>
+                  <mat-select [(ngModel)]="ticket.organizacion" name="organizacion" required>
+                    <mat-option *ngFor="let organizacion of organizaciones" [value]="organizacion.codi">
+                      {{ organizacion.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              </div>
+
+              <div class="flex gap-2 border-t-2 border-gray-300 pt-3">
+            </div>
+
+
+                <!-- Vía de Recepción -->
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Vía de Recepción</mat-label>
+                    <mat-select [(ngModel)]="ticket.viaRecepcion" name="via" required>
+                      <mat-option *ngFor="let via of vias" [value]="via.codi">
+                        {{ via.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                
+                <!-- Coordinación -->
+                <mat-form-field appearance="fill" class="w-full">
+                  <mat-label>Coordinación</mat-label>
+                  <mat-select [(ngModel)]="ticket.cate_codi_asignar" name="categoria" required multiple>
+                    <mat-option *ngFor="let categoria of categorias" [value]="categoria.codi">
+                      {{ categoria.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+                <!-- Prioridad -->
+                <mat-form-field appearance="fill">
+                    <mat-label>Prioridad</mat-label>
+                    <mat-select [(value)]="ticket.prioridad" required>
+                      <mat-option *ngFor="let priority of prioridades" [value]="priority.codi">
+                        <mat-icon [svgIcon]="'priority_' + (priority.codi ?? 'por_defecto')"></mat-icon>
+                        {{ priority.descripcion }}
+                      </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <div class="flex gap-2 border-t-2 border-gray-300 pt-3 justify-between">
+                  <button type="button" mat-raised-button (click)="openAssignDialog()" style="color: #166fd4">Asignar Responsables</button>
+                  <div class="flex justify-center items-center">
+                    <div class="flex items-center flex-wrap">
+                      <div *ngFor="let cateCodi of ticket.cate_codi_asignar">
+                        <div *ngFor="let user of selectedUsers[cateCodi]" class="relative">
+                          <img [src]="user.fotoUsuario" (error)="manejarErrorImagen(user)" alt="{{ user.nombre_completo }}" class="h-9 w-9 rounded-full" title="{{ user.nombre_completo }}">
+                          <button (click)="removeAssignedUser(user, cateCodi)" class="remove-button">&times;</button>
+                        </div>
+                      </div>
+                      <!-- Mostrar usuarios seleccionados del catálogo también -->
+                      <div *ngIf="selectedUsers[ticket.catalogo]">
+                        <div *ngFor="let user of selectedUsers[ticket.catalogo]" class="relative">
+                          <img [src]="user.fotoUsuario" (error)="manejarErrorImagen(user)" alt="{{ user.nombre_completo }}" class="h-9 w-9 rounded-full" title="{{ user.nombre_completo }}">
+                          <button (click)="removeAssignedUser(user, ticket.catalogo)" class="remove-button">&times;</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                
+
+              <div class="flex lg:hidden justify-center gap-2 border-t-2 border-gray-300 pt-3">
+                <button mat-raised-button type="submit" class="text-white" [disabled]="loading || !ticketForm.valid" style="background-color: #166fd4;">Crear Ticket</button>
+                <button routerLink="/menu/inicio" type="button" style="color: #166fd4">
+                    Cancel
+                  </button>
+            </div>
+            </div>
+
+        </div>
+    </form>
+</div>

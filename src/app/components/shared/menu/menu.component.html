@@ -1,0 +1,154 @@
+<div class="w-12/12">
+  <div class="flex flex-col">
+    <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+      <div class="cardd" *ngIf="showCreate()">
+        <div class="content">
+          <p class="heading">NUEVO TICKET
+          </p><p class="para">
+            Ingrese los detalles de su problema o consulta para obtener ayuda de nuestro equipo de soporte técnico. Proporcione toda la información relevante para que podamos asistirle de la manera más eficiente posible.
+          </p>
+          <a routerLink="/menu/create-ticket" class="btn cursor-pointer"><span>Nuevo Ticket</span></a>
+        </div>
+    </div>
+    
+    <div class="cardd">
+        <div class="content">
+          <p class="heading">VER TICKETS
+          </p><p class="para">
+            Vea y administre todos sus tickets de soporte abiertos y cerrados. Puede seguir el progreso de sus consultas, actualizar información adicional o cerrar tickets que ya han sido resueltos.
+          </p>
+          <a routerLink="/menu/list-tickets" class="btn cursor-pointer"><span>Listado</span></a>
+        </div>
+    </div>
+    </div>
+    <div class="bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario()">
+      <div class="text-2xl text-white mx-4 m-2" style="font-weight: 600">CONFIGURACIONES</div>
+    </div>
+    <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+      <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionAdmin()" >
+        <div class="content">
+          <p class="heading2">CONFIGURAR ADMIN
+          </p><p class="para">
+            Acceda a la configuracion de administradores de cada Unidad. Solo el SuperUsuario puede visualizar esta forma.
+          </p>
+          <a routerLink="/config/admin" class="btn cursor-pointer"><span>Configurar</span></a>
+        </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">CONFIGURAR USUARIO
+        </p><p class="para">
+          Acceda a la configuracion de usuarios de cada Unidad. Asigne Roles, Categoria, Unidad. ETC. Solo Administradores pueden visualizar esta forma.
+        </p>
+        <a routerLink="/config/user" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionAdmin()">
+      <div class="content">
+        <p class="heading2">CONFIGURAR UNIDAD
+        </p><p class="para">
+          Acceda a la configuracion de Unidades. Asigne Grupos de trabajo que requieran un sistema de Tickets.
+        </p>
+        <a routerLink="/config/unidad" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">CONFIGURAR ASIGNACION CATÁLOGO
+        </p><p class="para">
+          Acceda a la configuracion de Asignación de Catalogos para usuarios. Asigne las especialidades de cada usuario en el sistema de Tickets.
+        </p>
+        <a routerLink="/config/catalogo" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    </div>
+    
+    <div class="w-full bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario()">
+      <div class="text-2xl text-white mx-4 m-2" style="font-weight: 600">MANTENEDORES</div>
+    </div>
+    <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+      <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+        <div class="content">
+          <p class="heading2">MANTENEDOR ORGANIZACIÓN
+          </p><p class="para">
+            Acceda a la configuracion de Organización [Acceso solo para Administradores].
+          </p>
+          <a routerLink="/mant/organizacion" class="btn cursor-pointer"><span>Configurar</span></a>
+        </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionAdmin()">
+      <div class="content">
+        <p class="heading2">MANTENEDOR CATEGORIAS
+        </p><p class="para">
+          Acceda a la configuracion de Categorias [Acceso solo para Administradores].
+        </p>
+        <a routerLink="/mant/categorias" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">MANTENEDOR TIPOLOGIA
+        </p><p class="para">
+          Acceda a la configuracion de Tipologias [Acceso solo para Administradores].
+        </p>
+        <a routerLink="/mant/tipologia" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">MANTENEDOR VIAS
+        </p><p class="para">
+          Acceda a la configuracion de Vias de Recepción [Acceso solo para Administradores].
+        </p>
+        <a routerLink="/mant/vias" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">MANTENEDOR PRIORIDAD
+        </p><p class="para">
+          Acceda a la configuracion de Prioridades [Acceso solo para Administradores].
+        </p>
+        <a routerLink="/mant/prioridad" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">MANTENEDOR CARGOS
+        </p><p class="para">
+          Acceda a la configuracion de Cargos [Acceso solo para Administradores].
+        </p>
+        <a routerLink="/mant/cargos" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">MANTENEDOR CATALOGOS
+        </p><p class="para">
+          Acceda a la configuracion de Catalogos [Acceso solo para Administradores].
+        </p>
+        <a routerLink="/mant/catalogos" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">MANTENEDOR TRABAJOS
+        </p><p class="para">
+          Acceda a la configuracion de Trabajos [Acceso solo para Administradores].
+        </p>
+        <a routerLink="/mant/trabajos" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
+      <div class="content">
+        <p class="heading2">MANTENEDOR PROGRESO
+        </p><p class="para">
+          Acceda a la configuracion de Progreso [Acceso solo para Administradores].
+        </p>
+        <a routerLink="/mant/progreso" class="btn cursor-pointer"><span>Configurar</span></a>
+      </div>
+    </div>
+    </div>
+    
+    </div>
+</div>

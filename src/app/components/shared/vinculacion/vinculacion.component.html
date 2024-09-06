@@ -1,0 +1,40 @@
+<div mat-dialog-title class="flex flex-row justify-between">
+    <h1>VINCULAR REQUERIMIENTOS</h1>
+    <div class="flex items-center mb-3">
+        <div class="flex gap-2 relative w-full">
+            <input class="border shadow-border rounded-md pl-4 pr-10 w-5/6" style="height: 54px;" type="text" placeholder="Buscar por ID del ticket..." [(ngModel)]="searchTicketId" (keyup.enter)="onSearchTickets()">
+            <button class="flex justify-center items-center border rounded-lg bg-blue-600" (click)="onSearchTickets()" style="height: 54px; width:54px;">
+                <img src="/assets/BusquedaIcon.svg" alt="">
+            </button>
+        </div>
+    </div>
+</div>
+<div mat-dialog-content>
+    <mat-selection-list #tickets (selectionChange)="onTicketSelectionChange($event)">
+        <mat-list-option *ngFor="let ticket of filteredTickets | paginate: { itemsPerPage: pageSize, currentPage: currentPage, totalItems: totalItems }; let i = index" [value]="ticket" [selected]="ticket.selected">
+            <div class="flex justify-between items-center w-full p-2 border-b">
+                <div class="flex items-center gap-2 w-4/12">
+                    <img [src]="ticket.urlImagenUsuario" (error)="manejarErrorImagen(ticket)" alt="{{ ticket.nombre }}" class="h-12 w-12 rounded-full" title="{{ ticket.nombre }}">
+                    <div>
+                        <span class="font-medium text-xs">{{ticket.idUsuario}}</span>
+                        <span class="block text-gray-500 text-xs">{{ticket.nombre}}</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-start w-8/12">
+                    <span class="font-medium text-blue-500">Asunto:</span>
+                    <span class="text-gray-500">{{ticket.asunto}}</span>
+                </div>
+            </div>
+        </mat-list-option>
+    </mat-selection-list>
+</div>
+<div class="flex flex-row justify-between w-full">
+    <div class="flex justify-between">
+        <mat-paginator [length]="totalItems" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 25, 100]" (page)="handlePage($event)">
+        </mat-paginator>
+    </div>
+    <div mat-dialog-actions>
+        <button mat-raised-button color="primary" (click)="vincularRequerimientos()">Vincular</button>
+        <button mat-button mat-dialog-close>Cancelar</button>
+    </div>
+</div>

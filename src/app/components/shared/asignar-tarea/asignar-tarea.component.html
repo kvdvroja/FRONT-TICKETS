@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>CREAR TAREA BASIC</h1>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill" class="w-full">
+    <mat-label>Asunto</mat-label>
+    <input matInput [(ngModel)]="nombreTarea" name="asunto" required>
+  </mat-form-field>
+  <div class="flex flex-col gap-2 justify-start items-start">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Establecer fecha de vencimiento</mat-label>
+      <input matInput [matDatepicker]="pickerVencimiento" [(ngModel)]="selectedFechaVencimiento">
+      <mat-datepicker-toggle matSuffix [for]="pickerVencimiento"></mat-datepicker-toggle>
+      <mat-datepicker #pickerVencimiento></mat-datepicker>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button type="button" class="text-white" style="background-color: #166fd4;" (click)="crearTarea()">Crear</button>
+  <button mat-button (click)="closeDialog()">Cerrar</button>
+</div>

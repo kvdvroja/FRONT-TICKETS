@@ -1,0 +1,274 @@
+<!-- Añade ngIf para verificar que el usuario esté seleccionado -->
+<div class="container my-4 w-full">
+    <!-- Resto del código... -->
+    <div class="flex justify-between text-xl mb-3 text-gray-500">
+        <b>Configurar Usuario</b>
+        <div class="mr-5">
+            <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
+                <p class="flex justify-center items-center text-center m-auto gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"/></svg>
+                    Regresar
+                </p>
+            </button></div>
+    </div>
+    <div class="flex gap-2 border-t-2 border-gray-300 pt-3"></div>
+    <form>
+        <div class="flex justify-between">
+            <div class="flex flex-row gap-3 justify-end items-center text-center">
+                <button mat-raised-button type="button" (click)="mostrarPanelAgregarUsuario()" class="text-white" style="background-color: #166fd4; width:150px;" title="Crear Usuario">
+                    <p class="flex justify-center items-center text-center m-auto gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+                        Nuevo
+                    </p>
+                </button>
+                <button *ngIf="!mostrarListaUsuarios" mat-raised-button type="button" (click)="regresar();" class="text-white" style="background-color: #166fd4;">
+                    <p class="flex justify-center items-center text-center m-auto gap-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"/>
+                      </svg>
+                      Regresar
+                    </p>
+                  </button>
+                               
+            </div>
+            <div class="flex flex-row gap-3 justify-end items-center text-center">
+                <div class="flex justify-center items-center text-center text-xl" style="color:#166fd4">
+                    <b>INGRESE ID:</b>
+                </div>
+                <div style="margin-bottom:-20px;">
+                    <mat-form-field appearance="fill" class="">
+                        <mat-label>ID</mat-label>
+                        <input matInput [(ngModel)]="inputId" name="id" required maxlength="9">
+                    </mat-form-field>
+                </div>
+                <button mat-raised-button type="button" (click)="buscarUsuarioYMostrarImagen()" class="text-white" style="background-color: #166fd4; height:50px;" title="Buscar Usuario por ID">
+                    <p class="flex justify-center items-center text-center m-auto gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><g fill="none" fill-rule="evenodd"><path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035c-.01-.004-.019-.001-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427c-.002-.01-.009-.017-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093c.012.004.023 0 .029-.008l.004-.014l-.034-.614c-.003-.012-.01-.02-.02-.022m-.715.002a.023.023 0 0 0-.027.006l-.006.014l-.034.614c0 .012.007.02.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="#ffffff" d="M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 0 0 0-13M2 10.5a8.5 8.5 0 1 1 15.176 5.262l3.652 3.652a1 1 0 0 1-1.414 1.414l-3.652-3.652A8.5 8.5 0 0 1 2 10.5M9.5 7a1 1 0 0 1 1-1a4.5 4.5 0 0 1 4.5 4.5a1 1 0 1 1-2 0A2.5 2.5 0 0 0 10.5 8a1 1 0 0 1-1-1"/></g></svg>
+                    </p>
+                </button>
+            </div>
+        </div>
+
+        <!-- PANEL LISTADO -->
+        <div class="flex flex-row items-center gap-2 justify-between">
+            <div *ngIf="isLoading" class="loader-overlay">
+                <div class="loader">Cargando...</div>
+            </div>
+            <div class="w-full">
+                <div *ngIf="mostrarListaUsuarios" class="flex flex-col flex-1 gap-3 border p-3 h-100 shadow-border mt-5">
+                    <table class="min-w-full divide-y divide-gray-200 shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
+                        <thead class="bg-gray-50">
+                          <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">N°</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ID Usuario</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th> <!-- Nueva columna para estado -->
+                          </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                          <tr *ngFor="let user of filteredConfigUsuario; let i = index" [ngClass]="{'bg-blue-200': i % 2 === 0, 'bg-white': i % 2 !== 0}">
+                            <td class="pl-6 whitespace-nowrap text-sm font-medium text-gray-900 text-center">{{ user.codi }}</td>
+                            <td class="px-6 whitespace-nowrap text-sm text-center">{{ user.idUsuario }}</td>
+                            <td class="px-6 whitespace-nowrap text-sm text-center">{{ user.userData?.nombre_completo }}</td>
+                            <td class="px-6 whitespace-nowrap text-sm text-center">
+                              <span [ngClass]="{'text-red-600': user.userEstado === 'Sin Asignar', 'text-green-500': user.userEstado === 'Asignado'}">{{ user.userEstado }}</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                </div>
+
+                <div *ngIf="mostrarPanelUsuario" class="flex flex-row gap-4">
+                    <div *ngIf="mostrarPanelUsuario" class="flex items-center bg-gray-200 rounded-lg mt-5 h-56 mx-auto" style="width: 1100px;">
+                        <div class="p-4 bg-blue-500 rounded-lg">
+                            <img [src]="imagenUsuario" (error)="manejarErrorImagen()" alt="Imagen de usuario" class="h-44 w-44 rounded-full panel-usuario" [ngClass]="{'panel-usuario-visible': mostrarPanelUsuario}" title="Imagen de usuario">
+                        </div>
+                        <div class="flex flex-row p-3 h-full rounded-lg items-center">
+                            <ul class="flex flex-col text-lg text-blue-600">
+                                <li class="flex flex-row">
+                                    <b class="w-36">CÓDIGO:</b>
+                                    <span class="text-lg text-black ml-16"><b>{{userID}}</b></span>
+                                </li>
+                                <li class="flex flex-row">
+                                    <b class="w-36">NOMBRE:</b>
+                                    <span class="text-lg text-black ml-16"><b>{{userName}}</b></span>
+                                </li>
+                                <li class="flex flex-row">
+                                    <b class="w-36">ROL:</b>
+                                    <ng-container *ngIf="userRol === '1'; else noEsSuperAdmin">
+                                        <span class="text-lg text-black ml-16"><b>S.ADMIN</b></span>
+                                      </ng-container>
+                                      <ng-template #noEsSuperAdmin>
+                                        <ng-container *ngIf="userRol === '2'; else otroRol">
+                                          <span class="text-lg text-black ml-16"><b>ADMIN</b></span>
+                                        </ng-container>
+                                        <ng-template #otroRol>
+                                          <ng-container *ngIf="userRol === '4'; else esUsuario">
+                                            <span class="text-lg text-black ml-16"><b>NUEVO</b></span>
+                                          </ng-container>
+                                          <ng-template #esUsuario>
+                                            <span class="text-lg text-black ml-16"><b>USUARIO</b></span>
+                                          </ng-template>
+                                        </ng-template>
+                                      </ng-template>
+                                </li>
+                                <li class="flex flex-row">
+                                    <b class="w-36">PIDM:</b>
+                                    <span class="text-lg text-black ml-16"><b>{{userPidm}}</b></span>
+                                </li>
+                                <li class="flex flex-row">
+                                    <b class="w-36">CATEGORIA:</b>
+                                    <span class="text-lg text-black ml-16"><b>{{userCategoria}}</b></span>
+                                </li>
+                                <li class="flex flex-row">
+                                    <b class="w-36">CARGOS:</b>
+                                    <span class="text-lg text-black ml-16"><b>{{userCargo}}</b></span>
+                                </li>
+                                <li class="flex flex-row">
+                                    <b class="w-36">UNIDAD:</b>
+                                    <span class="text-lg text-black ml-16"><b>{{userUnidad}}</b></span>
+                                </li>
+                                <li class="flex flex-row">
+                                    <b class="w-36">NIVEL DE A:</b>
+                                    <span class="text-lg text-black ml-16"><b>{{userNivelAtencion}}</b></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="flex flex-grow h-full rounded-lg items-center justify-center text-center gap-2">
+                            <div *ngIf="mostrarSinAsignar">
+                                <div class="text-xl bg-red-600 rounded-xl p-4 text-white">
+                                    <b>SIN ASIGNAR</b>
+                                </div>
+                            </div>
+                            <div class="flex flex-col" *ngIf="mostrarAsignado">
+                                <div class="text-2xl bg-green-500 rounded-xl p-4 text-white">
+                                    <b class="flex justify-center items-center">ASIGNADO</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col flex-grow gap-2 items-center justify-center bg-gray-200 rounded-lg mt-5 mx-auto">
+                        <button mat-raised-button type="button" (click)="cambiarclave()" class="text-white" style="background-color: #166fd4; width:200px;">
+                            <p class="flex justify-center items-center text-center m-auto gap-1">
+                                Cambiar Contraseña
+                            </p>
+                        </button>
+                        <button *ngIf="userDetail?.rols_codi == '1' && userRol == '3'" (click)="hacerAdmin()" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:200px;">
+                            <p class="flex justify-center items-center text-center m-auto gap-1">
+                                Hacer Admin
+                            </p>
+                        </button>
+                        <button *ngIf="userDetail?.rols_codi == '1' && userRol == '2'" (click)="hacerUsuario()" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:200px;">
+                            <p class="flex justify-center items-center text-center m-auto gap-1">
+                                Hacer Usuario
+                            </p>
+                        </button>
+                        <button mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:200px;">
+                            <p class="flex justify-center items-center text-center m-auto gap-1">
+                                ...
+                            </p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="mostrarPanelUsuarioEditar" class="flex items-center bg-gray-200 rounded-lg mt-5 h-56">
+            <div class="flex flex-col w-full">
+                <div class="flex justify-center">
+                    <h1>Edite los atributos del usuario.</h1>
+                </div>
+                <div class="flex flex-grow h-full rounded-lg items-center justify-center text-center gap-3">
+                    <div class="w-1/6">
+                        <mat-form-field appearance="fill" class="w-full">
+                            <mat-label>Categoría</mat-label>
+                            <mat-select [(ngModel)]="selectCategoriaE" name="categoria" required>
+                            <mat-option *ngFor="let categoria of categorias" [value]="categoria.codi">
+                                {{ categoria.descripcion }}
+                            </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="w-1/6">
+                        <mat-form-field appearance="fill" class="w-full">
+                            <mat-label>Cargos</mat-label>
+                            <mat-select [(ngModel)]="selectCargosE" name="cargo" required>
+                              <mat-option *ngFor="let cargo of cargos" [value]="cargo.codi">
+                                {{ cargo.descripcion }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </div>
+                    <div class="w-1/6">
+                        <mat-form-field appearance="fill" class="w-full">
+                            <mat-label>Nivel de Atención</mat-label>
+                            <mat-select [(ngModel)]="selectNivelAtencionE" name="nivelAtencion" required>
+                                <mat-option [value]="'1'">1</mat-option>
+                                <mat-option [value]="'2'">2</mat-option>
+                                <mat-option [value]="'3'">3</mat-option>
+                                <mat-option [value]="'4'">4</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <button mat-raised-button type="button" (click)="editarAsignado()" class="text-white" style="background-color: #166fd4; width:100px;">
+                        <p class="flex justify-center items-center text-center m-auto gap-1">
+                            GUARDAR
+                        </p>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="mostrarPanelUsuarioAsignar" class="flex items-center bg-gray-200 rounded-lg mt-5 h-56">
+            <div class="flex flex-col w-full">
+                <div class="flex justify-center">
+                    <h1>Asigne atributos al usuario.</h1>
+                </div>
+                <div class="flex flex-grow h-full rounded-lg items-center justify-center text-center gap-3">
+                    <div class="w-1/6">
+                        <mat-form-field appearance="fill" class="w-full">
+                            <mat-label>Cargos</mat-label>
+                            <mat-select [(ngModel)]="selectCargos" name="cargo" required>
+                              <mat-option *ngFor="let cargo of cargos" [value]="cargo.codi">
+                                {{ cargo.descripcion }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                    </div>
+                    <div class="w-1/6">
+                        <mat-form-field appearance="fill" class="w-full">
+                            <mat-label>Categoría</mat-label>
+                            <mat-select [(ngModel)]="selectCategoria" name="categoria" required>
+                            <mat-option *ngFor="let categoria of categorias" [value]="categoria.codi">
+                                {{ categoria.descripcion }}
+                            </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="w-1/6">
+                        <mat-form-field appearance="fill" class="w-full">
+                            <mat-label>Nivel de Atención</mat-label>
+                            <mat-select [(ngModel)]="selectNivelAtencion" name="nivelAtencion" required>
+                                <mat-option [value]="'1'">1</mat-option>
+                                <mat-option [value]="'2'">2</mat-option>
+                                <mat-option [value]="'3'">3</mat-option>
+                                <mat-option [value]="'4'">4</mat-option>
+
+                                </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="flex justify-center">
+                    <button mat-raised-button type="button" (click)="Asignar()" class="text-white" style="background-color: #166fd4; width:100px;">
+                        <p class="flex justify-center items-center text-center m-auto gap-1">
+                            GUARDAR
+                        </p>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+

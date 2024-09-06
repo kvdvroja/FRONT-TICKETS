@@ -1,0 +1,347 @@
+<div class="container w-full">
+  <div class="container w-full flex lg:hidden xl:hidden 2xl:hidden justify-center items-center" style="background-color:#3b83f6;">
+    <span class="text-white flex my-auto text-lg"><b>Ticket: {{ticket?.ticketID}}</b></span>
+  </div>
+  <div class="flex container justify-center lg:justify-between xl:justify-between 2xl:justify-between text-center items-center lg:p-2 xl:p-2 2xl:p-2 my-4 bg-white">
+    <div class="flex flex-row gap-2">
+      <span class="text-gray-500 hidden lg:flex xl:flex 2xl:flex my-auto text-lg"><b>Detalle de Ticket: {{ticket?.ticketID}}</b>
+      </span>
+      <button *ngIf="showCreate(ticket!.estado)" [routerLink]="['../../edit-ticket', ticket!.id]" title="Editar" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+        <img src="/assets/escrito.png" class="fixed-size-image-router">
+        Editar
+       </button>
+      <button (click)="navigateToTicketSheet(ticket)" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+        <img src="/assets/tareas4.png" class="fixed-size-image-router">
+        Tareas
+      </button>
+    </div>
+    <div class="">
+      <div class="flex gap-2 mx-2 justify-center items-center">
+        <div class="flex flex-col lg:flex-row xl:flex-row 2xl:flex-row gap-2 items-center">
+          <button mat-raised-button type="button" class="" (click)="goBack()" style="background-color:#3b83f6; width:120px;">
+            <p class="flex justify-center items-center text-center m-auto gap-1 text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                <path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z" />
+              </svg>
+              Regresar
+            </p>
+          </button>
+          <button *ngIf="ticket?.estado !== 'Cerrado'" mat-raised-button type="button" (click)="openMensajeFinal()" class="text-white" style="background-color: #da1010;">Cerrar</button>
+          <button *ngIf="ticket?.estado == 'Cerrado' && shouldShowChangeStatusButton();" mat-raised-button type="button" (click)="abrirTicket()" class="text-white" style="background-color: #da1010;">Abrir</button>
+          <button *ngIf="shouldShowDelete();" mat-raised-button type="button" (click)="Delete()" class="text-white" style="background-color: #000000;">Eliminar</button>
+        </div>
+        <div class="flex flex-col lg:flex-row xl:flex-row 2xl:flex-row border-l-2 border-gray-400 gap-2 px-2">
+          <div class="flex flex-col">
+            <span class="text-gray-500 font-semibold">Fecha:</span>
+            <span class="font-semibold">{{ticket?.fechaCreacion}}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-gray-500 font-semibold">Estado:</span>
+            <span class=""><b>{{ticket?.estado}}</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="ticket">
+    <mat-expansion-panel hideToggle class="break-all m-2" (opened)="actualizarEstadoTicket()">
+      <mat-expansion-panel-header class="h-40 lg:h-20 xl:h-20 2xl:h-20 my-2">
+        <mat-panel-title class="gap-4 w-full flex justify-between flex-col lg:flex-row xl:flex-row 2xl:flex-row">
+          <div class="flex flex-col break-all" style="width: 80%;">
+            <span class="text-sm text-gray-500">Asunto:</span>
+            <span class="text-sm lg:text-lg xl:text-lg 2xl:text-lg text-black"><b>{{ticket.asunto}}</b></span>
+          </div>
+          <div class="flex flex-row gap-2 justify-end" style="width: 20%;">
+            <div class="flex flex-col 2xl:flex-row gap-2 justify-center items-center">
+              <span>
+                <img *ngIf="tipologiaMap[ticket.tipologia] == 'SERVICIOS'" src="assets/SquareGreen.png" alt="Servicios" class="h-6 w-6">
+                <img *ngIf="tipologiaMap[ticket.tipologia] == 'REQUERIMIENTOS'" src="assets/SquareYellow.png" alt="Requerimientos" class="h-6 w-6">
+                <img *ngIf="tipologiaMap[ticket.tipologia] == 'MANTENIMIENTO'" src="assets/SquareBlue.png" alt="Mantenimiento" class="h-6 w-6">
+                <img *ngIf="tipologiaMap[ticket.tipologia] == 'INCIDENTE'" src="assets/SquareOrange.png" alt="Incidente" class="h-6 w-6">
+              </span>
+              <span class="text-xs lg:text-xs xl:text-xs 2xl:text-sm">
+                {{ tipologiaMap[ticket.tipologia] }}
+              </span>
+            </div>
+            <div>
+              <button class="flex flex-row justify-center items-center gap-2">
+                <img src="assets/detalle.jpeg" alt="Detalle">
+                <span class="hidden md:hidden lg:hidden xl:hidden 2xl:flex text-sm">Detalle:</span>
+              </button>
+            </div>
+          </div>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="flex flex-col-reverse lg:flex-row xl:flex-row 2xl:flex-row border-t-2 border-blue-500 m-2 w-full mt-5 lg:mt-0 xl:mt-0 2xl:mt-0">
+        <div class="flex flex-col my-2 w-full lg:w-9/12 xl:w-9/12 2xl:w-9/12 gap-2 bg-gray-100">
+          <div class="flex flex-col mr-2 bg-white h-80 py-2">
+            <span class="text-blue-600"><b>Descripción:</b></span>
+            <pre class="m-2 code-container font-sans"><code [innerHtml]="getSafeHtml(ticket.descripcion)"></code></pre>
+          </div>
+          <div class="flex-col mr-2 bg-white flex flex-grow p-2">
+            <span class="flex flex-row text-blue-600"><b>Adjuntos:</b></span>
+            <ul class="flex gap-1 flex-wrap items-center justify-center">
+              <li class="flex justify-center" *ngFor="let adjunto of adjuntos">
+                <button class="mt-2 flex flex-row" (click)="openPreviewModal(adjunto.url)" [title]="adjunto.nombre">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                    <path fill="#666666" d="M16.5 6v11.5a4 4 0 0 1-4 4a4 4 0 0 1-4-4V5A2.5 2.5 0 0 1 11 2.5A2.5 2.5 0 0 1 13.5 5v10.5a1 1 0 0 1-1 1a1 1 0 0 1-1-1V6H10v9.5a2.5 2.5 0 0 0 2.5 2.5a2.5 2.5 0 0 0 2.5-2.5V5a4 4 0 0 0-4-4a4 4 0 0 0-4 4v12.5a5.5 5.5 0 0 0 5.5 5.5a5.5 5.5 0 0 0 5.5-5.5V6z" />
+                  </svg>
+                  <span class="text-blue-500">{{adjunto.desc || "adjunto"}} </span>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="my-2 w-full lg:w-3/12 xl:w-3/12 2xl:w-3/12 bg-white flex flex-col p-4">
+          <div class="flex flex-col border-b-2 border-gray-500 w-full">
+            <span class="text-blue-600"><b>Solicitante:</b></span>
+            <div class="flex flex-row w-full justify-center gap-2 m-2">
+              <span class="flex justify-end w-2/6"><img [src]="imagenUsuario" (error)="manejarErrorImagen()" alt="{{ ticket.nombre }}" class="h-20 w-20 rounded-full" title="{{ ticket.nombre }}"></span>
+              <div class="flex flex-col w-4/6 justify-center items-start">
+                <span class="text-xs">{{ticket.idUsuario}}</span>
+                <span class="text-xs">{{ticket.nombre}}</span>
+                <!-- <span></span> -->
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex flex-col gap-1">
+              <br>
+              <span class="text-blue-600"><b>Recepción:</b></span>
+              <span>{{ viaRecepcionMap[ticket.viaRecepcion] }}</span>
+              <span class="text-blue-600"><b>Catálogo:</b></span>
+              <div style="font-weight: 400;" [innerHtml]="displayCatalogPath"></div>
+              <span class="text-blue-600"><b>Prioridad:</b></span>
+         <span class="flex flex-row text-center items-center gap-1" *ngIf="prioridadMap[ticket.prioridad].descripcion">
+          <img *ngIf="prioridadMap[ticket.prioridad]?.imagen" 
+          [src]="prioridadMap[ticket.prioridad].imagen" 
+          [alt]="prioridadMap[ticket.prioridad].descripcion" 
+          class="h-6 w-6">
+           {{ prioridadMap[ticket.prioridad].descripcion }}
+         </span>
+         
+              
+              <span class="text-blue-600"><b>Coordinación:</b></span>
+              <span style="font-weight: 400;">
+                <ng-container *ngFor="let categoria of categorias; let i = index">
+                  <p class="text-sm m-0">■ {{ categoria.descripcion }}</p>
+                </ng-container>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </div>
+
+  <!-- asignacion de responsabilidades -->
+  <div class="flex flex-col">
+    <div class="hidden flex-row w-full px-10 md:flex lg:flex xl:flex 2xl:flex">
+      <div class="flex w-4/12 mx-2 my-1 justify-center items-center text-orange-500"><span><b>Asignado a</b></span></div>
+      <div class="flex w-2/12 mx-2 my-1 justify-center items-center text-orange-500"><span><b>Coordinación</b></span></div>
+      <div class="flex w-5/12 mx-2 my-1 justify-center items-center text-orange-500"><span><b>Estado Requerimiento</b></span></div>
+      <div class="flex w-1/12 mx-2 my-1 justify-center items-center text-orange-500"><span><b>Acción</b></span></div>
+    </div>
+    <div class="flex flex-row w-full px-10 md:hidden lg:hidden xl:hidden 2xl:hidden justify-center items-center">
+      <div class="flex mx-2 my-1 justify-center items-center text-orange-500"><span><b>Asignacion de Tareas</b></span></div>
+    </div>
+    <div class="" *ngFor="let asignacion of asignacionesCategorias">
+      <div class="flex md:hidden justify-center items-center">
+        <span class="text-lg text-gray-500"><b>{{ getCategoriaDescripcion(asignacion.cate_codi) }}</b></span>
+      </div>
+      <mat-expansion-panel hideToggle class="break-all my-1">
+        <mat-expansion-panel-header (click)="$event.stopPropagation()" class="h-20 my-1" style="padding: 0 12px;" >
+          <mat-panel-title class="w-full" style="margin-right: 0px;">
+            <div class="flex w-3/12 lg:w-4/12 xl:w-4/12 2xl:w-4/12 mx-2 my-1 justify-start items-center">
+              <img [src]="coordinadores[asignacion.cate_codi]?.imagenUrl || 'assets/UserSinFoto.svg'" (error)="manejarErrorImagenCoordinador(asignacion.cate_codi)" alt="Imagen del Coordinador" class="h-10 w-10 rounded-full">
+              <div class="flex flex-col ml-2 ">
+                <span class="hidden md:flex lg:flex xl:flex 2xl:flex">{{ coordinadores[asignacion.cate_codi]?.nombreCoordinador || 'Coordinador no encontrado' }}</span>
+                <span class="hidden md:flex lg:flex xl:flex 2xl:flex"><b>Coordinador</b></span>
+                <span class="text-xs text-blue-500" *ngIf="hasCoordinadoresAdicionales(asignacion.cate_codi)">
+                  <button class="hidden md:flex lg:flex xl:flex 2xl:flex" (click)="openAsignadosDetalle(ticket!.ticketID, asignacion.cate_codi)">
+                    ({{ coordinadoresAdicionales[asignacion.cate_codi]?.length || 0 }} usuarios más...)
+                  </button>
+                  <button class="flex md:hidden lg:hidden xl:hidden 2xl:hidden" (click)="openAsignadosDetalle(ticket!.ticketID, asignacion.cate_codi)">
+                    ({{ coordinadoresAdicionales[asignacion.cate_codi]?.length || 0 }}+)
+                  </button>
+                </span>
+              </div>
+            </div>
+            <div class="w-2/12 mx-2 my-1 justify-center items-center text-gray-400 hidden md:flex lg:flex xl:flex 2xl:flex">
+              <span class="text-xl"><b>{{ getCategoriaDescripcion(asignacion.cate_codi) }}</b></span>
+            </div>
+            <div class="flex flex-row w-7/12 lg:w-5/12 xl:w-5/12 2xl:w-5/12 mx-2 my-1 justify-center items-center gap-1 lg:gap-3 xl:gap-3 2xl:gap-3">
+              <div class="w-9/12">
+                <mat-progress-bar mode="determinate" [value]="calcularProgreso(asignacion.cate_codi)"></mat-progress-bar>
+              </div>
+              <div class="flex w-3/12 lg:w-2/12 xl:w-2/12 2xl:w-2/12 justify-center items-center">
+                <span class="text-xs lg:text-xl xl:text-xl 2xl:text-2xl ">{{ calcularProgreso(asignacion.cate_codi) | number:'1.2-2' }}%</span>
+              </div>
+            </div>
+            <div class="flex w-1/12 mx-2 my-1 justify-center items-center">
+                <button class="flex flex-row justify-center items-center gap-2 button-toggle" (click)="togglePanel(asignacion.cate_codi)">
+                  <img src="assets/detalleAsignacion.jpeg" alt="Detalle">
+                </button>
+            </div>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+     <div [ngClass]="expandedPanels[asignacion.cate_codi] ? 'panel-content-expanded' : 'panel-content-hidden'">
+        <div class="flex flex-col bg-gray-300 md:m-4">
+          <div class="flex flex-col md:flex-row lg:flex-row xl:flex-row 2xl:flex-row justify-between mx-4 mt-4 gap-2 md:gap-0">
+            <div class="text-xl justify-center"><span><b>Sub Tareas asignadas:</b></span></div>
+            <div class="flex flex-row gap-2 justify-between items-center">
+              <div class="flex flex-col justify-center items-center">
+                <span class="text-2xl"><b>{{ contarTareas(asignacion.cate_codi, 'total') }}</b></span>
+                <span class="hidden md:flex">Total tareas:</span>
+                <span class="flex md:hidden" style="font-size: 8px;">Total:</span>
+              </div>
+              <div class="flex flex-col justify-center items-center">
+                <span class="text-2xl"><b>{{ contarTareas(asignacion.cate_codi, '2') }}</b></span>
+                <span class="hidden md:flex">Programados:</span>
+                <span class="flex md:hidden" style="font-size: 8px;">Programados:</span>
+              </div>
+              <div class="flex flex-col justify-center items-center">
+                <span class="text-2xl"><b>{{ contarTareas(asignacion.cate_codi, '3') }}</b></span>
+                <span class="hidden md:flex">Iniciados:</span>
+                <span class="flex md:hidden" style="font-size: 8px;">Iniciados:</span>
+              </div>
+              <div class="flex flex-col justify-center items-center">
+                <span class="text-2xl"><b>{{ contarTareas(asignacion.cate_codi, '4') }}</b></span>
+                <span class="hidden md:flex">Completados:</span>
+                <span class="flex md:hidden" style="font-size: 8px;">Completados:</span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col bg-white">
+            <div class="flex flex-col justify-start items-start my-4 md:my-2 md:m-4 border-2 border-gray-500 p-2">
+              <div *ngFor="let tarea of asignarTickets[asignacion.cate_codi]; let i = index" class="flex justify-between items-center border p-2 w-full my-2">
+                <div class="w-5/12 break-all">
+                  <span><b>REQ-{{ i + 1 }}</b></span><span class="hidden md:flex">{{tarea.nombre}}</span><span class="flex md:hidden" style="font-size: 8px;">{{tarea.nombre}}</span>
+                </div>
+                <div class="hidden md:flex flex-col justify-center items-center w-3/12">
+                  <span *ngIf="tarea.fecha_inicio"><b>Del</b> {{ tarea.fecha_inicio }}</span>
+                  <span *ngIf="tarea.fecha_inicio"><b>Al</b> {{ tarea.fecha_fin }}</span>
+                </div>
+                <div class="flex flex-row gap-2 w-6/12 md:w-4/12 justify-end">
+                  <div *ngIf="tarea.prog_codi === '4'" class="flex">
+                    <button (click)="openPreviewSolucion(tarea.codi)"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 32 32"><path fill="#f97316" d="M7.068 23.505h8.464c.667 0 1.188-.531 1.188-1.198s-.531-1.188-1.198-1.188H7.069a1.18 1.18 0 0 0-1.188 1.188c0 .667.531 1.198 1.198 1.198zm15.036-5.146c0-.667-.531-1.198-1.198-1.198H8.718c-.667 0-1.188.531-1.188 1.198s.536 1.203 1.203 1.203h12.198a1.2 1.2 0 0 0 1.203-1.203zm2.485-3.958a1.209 1.209 0 0 0-1.188-1.172H8.708c-.667 0-1.188.516-1.188 1.182s.531 1.188 1.198 1.188H23.4c.667 0 1.188-.531 1.188-1.198zM7.521 10.427c0 .667.531 1.188 1.198 1.188h12.667c.656 0 1.177-.536 1.177-1.203a1.18 1.18 0 0 0-1.188-1.172H8.708c-.667 0-1.188.521-1.188 1.188zm3.042-5.146H7.068c-.667 0-1.188.531-1.188 1.198s.531 1.188 1.198 1.188h3.521c.667 0 1.203-.531 1.203-1.198a1.243 1.243 0 0 0-1.24-1.188zm19.932 22.453a1.243 1.243 0 0 0-1.255-1.255H6.266c-1.266 0-2.307-1.068-2.307-2.318V4.76a2.318 2.318 0 0 1 2.307-2.307h19.401a2.31 2.31 0 0 1 2.318 2.307v15.734c0 .667.563 1.224 1.203 1.224c.677 0 1.24-.557 1.24-1.224V4.76A4.765 4.765 0 0 0 25.668 0H6.267c-2.63 0-4.76 2.13-4.76 4.76v19.401a4.765 4.765 0 0 0 4.76 4.76h20.932l3.297 3.078z"/></svg></button>
+                  </div>
+                  <div class="flex flex-row justify-center items-center">
+                    <span *ngFor="let usuario of usuariosAsignadosPorTarea[tarea.codi]" class="">
+                      <img [src]="usuario.fotoUsuario" (error)="manejarErrorImagenAsign(usuario)" alt="{{ usuario.nombre_completo }}" class="h-7 w-7 rounded-full" title="{{ usuario.nombre_completo }}">
+                    </span>
+                  </div>
+                  <div class="flex border p-2 rounded-lg justify-center items-center w-20 md:w-32"[ngClass]="getProgresoClase(tarea.prog_codi)">
+                    <span class="hidden md:flex">{{ getProgresoTexto(tarea.prog_codi) }}</span>
+                    <span class="flex md:hidden" style="font-size: 8px;">{{ getProgresoTexto(tarea.prog_codi) }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="my-4 mx-2">
+    <button
+      class="p-2"
+      [ngClass]="{
+        'text-blue-600 border-r-2 border-gray-400': selectedTab === 'comentarios',
+        'text-gray-400': selectedTab !== 'comentarios'
+      }"
+      (click)="selectTab('comentarios')"
+    >
+      <b>Comentarios</b>
+    </button>
+    <button
+      class="p-2"
+      [ngClass]="{
+        'text-blue-600 border-l-2 border-gray-400': selectedTab === 'historial',
+        'text-gray-400': selectedTab !== 'historial'
+      }"
+      (click)="selectTab('historial')"
+    >
+      <b>Historial</b>
+    </button>
+  </div>
+
+<!-- Contenido de Comentarios -->
+<div *ngIf="selectedTab === 'comentarios'" class="shadow-border my-4 mx-2 p-1 lg:p-0 xl:p-0 2xl:p-0">
+  <div class="flex flex-col w-full gap-2">
+    <div *ngFor="let respuesta of respuestas" class="flex flex-row w-full py-2">
+      <div class="hidden lg:flex xl:flex 2xl:flex justify-center items-center w-1/12">
+        <img [src]="respuesta.imagenUsuarioR" (error)="manejarErrorImagenRespuesta(respuesta)" alt="Imagen de usuario" class="h-10 w-10 lg:h-20 lg:w-20 xl:h-20 xl:w-20 2xl:h-20 2xl:w-20 rounded-full" title="{{ respuesta.idUsuario }}">
+      </div>
+      <div class="flex flex-col border border-gray-500 rounded-lg w-full lg:w-11/12 xl:w-11/12 2xl:w-11/12 mr-0 lg:mr-2 xl:mr-2 2xl:mr-2 pt-4 pb-2">
+        <img [src]="respuesta.imagenUsuarioR" (error)="manejarErrorImagenRespuesta(respuesta)" alt="Imagen de usuario" class="flex lg:hidden xl:hidden 2xl:hidden h-20 w-20 rounded-full mx-auto" title="{{ respuesta.idUsuario }}">
+        <div class="flex flex-row justify-center lg:justify-between xl:justify-between 2xl:justify-between mx-2 mt-1 lg:mt-0 xl:mt-0 2xl:mt-0">
+          <span class="text-xs lg:text-sm xl:text-sm 2xl:text-sm" style="text-align:center"><b>{{ respuesta.nombreUsuario }} - {{respuesta.idUsuario}}</b></span>
+          <span class="hidden lg:flex xl:flex 2xl:flex">{{ticket?.fechaCreacion}}</span>
+        </div>
+        <div class="m-2">
+          <pre class="code-container font-sans"><code [innerHtml]="getSafeHtml(respuesta?.descripcion!)"></code></pre>
+        </div>
+        <div class="flex flex-row m-2 justify-between">
+          <ul class="flex gap-1 flex-wrap justify-start">
+            <li *ngFor="let adjunto of respuesta.adjuntosRespuesta" class="flex justify-center">
+              <button class="flex flex-row mt-2" (click)="openPreviewModal(adjunto.url)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                  <path fill="#666666" d="M16.5 6v11.5a4 4 0 0 1-4 4a4 4 0 0 1-4-4V5A2.5 2.5 0 0 1 11 2.5A2.5 2.5 0 0 1 13.5 5v10.5a1 1 0 0 1-1 1a1 1 0 0 1-1-1V6H10v9.5a2.5 2.5 0 0 0 2.5 2.5a2.5 2.5 0 0 0 2.5-2.5V5a4 4 0 0 0-4-4a4 4 0 0 0-4 4v12.5a5.5 5.5 0 0 0 5.5 5.5a5.5 5.5 0 0 0 5.5-5.5V6z" />
+                </svg>
+                <span class="text-blue-500">{{adjunto.desc}}</span>
+              </button>
+            </li>
+          </ul>
+          <span class="flex lg:hidden xl:hidden 2xl:hidden">{{ticket?.fechaCreacion}}</span>
+          <button *ngIf="respuesta.idUsuario == this.userDetail?.idUsuario" type="button" title="Editar" (click)="editarRespuesta(respuesta)" class="">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#166fd4" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM17.6 7.8L19 6.4L17.6 5l-1.4 1.4z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex flex-row w-full justify-end mt-3">
+    <div class="flex flex-col w-full lg:w-11/12 xl:w-11/12 2xl:w-11/12 gap-2">
+      <div class="my-4 mx-2 lg:mx-0 xl:mx-0 2xl:mx-0"><b>Nuevo comentario:</b></div>
+      <div class="flex w-full pr-0 lg:pr-4 xl:pr-4 2xl:pr-4 pb-4">
+        <quill-editor class="w-full" [(ngModel)]="descEditor" [modules]="editorConfig" (onEditorCreated)="setEditorInstance($event)" (onContentChanged)="onEditorChange($event)">
+        </quill-editor>
+      </div>
+      <div class="flex flex-col-reverse lg:flex-row xl:flex-row 2xl:flex-row gap-2 justify-between m-2 items-center">
+        <!-- Botón para respuesta sin adjunto -->
+        <button mat-raised-button type="button" class="text-white mt-2" style="background-color: #166fd4;" (click)="crearRespuesta(false)" *ngIf="selectedFiles.length === 0">Responder</button>
+        <button mat-raised-button type="button" class="text-white mt-2" style="background-color: #007BFF;" (click)="crearRespuesta(true)" *ngIf="selectedFiles.length > 0">Responder con Adjunto</button>
+        <!-- Botón para respuesta con adjunto -->
+        <input type="file" (change)="NewonFileSelected($event)" multiple>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contenido de Historial -->
+<div *ngIf="selectedTab === 'historial'" class="shadow-border my-4 mx-2 p-1 lg:p-0 xl:p-0 2xl:p-0">
+  <div class="flex flex-col w-full lg:w-9/12 xl:w-9/12 2xl:w-9/12 gap-1">
+    <div *ngFor="let historial of historiales" class="flex flex-row w-full">
+      <div class="hidden lg:flex xl:flex 2xl:flex justify-center items-center" style="width:5%;">
+        <img [src]="historial.imagenUsuarioH" (error)="manejarErrorImagenHistorial(historial)" alt="Imagen de usuario" class="h-8 w-8 rounded-full" title="{{ historial.nombreUsuarioH }}">
+      </div>
+      <div class="flex flex-row justify-between border m-2 border-gray-500 rounded-lg w-full mr-0 lg:mr-2 xl:mr-2 2xl:mr-2" style="width:95%;">
+        <div class="m-2">
+          <span>{{historial?.descripcion}}</span>
+        </div>
+        <div class="m-2">
+          <span>{{historial?.fechaActividad}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

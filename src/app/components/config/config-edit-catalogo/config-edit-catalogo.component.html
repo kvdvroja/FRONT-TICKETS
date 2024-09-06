@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>Editar Asignación</h1>
+<div mat-dialog-content>
+  <mat-form-field class="w-full">
+    <mat-label>Catálogo</mat-label>
+    <input type="text" placeholder="Buscar" matInput [formControl]="catalogoCtrl" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCatalogoSelected($event)">
+      <mat-option *ngFor="let catalogo of filteredCatalogos | async" [value]="catalogo.nombre">
+        {{ catalogo.nombre }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <mat-form-field class="w-full">
+    <mat-label>Usuario</mat-label>
+    <input type="text" [value]="data.usun_name" matInput disabled>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="onSave()">Guardar</button>
+</div>

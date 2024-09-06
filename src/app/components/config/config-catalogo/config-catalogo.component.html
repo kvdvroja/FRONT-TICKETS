@@ -1,0 +1,126 @@
+<div class="container m-4 w-full">
+    <div class="flex justify-between text-xl mb-5 text-gray-500">
+        <b>Mantenedor de Asignación de Catálogos</b>
+        <div class="mr-5">
+            <div class="button-container">
+                <button (click)="openCatalogo()" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:200px;">
+                    <p class="flex justify-center items-center text-center m-auto gap-1">
+                        Nueva Asignación
+                    </p>
+                </button>
+                <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
+                    <p class="flex justify-center items-center text-center m-auto gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"/></svg>
+                        Regresar
+                    </p>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="flex gap-5">
+        <!-- <div class="flex flex-col flex-1 gap-3">
+                <div class="text-md text-gray-500">
+                    <b>Nombre del Catálogo</b>
+                </div>
+                <div class="flex gap-2">
+                    <mat-form-field class="w-full">
+                        <mat-label>Catálogo</mat-label>
+                        <input type="text" placeholder="Buscar" matInput [formControl]="catalogoCtrl" [matAutocomplete]="auto" required>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCatalogoSelected($event)">
+                            <mat-option *ngFor="let catalogo of filteredCatalogos | async" [value]="catalogo.nombre">
+                                {{ catalogo.nombre }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button *ngIf="selectedCatalogo" mat-icon-button matSuffix aria-label="Clear" (click)="clearCatalogo()">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+                <div class="text-md text-gray-500">
+                    <b>Usuario</b>
+                </div>
+                <div class="flex gap-2">
+                    <mat-form-field class="w-full">
+                        <mat-label>Usuario</mat-label>
+                        <input type="text" placeholder="Buscar" matInput [formControl]="usuarioCtrl" [matAutocomplete]="usuarioAuto" required>
+                        <mat-autocomplete #usuarioAuto="matAutocomplete" (optionSelected)="onUsuarioSelected($event)">
+                            <mat-option *ngFor="let usuarios of filteredUsuarios | async" [value]="usuarios.nombreUsuario">
+                                {{ usuarios.nombreUsuario }}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <button *ngIf="selectedUsuario" mat-icon-button matSuffix aria-label="Clear" (click)="clearUsuario()">
+                            <mat-icon>clear</mat-icon>
+                        </button>
+                    </mat-form-field>
+                </div>
+
+                <div class="flex justify-end gap-2 border-t-2 border-gray-300 pt-3">
+                    <button mat-raised-button type="button" class="text-white" style="background-color: #166fd4;"(click)="createConfigCatalogo()">Crear Asignación</button>
+                    <button type="button" routerLink="/menu/inicio" mat-button style="color: #166fd4">
+                        Cancel
+                    </button>
+                </div>
+            </div> -->
+
+        <!-- Columna Derecha -->
+        <div class="flex flex-col flex-1 gap-3 border p-3 h-100 shadow-border">
+            <!-- config-organizacion.component.html -->
+            <!-- config-organizacion.component.html -->
+            <div class="mat-elevation-z8">
+            <div class="search-container">
+                <mat-form-field class="search-field">
+                <mat-label>Buscar</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Buscar en la tabla">
+                </mat-form-field>
+            </div>
+            
+            <table mat-table [dataSource]="dataSource" class="mat-table">
+                <!-- Codi Column -->
+                <ng-container matColumnDef="codi">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">N°</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{element.codi}}</td>
+                </ng-container>
+
+                <!-- Descripcion Column -->
+                <ng-container matColumnDef="usun_name">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">USUARIO</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{element.usun_name}}</td>
+                </ng-container>
+
+                    <!-- Descripcion Column -->
+                    <ng-container matColumnDef="cata_name">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">CATÁLOGO</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{element.cata_name}}</td>
+                </ng-container>
+
+                    <!-- Descripcion Column -->
+                <ng-container matColumnDef="fechaActividad">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">FECHA CREACIÓN</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">{{element.fechaActividad}}</td>
+                </ng-container>
+                <!-- <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class="text-center">ACCION</th>
+                    <td mat-cell *matCellDef="let element" class="text-center">
+                        <button mat-icon-button *ngIf="element.indEstado === 'I'" (click)="onDeleteAsignacion(element)">
+                            <mat-icon>check_circle</mat-icon>
+                        </button>
+                        <button mat-icon-button *ngIf="element.indEstado === 'A'" (click)="onDeleteAsignacion(element)">
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="onEditAsignacion(element)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </ng-container> -->
+                <!-- Acciones Column -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[20, 30, 40, 50]" showFirstLastButtons></mat-paginator>
+            </div>
+            <div class="flex gap-2 border-t-2 border-gray-300 pt-3">
+            </div>
+        </div>
+    </div>
+</div>

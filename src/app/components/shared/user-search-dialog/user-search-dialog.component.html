@@ -1,0 +1,19 @@
+<!-- user-search-dialog.component.html -->
+<h1 mat-dialog-title>Buscar Usuario</h1>
+<div mat-dialog-content>
+  <mat-form-field class="w-full">
+    <mat-label>Buscar por nombre</mat-label>
+    <input matInput [(ngModel)]="searchTerm" (change)="searchUsers()">
+  </mat-form-field>
+  <mat-form-field class="w-full" *ngIf="filteredUsers.length > 0">
+    <mat-label>Seleccione un usuario</mat-label>
+    <mat-select [(value)]="selectedUser">
+      <mat-option *ngFor="let user of filteredUsers" [value]="user">
+        {{ user.nombre_completo }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="selectedUser">Seleccionar</button>
+</div>

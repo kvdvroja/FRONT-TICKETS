@@ -1,0 +1,40 @@
+<div class="hidden sm:flex bg-gray-200 w-full h-full flex-col gap-2 p-3 xl:items-start border-r-2 border-gray-300 items-center">
+  <div *ngIf="showSAdmin()" class="w-full mb-2">
+    <label for="unidadSelect" class="block text-gray-700">Seleccionar Unidad</label>
+    <select [(ngModel)]="selectedUnidad" (ngModelChange)="onUnidadChange($event)" class="w-full p-2 border border-gray-300 rounded">
+      <option value="Seleccione">Seleccione</option>
+      <option *ngFor="let unidad of unidades" [value]="unidad.codi">{{ unidad.nombre }} - {{ unidad.camp_code }}</option>
+    </select>
+  </div>
+  <div class="flex w-full flex-col justify-center items-center">
+    <mat-form-field appearance="fill" style="width: 120px;">
+      <mat-label class="text-xs">N° de Ticket</mat-label>
+      <input matInput name="searchExactCodi" [(ngModel)]="searchExactCodi" (keyup.enter)="buscarTicketPorCodi()">
+    </mat-form-field>
+  </div>
+  
+  <a *ngIf="showCreate()" routerLink="/menu/create-ticket" class="cursor-pointer xl:flex lg:hidden hidden xl:flex-col" title="Crear nuevo ticket">
+    <div class="flex gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#2563eb" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+      <span class="font-semibold" style="color: #2563eb;">Nuevo Ticket</span>
+    </div>
+  </a>
+  <a *ngIf="showCreate()" routerLink="/menu/create-ticket" class="cursor-pointer flex xl:hidden lg:flex" title="Crear nuevo ticket">
+      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24"><path fill="#166fd4" d="M5 20v-3H2v-2h3v-3h2v3h3v2H7v3zm7-1v-6H9v-3H3V7q0-.825.588-1.412T5 5h10q.5 0 .938.225t.712.625L21 12l-4.35 6.15q-.275.4-.712.625T15 19z"/></svg>
+  </a>
+  <a routerLink="/menu/list-tickets" class="cursor-pointer xl:flex lg:hidden hidden" title="Ver todos los tickets">
+    <div class="flex gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#2563eb" d="M8 17q.425 0 .713-.288T9 16t-.288-.712T8 15t-.712.288T7 16t.288.713T8 17m0-4q.425 0 .713-.288T9 12t-.288-.712T8 11t-.712.288T7 12t.288.713T8 13m0-4q.425 0 .713-.288T9 8t-.288-.712T8 7t-.712.288T7 8t.288.713T8 9m3 8h6v-2h-6zm0-4h6v-2h-6zm0-4h6V7h-6zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21z"/></svg>
+      <span class="font-semibold" style="color: #2563eb;">Ver Tickets</span>
+    </div>
+  </a>
+  <a routerLink="/menu/list-tickets" class="cursor-pointer xl:hidden lg:flex flex" title="Ver todos los tickets">
+      <span><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 512 512"><path fill="#166fd4" d="m426.24 127.72l-10.94 10.94a29.67 29.67 0 0 1-42-42l10.94-10.94L314.52 16l-88 88l-4 12.09l-12.09 4L16 314.52l69.76 69.76l10.94-10.94a29.67 29.67 0 0 1 42 42l-10.94 10.94L197.48 496l194.4-194.4l4-12.09l12.09-4l88-88Zm-208.56 5.43l21.87-21.87l33 33l-21.88 21.87Zm43 43l21.88-21.88l32.52 32.52l-21.88 21.88Zm42.56 42.56l21.88-21.88l32.52 32.52l-21.84 21.93Zm75.57 75.56l-33-33l21.87-21.88l33 33Z"/></svg></span>
+  </a>
+  <button (click)="verTicketsPropios();" class="cursor-pointer xl:flex lg:hidden hidden" title="Ver todos los tickets">
+    <div class="flex gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path fill="#2563eb" d="m4.906 11.541l3.551 3.553l6.518-6.518l-3.553-3.551zm14.198-4.877l-1.511-1.512a2.024 2.024 0 0 1-2.747-2.746L13.335.894a1.017 1.017 0 0 0-1.432 0L.893 11.904a1.017 1.017 0 0 0 0 1.432l1.512 1.51a2.024 2.024 0 0 1 2.747 2.748l1.512 1.51a1.015 1.015 0 0 0 1.432 0L19.104 8.096a1.015 1.015 0 0 0 0-1.432M8.457 16.719l-5.176-5.178L11.423 3.4l5.176 5.176z"/></svg>
+      <span class="font-semibold text-xs" style="color: #2563eb;">Tickets Propios</span>
+    </div>
+  </button>
+</div>

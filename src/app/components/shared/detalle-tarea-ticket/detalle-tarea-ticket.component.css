@@ -1,0 +1,67 @@
+::ng-deep .ql-container {
+  height: 150px;
+}
+
+::ng-deep .ql-editor {
+  height: 100%;
+}
+
+.shadow-border {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ajusta estos valores según necesites */
+}
+
+.editable-title {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.editable-title mat-icon {
+  margin-left: 8px;
+  font-size: 18px;
+  color: gray;
+}
+
+.line-through {
+  text-decoration: line-through;
+}
+
+.mat-icon {
+  vertical-align: middle;
+}
+
+.subtarea-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.subtarea-item input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.subtarea-item .line-through {
+  text-decoration: line-through;
+}
+
+.subtarea-item input[type="text"] {
+  border: 1px solid #ccc;
+  padding: 2px 5px;
+  margin-right: 10px;
+}
+
+.remove-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

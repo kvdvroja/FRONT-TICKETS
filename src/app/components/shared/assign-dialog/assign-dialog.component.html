@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>Asignar Responsables</h1>
+<div mat-dialog-content>
+  <div *ngFor="let cateCodi of coordinaciones" class="mb-4">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Responsable para {{ categorias[cateCodi]?.descripcion }}</mat-label>
+      <mat-select [(ngModel)]="selectedUsers[cateCodi]" multiple (selectionChange)="openTaskDialog($event, cateCodi)">
+        <mat-option *ngFor="let user of usuarios[cateCodi]" [value]="user">
+          <div class="flex items-center">
+            <div>
+              <img *ngIf="user.fotoUsuario" [src]="user.fotoUsuario" (error)="manejarErrorImagen(user)" alt="{{ user.nombre_completo }}" class="h-10 w-9 rounded-full mr-4" title="{{ user.nombre_completo }}">
+            </div>
+            <div class="flex flex-col">
+              <span class="text-xs"><b>{{user.idUsuario}}</b></span>
+              <span class="text-sm">{{ user.nombre_completo }}</span>
+            </div>
+          </div>
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button type="button" class="text-white" style="background-color: #166fd4;" (click)="selectUser()">Seleccionar</button>
+</div>

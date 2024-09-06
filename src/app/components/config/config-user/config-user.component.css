@@ -1,0 +1,36 @@
+.panel-usuario {
+    /* Inicialmente el panel está oculto */
+    opacity: 0;
+    /* Altura inicial es 0 para que no ocupe espacio */
+    max-height: 0;
+    /* Transición suave para opacidad y altura máxima */
+    transition: opacity 0.5s ease, max-height 0.5s ease;
+    overflow: hidden; /* Asegura que el contenido no se desborde cuando el panel está cerrado */
+  }
+  
+  /* Clase para cambiar el estado a visible */
+  .panel-usuario-visible {
+    opacity: 1; /* Opacidad completa */
+    max-height: 500px; /* Un valor máximo de altura suficiente para cubrir el contenido */
+    /* La transición es la misma que se define en .panel-usuario */
+  }
+
+
+  .loader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Asegúrate de que el z-index sea suficientemente alto */
+  }
+  
+  .loader {
+    /* Estiliza tu loader aquí */
+    color: white;
+  }
+  

@@ -1,0 +1,35 @@
+<div class="flex justify-center" style="background-image: url('https://i.imgur.com/U1wUZNh.png'); height: 100vh;">
+    <div class="form-container">
+        <p class="title">REGISTRO</p>
+        <form class="form" (ngSubmit)="onRegister()">
+            <!-- <div class="input-group">
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Unidad</mat-label>
+                    <mat-select [(ngModel)]="registerData.unid_codi" name="unid_codi" required>
+                        <mat-option value="1">OSIE</mat-option>
+                        <mat-option value="2">IDIOMAS</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div> -->
+            <div class="input-group">
+                <label for="username">USUARIO</label>
+                <input type="text" [(ngModel)]="registerData.idUsuario" name="username" id="username" placeholder="" maxlength="9">
+            </div>
+            <div class="input-group">
+                <label for="email">EMAIL</label>
+                <input type="text" [(ngModel)]="registerData.email" name="email" id="email" placeholder="">
+            </div>
+            <div class="input-group">
+                <label for="password">CONTRASEÑA</label>
+                <input type="password" [(ngModel)]="registerData.password" name="password" id="password" placeholder="">
+            </div>
+            <div class="input-group">
+                <label for="c-password">CONFIRMAR CONTRASEÑA</label>
+                <input type="password" [(ngModel)]="confirmPassword" name="c-password" id="c-password" placeholder="">
+            </div>
+
+            <button type="submit" class="sign mt-3">Registrar</button>
+            <button routerLink="/login" type="button" class="sign mt-3 bg-white">Cancelar</button>
+        </form>
+    </div>
+</div>

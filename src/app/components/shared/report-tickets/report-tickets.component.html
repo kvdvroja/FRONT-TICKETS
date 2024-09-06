@@ -1,0 +1,221 @@
+<div class="w-12/12">
+    <div class="flex justify-between text-xl mb-5 text-gray-500">
+      <b>Reporte de Tickets</b>
+      <div class="mr-5">
+        <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
+          <p class="flex justify-center items-center text-center m-auto gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"/></svg>
+            Regresar
+          </p>
+        </button>
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+        <div class="row" style="width: 100% !important;">
+          <div class="col-sm-1">
+            <div class="buttons-row flex lg:flex-row flex-col mb-3 gap-3 items-start">
+              <mat-form-field appearance="fill" class="w-40">
+                <mat-label>Filtrar Por:</mat-label>
+                <mat-select [(ngModel)]="selectedFiltro" (ngModelChange)="aplicarFiltros()">
+                  <mat-option value="MesAnio">MES</mat-option>
+                  <mat-option value="EntreFechas">ENTRE FECHAS</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="buttons-row flex lg:flex-row flex-col mb-3 gap-3 items-start">
+              <mat-form-field appearance="fill" class="w-40" *ngIf="selectedFiltro == 'MesAnio'">
+                <mat-label>Fecha</mat-label>
+                <input matInput [matDatepicker]="picker" [formControl]="date">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker
+                                startView="multi-year"
+                                (monthSelected)="setMonthAndYear($event, picker)"
+                                panelClass="example-month-picker">
+                </mat-datepicker>
+              </mat-form-field>
+              <!-- <mat-form-field appearance="fill" class="w-40" *ngIf="selectedFiltro == 'EntreFechas'">
+                <mat-label>Desde</mat-label>
+                <input matInput [matDatepicker]="pickerInicio" [formControl]="dateInicio" [(ngModel)]="selectedFechaInicio">
+                <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+                <mat-datepicker #pickerInicio></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="w-40" *ngIf="selectedFiltro == 'EntreFechas'">
+                <mat-label>Hasta</mat-label>
+                <input matInput [matDatepicker]="pickerFin" [formControl]="dateFin" [(ngModel)]="selectedFechaFin">
+                <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFin></mat-datepicker>
+              </mat-form-field> -->
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>Tipologia</mat-label>
+              <mat-select name="tipologia" [(ngModel)]="selectedTipologia" (ngModelChange)="getRecords()">
+                <mat-option class="flex items-center" *ngFor="let tipologia of tipologias" [value]="tipologia.codi">
+                  <div class="flex">
+                    {{ tipologia.descripcion }}
+                  </div>
+                </mat-option>
+              </mat-select>
+              <button *ngIf="selectedTipologia" mat-icon-button matSuffix aria-label="Clear" (click)="clearTipologia()">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <mat-form-field class="w-full">
+              <mat-label>Catalogo</mat-label>
+              <input type="text" placeholder="Buscar" matInput [formControl]="catalogoCtrl" [matAutocomplete]="auto">
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onCatalogoSelected($event)">
+                <mat-option *ngFor="let catalogo of filteredCatalogos | async" [value]="catalogo.nombre">
+                  {{ catalogo.nombre }}
+                </mat-option>
+              </mat-autocomplete>
+              <button *ngIf="selectedCatalogo" mat-icon-button matSuffix aria-label="Clear" (click)="clearCatalogo()">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <mat-form-field class="w-full">
+              <mat-label>Organizacion</mat-label>
+              <input type="text" placeholder="Buscar" matInput [formControl]="organizacionCtrl" [matAutocomplete]="organizacionAuto">
+              <mat-autocomplete #organizacionAuto="matAutocomplete" (optionSelected)="onOrganizacionSelected($event)">
+                <mat-option *ngFor="let organizacion of filteredOrganizaciones | async" [value]="organizacion.descripcion">
+                  {{ organizacion.descripcion }}
+                </mat-option>
+              </mat-autocomplete>
+              <button *ngIf="selectedOrganizacion" mat-icon-button matSuffix aria-label="Clear" (click)="clearOrganizacion()">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <mat-form-field appearance="fill" class="w-full">
+              <mat-label>Coordinación</mat-label>
+              <mat-select name="categoria" [(ngModel)]="selectedCategoria" (ngModelChange)="getRecords()">
+                <mat-option *ngFor="let categoria of categorias" [value]="categoria.codi">
+                  {{ categoria.descripcion }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="selectedCategoria" mat-icon-button matSuffix aria-label="Clear" (click)="clearCategoria()">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <mat-form-field appearance="fill">
+              <mat-label>Prioridad</mat-label>
+              <mat-select [(ngModel)]="selectedPrioridad" name="prioridad" (ngModelChange)="getRecords()">
+                <mat-option *ngFor="let priority of prioridades" [value]="priority.codi">
+                  {{ priority.descripcion }}
+                </mat-option>
+              </mat-select>
+              <button *ngIf="selectedPrioridad" mat-icon-button matSuffix aria-label="Clear" (click)="clearPrioridad()">
+                <mat-icon>clear</mat-icon>
+              </button>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-2">
+            <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+              <!-- Filtros de búsqueda -->
+              <div class="row" style="width: 100% !important;">
+                <!-- Filtros aquí -->
+                <button mat-raised-button color="primary" (click)="downloadMonthlyReport()" [disabled]="isLoading">
+                  <span *ngIf="!isLoading">Descargar Reporte</span>
+                  <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="w-12/12">
+    <div class="flex flex-col">
+        <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+            <div class="row" style="width: 100% !important;">
+                <div class="col-sm-12">
+                    <div class="mat-elevation-z8">
+                        <div *ngIf="isTableLoading" class="spinner-container">
+                            <mat-spinner></mat-spinner>
+                        </div>
+                        <table mat-table [dataSource]="dataSource" *ngIf="!isTableLoading">
+                            <!-- Ticket ID Column -->
+                            <ng-container matColumnDef="ticketID">
+                                <th mat-header-cell *matHeaderCellDef> Ticket ID </th>
+                                <td mat-cell *matCellDef="let element"> {{element.ticketID}} </td>
+                            </ng-container>
+                            <!-- Nombre Column -->
+                            <ng-container matColumnDef="nombre">
+                                <th mat-header-cell *matHeaderCellDef> Nombre </th>
+                                <td mat-cell *matCellDef="let element"> {{element.nombre}} </td>
+                            </ng-container>
+                            <!-- Asunto Column -->
+                            <ng-container matColumnDef="asunto">
+                                <th mat-header-cell *matHeaderCellDef> Asunto </th>
+                                <td mat-cell *matCellDef="let element"> {{element.asunto}} </td>
+                            </ng-container>
+                            <!-- Organización Column -->
+                            <ng-container matColumnDef="organizacionDescripcion">
+                                <th mat-header-cell *matHeaderCellDef> Organización </th>
+                                <td mat-cell *matCellDef="let element"> {{element.organizacionDescripcion}} </td>
+                            </ng-container>
+                             <!-- Catálogo Column -->
+                             <ng-container matColumnDef="catalogoDescripcion">
+                                <th mat-header-cell *matHeaderCellDef> Catálogo </th>
+                                <td mat-cell *matCellDef="let element"> {{element.catalogoDescripcion}} </td>
+                            </ng-container>
+                            <!-- Tipología Column -->
+                            <ng-container matColumnDef="tipologiaDescripcion">
+                                <th mat-header-cell *matHeaderCellDef> Tipología </th>
+                                <td mat-cell *matCellDef="let element"> {{element.tipologiaDescripcion}} </td>
+                            </ng-container>
+                            <!-- Prioridad Column -->
+                            <ng-container matColumnDef="prioridadDescripcion">
+                                <th mat-header-cell *matHeaderCellDef> Prioridad </th>
+                                <td mat-cell *matCellDef="let element"> {{element.prioridadDescripcion}} </td>
+                            </ng-container>
+                            <!-- Vía Column -->
+                            <ng-container matColumnDef="viaDescripcion">
+                                <th mat-header-cell *matHeaderCellDef> Vía </th>
+                                <td mat-cell *matCellDef="let element"> {{element.viaDescripcion}} </td>
+                            </ng-container>
+                            <!-- Estado Column -->
+                            <ng-container matColumnDef="estado">
+                                <th mat-header-cell *matHeaderCellDef> Estado </th>
+                                <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+                            </ng-container>
+                            <!-- Fecha de Creación Column -->
+                            <ng-container matColumnDef="fechaCreacion">
+                                <th mat-header-cell *matHeaderCellDef> Fecha de Creación </th>
+                                <td mat-cell *matCellDef="let element"> {{element.fechaCreacion}} </td>
+                            </ng-container>
+                            <!-- Fecha de Cierre Column -->
+                            <ng-container matColumnDef="fechaCierre">
+                                <th mat-header-cell *matHeaderCellDef> Fecha de Cierre </th>
+                                <td mat-cell *matCellDef="let element"> {{element.fechaCierre}} </td>
+                            </ng-container>
+                            <!-- Demora Column -->
+                            <ng-container matColumnDef="descripcion">
+                              <th mat-header-cell *matHeaderCellDef>Tiempo de Atención</th>
+                              <td mat-cell *matCellDef="let element"> {{ calcularTiempo(element.fechaCreacion, element.fechaCierre) }} </td>
+
+                          </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                        <mat-paginator [pageSizeOptions]="[25,40, 50]"
+                                        showFirstLastButtons
+                                        aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

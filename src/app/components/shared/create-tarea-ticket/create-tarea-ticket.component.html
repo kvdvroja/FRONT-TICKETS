@@ -1,0 +1,282 @@
+<div class="container w-full">
+    <div class="w-full flex lg:hidden xl:hidden 2xl:hidden justify-center items-center" style="background-color:#3b83f6;">
+        <span class="text-white flex my-auto text-lg"><b>Ticket: {{asignacionCategoria?.breq_codi}} - {{asignacionCategoria?.cate_codi}}</b></span>
+      </div>
+  <div class="flex container justify-center lg:justify-between xl:justify-between 2xl:justify-between text-center items-center lg:px-2 xl:px-2 2xl:px-2 my-4 bg-white">
+  <div class="flex flex-row gap-2">
+    <span class="text-gray-500 hidden lg:flex xl:flex 2xl:flex my-auto text-lg"><b>Ticket: {{asignacionCategoria?.breq_codi}} - {{asignacionCategoria?.cate_codi}}</b></span>
+    <button *ngIf="showCreate(ticket!.estado)" [routerLink]="['../../edit-ticket', ticket!.id]" title="Editar" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+      <img src="/assets/escrito.png" class="fixed-size-image-router">
+      Editar
+    </button>
+    <button (click)="navigateToDetalle(ticket!)" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+      <img src="/assets/ListDetail.svg" alt="Detalle" class="fixed-size-image-router">
+      Detalle
+    </button>
+  </div>
+    <div class="">
+     <div class="flex gap-2 mx-2 justify-center items-center">
+      <div class="flex flex-col lg:flex-row xl:flex-row 2xl:flex-row gap-2 items-center">
+        <button (click)="goBack();" mat-raised-button type="button" class="" style="background-color:#3b83f6; width:120px;">
+          <p class="flex justify-center items-center text-center m-auto gap-1 text-white">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"/></svg>
+              Regresar
+          </p>
+      </button>
+      </div>
+    </div>
+    </div>
+  </div>
+  
+  <div *ngIf="ticket">
+    <div class="flex flex-col-reverse lg:flex-row xl:flex-row 2xl:flex-row w-full lg:mt-0 xl:mt-0 2xl:mt-0">
+        <div class="flex flex-col w-full lg:w-9/12 xl:w-9/12 2xl:w-9/12 gap-2">
+          <div class="flex flex-col mx-2 gap-2">
+            <span class="text-xl"><b>{{ticket.asunto}}</b></span>
+            <div class="flex flex-row justify-start gap-2">
+                <button type="button" (click)="openAssignTareaDialog()" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#0284c7" d="m10.95 18l5.65-5.65l-1.45-1.45l-4.225 4.225l-2.1-2.1L7.4 14.45zM6 22q-.825 0-1.412-.587T4 20V4q0-.825.588-1.412T6 2h8l6 6v12q0 .825-.587 1.413T18 22zm7-13h5l-5-5z"/></svg>
+                    Agregar nueva tarea</button>
+                <button type="button" (click)="openVinculacionDialog(ticket.ticketID)" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#0284c7" d="M16 22v-2.25q-1.4-.45-2.35-1.6t-1.1-2.65h2q.2 1.075 1.013 1.787T17.5 18h3q.625 0 1.063.438T22 19.5V22zm3-5q-.825 0-1.412-.587T17 15t.588-1.412T19 13t1.413.588T21 15t-.587 1.413T19 17M9 14q0-3.75 2.625-6.375T18 5v2q-2.925 0-4.962 2.038T11 14zm4 0q0-2.075 1.463-3.537T18 9v2q-1.25 0-2.125.875T15 14zM2 11V8.5q0-.625.438-1.062T3.5 7h3q1.125 0 1.938-.712T9.45 4.5h2q-.15 1.5-1.1 2.65T8 8.75V11zm3-5q-.825 0-1.412-.587T3 4t.588-1.412T5 2t1.413.588T7 4t-.587 1.413T5 6"/></svg>
+                    Vincular requerimiento</button>
+            </div>
+          </div>
+
+
+          <div class="mx-2">
+            <div class="flex flex-col">
+              <span class="text-md my-2 font-medium">Lista de tareas:</span>
+              <div class="flex flex-row w-full gap-1 justify-center items-center">
+                <div class="w-9/12 flex justify-center items-center">
+                  <mat-progress-bar mode="determinate" [value]="calcularProgreso()"></mat-progress-bar>
+                </div>
+                <div class="w-3/12 flex justify-center items-center">
+                  <span class="text-md"><b>{{ calcularProgreso() | number:'1.2-2' }}% Terminado</b></span>
+                </div>
+              </div>
+            </div> 
+            <div class="flex w-full flex-col">
+              <div *ngFor="let tarea of asignarTickets; let i = index" class="flex justify-between items-center border p-2 w-full my-2">
+                <div class="flex flex-row gap-2">
+                  <div class="flex flex-col justify-center items-center">
+                    <button *ngIf="i > 0" (click)="moveTaskUp(tarea)" title="Mover hacia arriba">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="#0284c7" d="M12 4.414L16.95 9.364l1.414-1.414L12 1.586 5.636 7.95l1.414 1.414L12 4.414z"/>
+                      </svg>
+                    </button>
+                    <button *ngIf="i < asignarTickets.length - 1" (click)="moveTaskDown(tarea)" title="Mover hacia abajo">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+                        <path fill="#0284c7" d="M12 19.586l-4.95-4.95-1.414 1.414L12 22.414l6.364-6.364-1.414-1.414-4.95 4.95z"/>
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="flex flex-row justify-center items-center">
+                    <span><b>REQ-{{ i + 1 }}</b></span> - <span>{{tarea.nombre}}</span>
+                  </div>
+                </div>
+                <div class="flex flex-row gap-2">
+                  <div class="flex flex-row justify-center items-center">
+                    <span *ngFor="let usuario of usuariosAsignadosPorTarea[tarea.codi]" class="">
+                      <img [src]="usuario.fotoUsuario" (error)="manejarErrorImagenAsign(usuario)" alt="{{ usuario.nombre_completo }}" class="h-7 w-7 rounded-full" title="{{ usuario.nombre_completo }}">
+                    </span>
+                  </div>
+                  <button title="Detalle de Tarea" type="button" (click)="openDetalleTareaDialog(tarea.codi);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24">
+                      <path fill="#ea580c" d="M5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h4.2q.325-.9 1.088-1.45T12 1t1.713.55T14.8 3H19q.825 0 1.413.588T21 5v5.025q0 .425-.288.713t-.712.287t-.712-.288t-.288-.712V5H5v14h5q.425 0 .713.288T11 20t-.288.713T10 21zm0-3v1V5v6.075V11zm3-1h2.5q.425 0 .713-.288T11.5 16t-.288-.712T10.5 15H8q-.425 0-.712.288T7 16t.288.713T8 17m0-4h5q.425 0 .713-.288T14 12t-.288-.712T13 11H8q-.425 0-.712.288T7 12t.288.713T8 13m0-4h8q.425 0 .713-.288T17 8t-.288-.712T16 7H8q-.425 0-.712.288T7 8t.288.713T8 9m4-4.75q.325 0 .538-.213t.212-.537t-.213-.537T12 2.75t-.537.213t-.213.537t.213.538t.537.212M18 23q-2.075 0-3.537-1.463T13 18t1.463-3.537T18 13t3.538 1.463T23 18t-1.463 3.538T18 23m-.5-4.5v2q0 .2.15.35T18 21t.35-.15t.15-.35v-2h2q.2 0 .35-.15T21 18t-.15-.35t-.35-.15h-2v-2q0-.2-.15-.35T18 15t-.35.15t-.15.35v2h-2q-.2 0-.35.15T15 18t.15.35t.35.15z"/>
+                    </svg>
+                  </button>
+                  <div class="flex border p-2 rounded-lg justify-center items-center" style="width: 120px;" [ngClass]="getProgresoClase(tarea.prog_codi)">{{ getProgresoTexto(tarea.prog_codi) }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+            <div class="mx-2">
+                <div class="flex flex-col">
+                    <span class="text-md my-2 font-medium">Requerimientos vinculados:</span>
+                </div>
+                <div class="flex w-full flex-col">
+                    <div *ngIf="ticketsVinculados.length === 0" class="flex justify-center items-center border p-2 w-full my-2">
+                        No hay Requerimientos Vinculados.
+                    </div>
+                    <div *ngFor="let vinculado of ticketsVinculados; let i = index" class="flex justify-between items-center border p-2 w-full my-2">
+                      <div class="flex items-center gap-2 w-4/12">
+                        <img [src]="vinculado.ticket.urlImagenUsuario" (error)="manejarErrorImagen2(vinculado.ticket)" alt="{{ vinculado.ticket.nombre }}" class="h-12 w-12 rounded-full" title="{{ vinculado.ticket.nombre }}">
+                        <div>
+                          <span class="font-medium text-xs">{{vinculado.ticket.idUsuario}}</span>
+                          <span class="block text-gray-500 text-xs">{{vinculado.ticket.nombre}}</span>
+                        </div>
+                      </div>
+                      <div class="flex flex-col items-start w-8/12">
+                        <span class="font-medium text-blue-500">Asunto:</span>
+                        <span class="text-gray-500">{{vinculado.ticket.asunto}}</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <button (click)="verDetalleTicket(vinculado.ticket.id)" title="Detalle de Ticket">
+                          <img src="/assets/buscar2.png" alt="Detalle de Ticket" class="fixed-size-image">
+                        </button>
+                        <button (click)="desvincularRequerimiento(vinculado)" title="Desvincular Requerimiento">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#e11d48" d="M7 21q-.825 0-1.412-.587T5 19V6H4V4h5V3h6v1h5v2h-1v13q0 .825-.587 1.413T17 21zm2-4h2V8H9zm4 0h2V8h-2z"/></svg>
+                        </button>
+                      </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+
+
+
+
+
+        <div class="my-2 w-full lg:w-3/12 xl:w-3/12 2xl:w-3/12 border border-gray-100 flex flex-col p-4">
+          <div class="flex flex-col w-full">
+            <span class="text-blue-600"><b>Coordinación:</b></span>
+            <span class="text-orange-500 text-xl" @fadeIn><b>{{ getCategoriaDescripcion(asignacionCategoria!.cate_codi) }}</b></span>
+            <br>
+            <span class="text-blue-600"><b>Personas asignadas:</b></span>
+            <div class="flex flex-row w-full flex-wrap justify-start gap-2 m-2">
+              <span *ngFor="let usuario of usuarios[asignacionCategoria!.cate_codi]" @fadeIn>
+                <img [src]="usuario.fotoUsuario" (error)="manejarErrorImagenAsign(usuario)" alt="{{ usuario.nombre_completo }}" class="h-10 w-10 rounded-full" title="{{ usuario.nombre_completo }}">
+              </span>
+            </div>
+            <span class="text-blue-600"><b>Registrado por:</b></span>
+            <div class="flex flex-row w-full justify-start gap-2 m-2">
+              <span @fadeIn><img [src]="imagenUsuario" (error)="manejarErrorImagen()" alt="{{ ticket.nombre }}" class="h-10 w-10 rounded-full" title="{{ ticket.nombre }}"></span>
+            </div>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex flex-col gap-1">
+              <span class="text-blue-600"><b>Recepción:</b></span>
+              <span>{{ viaRecepcionMap[ticket.viaRecepcion] }}</span>
+              <span class="text-blue-600"><b>Catálogo:</b></span>
+              <div style="font-weight: 400;" [innerHtml]="displayCatalogPath"></div>
+              <span class="text-blue-600"><b>Prioridad:</b></span>
+              <span class="flex flex-row text-center items-center gap-1" *ngIf="prioridadMap[ticket.prioridad].descripcion">
+                <img *ngIf="prioridadMap[ticket.prioridad]?.imagen" 
+                [src]="prioridadMap[ticket.prioridad].imagen" 
+                [alt]="prioridadMap[ticket.prioridad].descripcion" 
+                class="h-6 w-6">
+                 {{ prioridadMap[ticket.prioridad].descripcion }}
+               </span>
+               <span class="text-blue-600"><b>Etiquetas:</b></span>
+               <div class="flex flex-col flex-wrap">
+                 <div *ngFor="let etiqueta of combinedEtiquetas()" 
+                      class="etiqueta-content m-1 p-2 rounded-md" 
+                      [style.background-color]="etiqueta.color_fondo">
+                   <span class="text-white uppercase">{{ etiqueta.nombre }}</span>
+                 </div>
+               </div>                                           
+              <span class="text-blue-600"><b>Fecha:</b></span>
+              <span>{{ticket.fechaCreacion}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  
+  <div class="mx-2">
+    <div class="flex flex-col">
+        <span class="text-md my-2 font-medium">Actividad:</span>
+    </div>
+</div>
+
+<div class="container">
+  <div class="my-4 mx-2">
+    <button
+      class="p-2"
+      [ngClass]="{
+        'text-blue-600 border-r-2 border-gray-400': selectedTab === 'comentarios',
+        'text-gray-400': selectedTab !== 'comentarios'
+      }"
+      (click)="selectTab('comentarios')"
+    >
+      <b>Comentarios</b>
+    </button>
+    <button
+      class="p-2"
+      [ngClass]="{
+        'text-blue-600 border-l-2 border-gray-400': selectedTab === 'historial',
+        'text-gray-400': selectedTab !== 'historial'
+      }"
+      (click)="selectTab('historial')"
+    >
+      <b>Historial</b>
+    </button>
+  </div>
+</div>
+  
+  <div *ngIf="selectedTab === 'comentarios'" class="flex w-full flex-col shadow-border my-4 p-1 lg:p-0 xl:p-0 2xl:p-0">
+    <div class="flex flex-col w-full lg:w-9/12 xl:w-9/12 2xl:w-9/12 gap-2">
+      <div *ngFor="let respuesta of respuestas" class="flex flex-row w-full py-2">
+        <div class="hidden lg:flex xl:flex 2xl:flex justify-center items-center w-1/12">
+          <img [src]="respuesta.imagenUsuarioR" (error)="manejarErrorImagenRespuesta(respuesta)" alt="Imagen de usuario" class="h-10 w-10 lg:h-20 lg:w-20 xl:h-20 xl:w-20 2xl:h-20 2xl:w-20 rounded-full" title="{{ respuesta.idUsuario }}">
+        </div>
+        <div class="flex flex-col border border-gray-500 rounded-lg w-full lg:w-11/12 xl:w-11/12 2xl:w-11/12 mr-0 lg:mr-2 xl:mr-2 2xl:mr-2 pt-4 pb-2">
+            <img [src]="respuesta.imagenUsuarioR" (error)="manejarErrorImagenRespuesta(respuesta)" alt="Imagen de usuario" class="flex lg:hidden xl:hidden 2xl:hidden h-20 w-20 rounded-full mx-auto" title="{{ respuesta.idUsuario }}">
+          <div class="flex flex-row justify-center lg:justify-between xl:justify-between 2xl:justify-between mx-2 mt-1 lg:mt-0 xl:mt-0 2xl:mt-0"><span class="text-xs lg:text-sm xl:text-sm 2xl:text-sm" style="text-align:center"><b>{{ respuesta.nombreUsuario }} - {{respuesta.idUsuario}}</b></span><span class="hidden lg:flex xl:flex 2xl:flex">{{ticket?.fechaCreacion}}</span></div>
+          <div class="m-2"><pre class="code-container font-sans"><code [innerHtml]="getSafeHtml(respuesta?.descripcion!)"></code></pre></div>
+          <div class="flex flex-row m-2 justify-between">
+            <ul class="flex gap-1 flex-wrap justify-start">
+              <li *ngFor="let adjunto of respuesta.adjuntosRespuesta" class="flex justify-center">
+                <button class="flex flex-row mt-2" (click)="openPreviewModal(adjunto.url)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#666666" d="M16.5 6v11.5a4 4 0 0 1-4 4a4 4 0 0 1-4-4V5A2.5 2.5 0 0 1 11 2.5A2.5 2.5 0 0 1 13.5 5v10.5a1 1 0 0 1-1 1a1 1 0 0 1-1-1V6H10v9.5a2.5 2.5 0 0 0 2.5 2.5a2.5 2.5 0 0 0 2.5-2.5V5a4 4 0 0 0-4-4a4 4 0 0 0-4 4v12.5a5.5 5.5 0 0 0 5.5 5.5a5.5 5.5 0 0 0 5.5-5.5V6z"/></svg>
+                  <span class="text-blue-500">{{adjunto.desc}}</span>
+                </button>
+              </li>
+            </ul>
+            <span class="flex lg:hidden xl:hidden 2xl:hidden">{{ticket?.fechaCreacion}}</span>
+            <button *ngIf="respuesta.idUsuario == this.userDetail?.idUsuario" type="button" title="Editar" (click)="editarRespuesta(respuesta)" class=""><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#166fd4" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM17.6 7.8L19 6.4L17.6 5l-1.4 1.4z"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="flex w-full flex-row mt-3">
+      <div class="flex flex-row w-full lg:w-9/12 xl:w-9/12 2xl:w-9/12 justify-start">
+        <!-- lg:w-11/12 xl:w-11/12 2xl:w-11/12 -->
+        <div class="flex flex-col w-full gap-2">
+          <div class="my-4 mx-2 lg:mx-0 xl:mx-0 2xl:mx-0"><b>Nuevo comentario:</b></div>
+          <!-- pr-0 lg:pr-4 xl:pr-4 2xl:pr-4 -->
+          <div class="flex w-full pb-4">              
+            <quill-editor class="w-full" [(ngModel)]="descEditor"
+            [modules]="editorConfig"
+            (onEditorCreated)="setEditorInstance($event)"
+            (onContentChanged)="onEditorChange($event)">
+            </quill-editor>
+          </div>
+          <div class="flex flex-col-reverse lg:flex-row xl:flex-row 2xl:flex-row gap-2 justify-between m-2 items-center">
+            <!-- Botón para respuesta sin adjunto -->
+            <button mat-raised-button type="button" class="text-white mt-2" style="background-color: #166fd4;"
+            (click)="crearRespuesta(false)" *ngIf="selectedFiles.length === 0">Responder</button>
+            <button mat-raised-button type="button" class="text-white mt-2" style="background-color: #007BFF;" 
+            (click)="crearRespuesta(true)" *ngIf="selectedFiles.length > 0">Responder con Adjunto</button>
+            
+            <!-- Botón para respuesta con adjunto -->
+            <input type="file" (change)="NewonFileSelected($event)" multiple>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido de Historial -->
+<div *ngIf="selectedTab === 'historial'" class="shadow-border my-4 mx-2 p-1 lg:p-0 xl:p-0 2xl:p-0">
+  <div class="flex flex-col w-full lg:w-9/12 xl:w-9/12 2xl:w-9/12 gap-1">
+    <div *ngFor="let historial of historiales" class="flex flex-row w-full">
+      <div class="hidden lg:flex xl:flex 2xl:flex justify-center items-center" style="width:5%;">
+        <img [src]="historial.imagenUsuarioH" (error)="manejarErrorImagenHistorial(historial)" alt="Imagen de usuario" class="h-8 w-8 rounded-full" title="{{ historial.nombreUsuarioH }}">
+      </div>
+      <div class="flex flex-row justify-between border m-2 border-gray-500 rounded-lg w-full mr-0 lg:mr-2 xl:mr-2 2xl:mr-2" style="width:95%;">
+        <div class="m-2">
+          <span>{{historial?.descripcion}}</span>
+        </div>
+        <div class="m-2">
+          <span>{{historial?.fechaActividad}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  </div>

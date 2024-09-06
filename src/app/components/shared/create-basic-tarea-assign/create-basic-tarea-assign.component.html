@@ -1,0 +1,14 @@
+<h1 mat-dialog-title>Asignar Usuarios a la Tarea</h1>
+<div mat-dialog-content>
+  <div class="flex flex-col gap-2 justify-start items-start">
+    <div class="flex flex-row w-full justify-start gap-2 m-2">
+      <span *ngFor="let usuario of usuarios">
+        <img [src]="usuario.fotoUsuario" (error)="manejarErrorImagen(usuario)" alt="{{ usuario.nombre_completo }}" class="h-10 w-10 rounded-full cursor-pointer" [title]="usuario.nombre_completo" (click)="toggleUserSelection(usuario)" [ngClass]="{'border-2 border-blue-500': isSelected(usuario)}">
+      </span>
+    </div>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="confirmSelection()">Confirmar</button>
+  <button mat-button (click)="dialogRef.close()">Cerrar</button>
+</div>

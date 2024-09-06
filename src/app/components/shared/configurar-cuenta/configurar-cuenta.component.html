@@ -1,0 +1,39 @@
+<div class="container lg:m-4 w-full">
+    <div class="flex justify-between text-xl my-3 lg:my-5 text-gray-500">
+      <b>Configurar Cuenta</b>
+    </div>
+    <div class="flex flex-row justify-center items-center">
+        <div>
+        </div>
+        <div class="text-white">
+            <b>Cambiar Contraseña</b>
+            <form [formGroup]="passwordForm" (ngSubmit)="onSubmit()">
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Contraseña Anterior</mat-label>
+                    <input matInput formControlName="oldPassword" type="password">
+                    <mat-error *ngIf="passwordForm.get('oldPassword')?.invalid && passwordForm.get('oldPassword')?.touched">
+                        Contraseña anterior es requerida
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Contraseña Nueva</mat-label>
+                    <input matInput formControlName="newPassword" type="password">
+                    <mat-error *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+                        Contraseña nueva debe tener al menos 8 caracteres, una mayúscula y un número
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Repita la Contraseña</mat-label>
+                    <input matInput formControlName="confirmPassword" type="password">
+                    <mat-error *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched">
+                        Las contraseñas deben coincidir
+                    </mat-error>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit" [disabled]="passwordForm.invalid">Actualizar Contraseña</button>
+            </form>
+        </div>
+    </div>
+</div>

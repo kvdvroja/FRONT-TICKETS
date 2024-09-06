@@ -1,0 +1,45 @@
+<div class="etiquetas-container">
+  <h2 class="title">Etiquetas</h2>
+  <div class="search-bar">
+    <input type="text" placeholder="Buscar etiquetas..." (input)="filtrarEtiquetas($event)">
+  </div>
+  
+  <div class="etiquetas-list">
+    <div *ngFor="let etiqueta of etiquetasFiltradas" class="etiqueta-item">
+      <mat-checkbox [checked]="etiquetasSeleccionadas.includes(etiqueta)" (change)="toggleSeleccionEtiqueta(etiqueta)">
+        <div class="etiqueta-content uppercase" [style.background-color]="etiqueta.color_fondo">
+          {{ etiqueta.nombre }}
+        </div>
+      </mat-checkbox>
+      <button mat-icon-button class="edit-button" (click)="editarEtiqueta(etiqueta.codi!)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button class="delete-button" (click)="eliminarEtiqueta(etiqueta.codi!)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <button mat-button class="crear-etiqueta" (click)="toggleFormulario()">
+    <mat-icon>add</mat-icon> Crear una etiqueta nueva
+  </button>
+
+  <button mat-button class="mostrar-mas">.....</button>
+</div>
+
+<div *ngIf="mostrarFormulario" class="formulario-etiqueta">
+    <form [formGroup]="etiquetaForm" (ngSubmit)="guardarEtiqueta()" class="flex flex-col gap-1 items-center justify-center">
+        <div class="flex flex-row justify-center items-start gap-2 p-2">
+            <input class="w-14 h-14" type="color" id="colorPicker" formControlName="color" (change)="onColorChange($event)">
+
+            <mat-form-field appearance="fill" class="w-full justify-center flex items-center">
+            <mat-label>Nombre de la etiqueta</mat-label>
+            <input matInput formControlName="nombre" required>
+            </mat-form-field>
+        </div>
+	    <div class="form-actions">
+      	<button mat-button type="button" (click)="toggleFormulario()">Cancelar</button>
+      	<button mat-raised-button color="primary" type="submit" [disabled]="!etiquetaForm.valid">Guardar</button>
+    	</div>
+    </form>
+</div>

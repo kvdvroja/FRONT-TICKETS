@@ -1,0 +1,48 @@
+.shadow-border {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* ajusta estos valores según necesites */
+  }
+  
+  .listo{
+    color: #4E846D;
+    background-color: #E1FCEF;
+  }
+  
+  .iniciado{
+    color: #E65B00;
+    background-color: #FEDEB4;
+  }
+  
+  .programado{
+    color: #6D5713;
+    background-color: #F5F3CD;
+  }
+
+  .code-container {
+    white-space: pre-wrap;      /* Mantiene el formato de espacios pero permite el salto de línea */
+    word-wrap: break-word;      /* Asegura que las palabras largas no sobresalgan del contenedor */
+    overflow-wrap: break-word;  /* Alternativa a word-wrap */
+  }
+
+  
+::ng-deep .ql-container {
+  height: 300px;
+}
+
+::ng-deep .ql-editor {
+  height: 100%;
+}
+
+
+.fixed-size-image {
+  width: 30px;
+  height: 30px;
+  max-width: 30px; /* Asegura que la imagen no se agrande más allá de este tamaño */
+  max-height: 30px; /* Asegura que la imagen no se agrande más allá de este tamaño */
+}
+
+.fixed-size-image-router {
+  width: 16px;
+  height: 16px;
+  max-width: 16px; /* Asegura que la imagen no se agrande más allá de este tamaño */
+  max-height: 16px; /* Asegura que la imagen no se agrande más allá de este tamaño */
+}

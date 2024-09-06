@@ -1,0 +1,17 @@
+<div *ngIf="isSupported; else unsupported">
+  <div *ngIf="fileType === 'image'">
+    <img [src]="selectedFileUrl" alt="Preview Image" style="width:900px; height: 700px;">
+  </div>
+  <div *ngIf="fileType === 'pdf'">
+    <embed [attr.src]="selectedFileUrl" type="application/pdf" width="900px" height="700px" />
+    <!-- O intenta con un iframe -->
+    <!-- <iframe [attr.src]="selectedFileUrl" width="100%" height="700px"></iframe> -->
+  </div>
+  <div *ngIf="fileType === 'txt'">
+    <button (click)="downloadFile(data.url)" style="position: absolute; top: 10px; right: 10px;">Descargar</button>
+    <iframe [src]="selectedFileUrl" style="width: 900px; height: 700px;"></iframe>
+  </div>
+</div>
+<ng-template #unsupported>
+  <p>Unsupported file type</p>
+</ng-template>

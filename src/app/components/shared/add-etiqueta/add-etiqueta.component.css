@@ -1,0 +1,83 @@
+.etiquetas-container {
+  width: 100%;
+  padding: 16px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.etiquetas-list {
+  max-height: 600px;
+  overflow-y: hidden;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.etiqueta-item {
+  display: flex;
+  align-items: center;
+  margin-top: -12px;
+  margin-bottom: -12px;
+}
+
+.etiqueta-content {
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 500;
+  width: 160px;
+}
+
+.edit-button {
+  opacity: 0.5;
+}
+
+.crear-etiqueta {
+  width: 100%;
+  text-align: left;
+  margin-top: 8px;
+}
+
+.mostrar-mas {
+    width: 100%;
+    text-align: left;
+    margin-top: 8px;
+}
+
+.modo-daltonico {
+  margin-top: 16px;
+}
+
+.formulario-etiqueta {
+  margin-top: 16px;
+  padding: 16px;
+}
+
+.color-picker {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.color-picker label {
+  margin-right: 8px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}

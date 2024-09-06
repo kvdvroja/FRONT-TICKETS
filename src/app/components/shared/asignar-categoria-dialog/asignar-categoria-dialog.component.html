@@ -1,0 +1,11 @@
+<span class="flex justify-center items-center text-xl m-4"><b>Seleccione una categoría</b></span>
+<div mat-dialog-content>
+  <mat-list>
+    <mat-list-item class="flex justify-center items-center flex-col" *ngFor="let categoria of data.categorias" (click)="onCategoriaSelect(categoria)">
+      <button mat-button >{{ getCategoriaDescripcion(categoria.cate_codi) }}</button>
+    </mat-list-item>
+  </mat-list>
+</div>
+<div class="flex justify-center items-center m-2">
+  <button mat-flat-button (click)="onNoClick()">Cancelar</button>
+</div>
