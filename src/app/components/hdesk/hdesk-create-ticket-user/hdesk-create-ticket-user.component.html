@@ -1,0 +1,123 @@
+<div class="spinner-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  
+  <div class="container lg:m-4 w-full">
+    <div class="flex justify-between text-xl my-3 lg:my-5 text-gray-500">
+      <b>REGISTRO TICKET USUARIO</b>
+      <div class="lg:mr-5">
+        <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
+            <p class="flex justify-center items-center text-center m-auto gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"/></svg>
+                Regresar
+            </p>
+        </button></div>
+  </div>
+      <form #ticketForm="ngForm" (ngSubmit)="createTicket()">
+        <div class="lg:flex lg:flex-wrap gap-5 w-full">
+            <div class="flex flex-col w-1/2 container justify-center text-center items-center">
+                <div class="text-justify">
+                    <div class="w-full justify-center text-center items-center p-2 mb-4" style="background-color: #2563eb;">
+                      <span class="text-white text-xl font-semibold">INSTRUCCIONES</span><br>
+                    </div>
+                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">1. ID DE USUARIO Y NOMBRE: </b>Asegúrate de que estos campos estén completados con tu información personal.</span><br>
+                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">2. ASUNTO: </b>Escribe un título breve y claro que resuma el problema o solicitud que deseas reportar.</span><br>
+                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">3. DESCRIPCIÓN: </b>En este campo, detalla tu problemática de la manera más clara y precisa posible. Asegúrate de incluir toda la información relevante, como los pasos que realizaste antes de encontrar el problema, y cualquier otro detalle que consideres importante para que podamos ayudarte mejor.</span><br>
+                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">4. CATÁLOGO DE SERVICIOS (OPCIONAL): </b>Si lo consideras necesario, selecciona un servicio del catálogo que esté relacionado con tu problema o solicitud.</span><br>
+                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">5. ADJUNTAR ARCHIVOS (OPCIONAL): </b>Si dispones de imágenes, documentos u otros archivos que ayuden a explicar tu caso, puedes adjuntarlos utilizando esta opción.</span><br>
+                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">6. CREAR TICKET: </b>Una vez completados todos los campos, haz clic en el botón "Crear Ticket" para enviar tu solicitud.</span><br>
+                </div>
+                <img class="flex justify-center items-center text-center" src="assets/banner-ticket-create.png" alt="" title="banner" style="width: 400px; height: 400px;">
+            </div>
+              <!-- Columna Derecha -->
+              <div class="flex flex-col flex-1 gap-3 border p-3 h-100 shadow-border w-1/2">
+                <div class="flex flex-col flex-1 gap-3">
+  
+                    <div class="flex flex-col lg:flex-row gap-2">
+                          <div class="flex gap-2">
+                              <mat-form-field appearance="fill" class="w-full">
+                                  <mat-label>ID Usuario</mat-label>
+                                  <input matInput maxlength="9" [(ngModel)]="ticket.idUsuario" name="idUsuario" #idUsuario="ngModel" required [disabled]="true">
+                              </mat-form-field>
+                          </div>
+                          <mat-form-field appearance="fill" class="w-full">
+                              <mat-label>Nombre</mat-label>
+                              <input matInput [(ngModel)]="ticket.nombre" name="nombre" required [disabled]="true">
+                            </mat-form-field>
+                    </div>
+                </div>
+                <!-- Asunto -->
+                <mat-form-field appearance="fill" class="w-full">
+                    <mat-label>Asunto</mat-label>
+                    <input matInput [(ngModel)]="ticket.asunto" name="asunto" required>
+                </mat-form-field>
+                      
+                <!-- Detalle -->
+                <div class="mb-3 container break-all" style="overflow-wrap: break-word;">
+                    <label for="detalle" class="form-label text-gray-500"><b>Descripción:</b></label>
+                    <quill-editor class="break-all" [(ngModel)]="descEditor"
+                        [modules]="editorConfig"
+                        (onEditorCreated)="setEditorInstance($event)"
+                        (onContentChanged)="onEditorChange($event)"
+                        style="height: 300px;">
+                    </quill-editor>
+                </div>
+
+                <div class="flex gap-2 pt-3">
+                  <div class="text-md text-gray-500">
+                    <b>Catálogo de servicios </b>
+                  </div>
+                </div>
+                <div class="flex flex-col lg:flex-row gap-2 w-full">
+                  <div class="flex gap-2 lg:w-1/3">
+                    <mat-form-field appearance="fill" class="w-full">
+                      <mat-label>Busqueda</mat-label>
+                      <input matInput [(ngModel)]="searchQuery" (input)="search(searchQuery)" name="serviceName">
+                    </mat-form-field>
+                    <div class="mb-3 flex lg:hidden flex-col justify-start">
+                      <button (click)="openCatalogo()" class="flex items-center justify-center border-2 bg-blue-600 rounded-md shadow-border" type="button" style="width:54px; height:54px;">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="#ffffff" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"/></svg>
+                      </button>
+                  </div>
+                </div>
+                <div class="lg:w-2/3">
+                  <mat-form-field class="w-full">
+                    <mat-label>Catalogo</mat-label>
+                    <mat-select [(value)]="ticket.catalogo" (selectionChange)="handleCatalogChange($event.value)" required>
+                      <mat-option *ngFor="let catalogo of catalogos" [value]="catalogo.codi">
+                        {{ catalogo.nombre }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div>
+                    <div class="mb-3 hidden lg:flex flex-col justify-start">
+                        <button (click)="openCatalogo()" class="flex items-center justify-center border-2 bg-blue-600 rounded-md shadow-border" type="button" style="width:54px; height:54px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 256 256"><path fill="#ffffff" d="M144 128a16 16 0 1 1-16-16a16 16 0 0 1 16 16m-84-16a16 16 0 1 0 16 16a16 16 0 0 0-16-16m136 0a16 16 0 1 0 16 16a16 16 0 0 0-16-16"/></svg>
+                        </button>
+                    </div>
+                </div>
+                </div>
+                <div>
+                  <label id="lblCatalogo" class="text-blue-600" for=""><b>{{catalogPath}}</b></label>
+                </div>
+  
+                <div class="flex gap-2 border-t-2 justify-between border-gray-300 pt-3">
+                    <!-- Adjunto -->
+                    <div class="flex justify-center text-center items-center gap-1">
+                        <label for="archivoAdjunto" class="form-label text-gray-500"><b>Adjunto:</b></label>
+                        <input type="file" id="archivoAdjunto" (change)="onFileSelected($event)" multiple>
+                    </div>
+
+                    <!-- Botón de Envío -->
+                    <div class="flex justify-center text-center items-center gap-2">
+                        <button mat-raised-button type="submit" class="text-white" [disabled]="loading || !ticketForm.valid" style="background-color: #166fd4;">Crear Ticket</button>
+                        <button routerLink="/menu/inicio" type="button" style="color: #166fd4">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </form>
+  </div>

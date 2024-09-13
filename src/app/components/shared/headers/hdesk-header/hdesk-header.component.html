@@ -11,11 +11,11 @@
   </div>
   <div class="hidden md:flex gap-4 ml-10">
     <a routerLink="/menu/inicio" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#ffffff" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7z"/></svg><span>Inicio</span></a>
-    <a routerLink="/menu/dashboard" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="#ffffff" d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg><span>Dashboard</span></a>
-    <a routerLink="/menu/list-tickets" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="#ffffff" d="m426.24 127.72l-10.94 10.94a29.67 29.67 0 0 1-42-42l10.94-10.94L314.52 16l-88 88l-4 12.09l-12.09 4L16 314.52l69.76 69.76l10.94-10.94a29.67 29.67 0 0 1 42 42l-10.94 10.94L197.48 496l194.4-194.4l4-12.09l12.09-4l88-88Zm-208.56 5.43l21.87-21.87l33 33l-21.88 21.87Zm43 43l21.88-21.88l32.52 32.52l-21.88 21.88Zm42.56 42.56l21.88-21.88l32.52 32.52l-21.84 21.93Zm75.57 75.56l-33-33l21.87-21.88l33 33Z"/></svg><span>
+    <a routerLink="/menu/dashboard" *ngIf="toggleVerUsuario();" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="#ffffff" d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg><span>Dashboard</span></a>
+    <a routerLink="/menu/list-tickets" *ngIf="toggleVerUsuario();" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="#ffffff" d="m426.24 127.72l-10.94 10.94a29.67 29.67 0 0 1-42-42l10.94-10.94L314.52 16l-88 88l-4 12.09l-12.09 4L16 314.52l69.76 69.76l10.94-10.94a29.67 29.67 0 0 1 42 42l-10.94 10.94L197.48 496l194.4-194.4l4-12.09l12.09-4l88-88Zm-208.56 5.43l21.87-21.87l33 33l-21.88 21.87Zm43 43l21.88-21.88l32.52 32.52l-21.88 21.88Zm42.56 42.56l21.88-21.88l32.52 32.52l-21.84 21.93Zm75.57 75.56l-33-33l21.87-21.88l33 33Z"/></svg><span>
       Requerimientos
     </span></a>
-    <a routerLink="/menu/reports-tickets" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#ffffff" d="m20 8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zM9 19H7v-9h2zm4 0h-2v-6h2zm4 0h-2v-3h2zM14 9h-1V4l5 5z"/></svg><span>Reportes</span></a>
+    <a routerLink="/menu/reports-tickets" *ngIf="toggleVerUsuario();" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#ffffff" d="m20 8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zM9 19H7v-9h2zm4 0h-2v-6h2zm4 0h-2v-3h2zM14 9h-1V4l5 5z"/></svg><span>Reportes</span></a>
 </div>
 <div class="relative" (click)="toggleUserMenu($event)">
     <button class="flex items-center bg-blue-700 p-2 rounded-full" (click)="toggleUserMenu($event)">
@@ -43,10 +43,10 @@
           </ng-container>
           <ng-template #otroRol>
             <ng-container *ngIf="userDetail?.rols_codi === '4'; else esUsuario">
-              <span class="text-orange-500 font-semibold">NUEVO</span>
+              <span class="text-orange-500 font-semibold">USUARIO</span>
             </ng-container>
             <ng-template #esUsuario>
-              <span class="text-orange-500 font-semibold">USUARIO</span>
+              <span class="text-orange-500 font-semibold">MODERADOR</span>
             </ng-template>
           </ng-template>
         </ng-template>

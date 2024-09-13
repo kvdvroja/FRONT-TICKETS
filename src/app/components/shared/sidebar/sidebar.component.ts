@@ -4,8 +4,9 @@ import { AuthService } from 'src/app/services/Auth/auth.service';
 import { UnidadService } from 'src/app/services/Unidad/unidad.service';
 import { Unidad } from 'src/app/interfaces/Unidad/unidad';
 import { TicketService } from 'src/app/services/ticket.service';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { TicketActionsService } from 'src/app/services/actions/ticket-actions.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,12 +21,16 @@ export class SidebarComponent implements OnInit {
   searchExactCodi: string = '';
   unid_codi = '';
   aplicarFiltroPidm = '';
+  mostrarMisTickets: boolean = false;
+  mostrarBotonVerTicketsPropios = false;
+  flagbutton = false;
 
   constructor(
     private authService: AuthService,
     private unidadService: UnidadService,
     private ticketService: TicketService,
-    private router: Router
+    private router: Router,
+    private ticketActionsService: TicketActionsService
   ) {}
 
   cargarUnidades() {
@@ -56,7 +61,23 @@ export class SidebarComponent implements OnInit {
     // Cargar las unidades disponibles
     this.cargarUnidades();
 
-    // Suscribirse al cambio de la unidad seleccionada
+    // Verificar la URL actual al cargar la página
+    this.verificarMostrarBoton(this.router.url);
+
+    // Suscribirse a eventos de navegación para manejar el botón cuando cambie la URL
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.verificarMostrarBoton(event.urlAfterRedirects);
+      }
+    });
+  }
+
+  verificarMostrarBoton(url: string) {
+    const estaEnListadoTickets = url.includes('/menu/list-tickets');
+    this.mostrarBotonVerTicketsPropios = estaEnListadoTickets;
+    this.mostrarMisTickets = estaEnListadoTickets; // Mostrar "Mis Tickets" si estamos en la lista de tickets
   }
 
   showCreate(): boolean {
@@ -71,7 +92,7 @@ export class SidebarComponent implements OnInit {
 
   showSAdmin(): boolean {
     const ocultarCreate = 
-    this.userDetail?.rols_codi === '1'
+    this.userDetail?.rols_codi === '1';
     return ocultarCreate;
   }
 
@@ -81,7 +102,7 @@ export class SidebarComponent implements OnInit {
       const searchTerm = this.searchExactCodi.toLowerCase();
       const { rols_codi, cate_codi, pidm } = this.userDetail!;
 
-      this.ticketService.searchTicketsByTicketID(searchTerm,rols_codi,cate_codi,pidm,this.unid_codi,this.aplicarFiltroPidm).subscribe(ticket => {
+      this.ticketService.searchTicketsByTicketID(searchTerm, rols_codi, cate_codi, pidm, this.unid_codi, this.aplicarFiltroPidm).subscribe(ticket => {
         if (ticket && ticket[0].id) {
           this.router.navigate(['/menu/ticket-detail', ticket[0].id]);
         } else {
@@ -114,19 +135,27 @@ export class SidebarComponent implements OnInit {
   }
 
   verTicketsPropios() {
-    const pidm = this.userDetail?.pidm || '';
-    
-    if (pidm) {
-      this.ticketService.getTicketsByUsuarioAsignado(pidm).subscribe({
-        next: tickets => {
-          console.log("Tickets obtenidos:", tickets);
-          this.router.navigate(['/menu/list-tickets'], { queryParams: { user: pidm } });
-        },
-        error: err => console.error('Error al obtener tickets:', err)
-      });
-    } else {
-      console.error('No se encontró el ID del usuario.');
-    }
+    this.ticketActionsService.triggerVerTicketsPropios(); // Activar la carga de tickets propios
   }
-  
+
+  verTicketsAbiertos() {
+    this.ticketActionsService.triggerVerTicketsAbiertos(); // Activar la carga de tickets propios
+  }
+
+  verTicketsCerrados() {
+    this.ticketActionsService.triggerVerTicketsCerrados(); // Activar la carga de tickets propios
+  }
+
+  verTicketsRevisados() {
+    this.ticketActionsService.triggerVerTicketsRevisados(); // Activar la carga de tickets propios
+  }
+
+  verTicketsEnProceso() {
+    this.ticketActionsService.triggerVerTicketsCerrados(); // Activar la carga de tickets propios
+  }
+
+  toggleMisTickets() {
+        this.ticketActionsService.triggerVerTodosLosTickets();
+  }
+
 }

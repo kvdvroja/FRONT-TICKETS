@@ -28,6 +28,7 @@ import { ConfigCatalogosComponent } from './components/config/config-catalogos/c
 import { ConfigurarCuentaComponent } from './components/shared/configurar-cuenta/configurar-cuenta.component';
 import { ConfigTrabajosComponent } from './components/config/config-trabajos/config-trabajos.component';
 import { ConfigProgresoComponent } from './components/config/config-progreso/config-progreso.component';
+import { HdeskCreateTicketUserComponent } from './components/hdesk/hdesk-create-ticket-user/hdesk-create-ticket-user.component';
 
 const routes: Routes = [
   { 
@@ -40,6 +41,13 @@ const routes: Routes = [
         component: HdeskCreateTicketComponent,
         canActivate: [RoleGuard],
         data: {roles: ['1','2'], categories: ['1'], cargos: ['1','2'] }  // Solo permite acceso a usuarios con categoría "1"
+        //allowedUserId: '000005741'
+      },
+      {
+        path: 'create-ticket-user',
+        component: HdeskCreateTicketUserComponent,
+        canActivate: [RoleGuard],
+        data: {roles: ['1','2','4'], categories: ['1'], cargos: ['1','2'] }  // Solo permite acceso a usuarios con categoría "1"
         //allowedUserId: '000005741'
       },
       { path: 'list-tickets', component: HdeskListComponent },

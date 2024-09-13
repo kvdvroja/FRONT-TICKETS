@@ -28,7 +28,7 @@ import { UnidadService } from 'src/app/services/Unidad/unidad.service';
 import { Observable } from 'rxjs';
 import { PaginatedResponse } from 'src/app/interfaces/paginatedResponse';
 import { SignalrService } from 'src/app/services/signalr.service';
-
+import { TicketActionsService } from 'src/app/services/actions/ticket-actions.service';
 
 @Component({
   selector: 'app-hdesk-list',
@@ -118,7 +118,8 @@ export class HdeskListComponent implements OnInit {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private signalrService: SignalrService,
-    private asignarCategoriaService: AsignarCategoriaService
+    private asignarCategoriaService: AsignarCategoriaService,
+    private ticketActionsService: TicketActionsService,
   ) {}
 
   ngOnInit() {
@@ -153,6 +154,45 @@ export class HdeskListComponent implements OnInit {
         this.cargarDependencias(); // Recargar los tickets basados en la nueva unidad seleccionada
       }
     });
+
+    this.ticketActionsService.verTicketsPropios$.subscribe(verPropios => {
+      if (verPropios) {
+        this.verTicketsPropios();
+        this.ticketActionsService.clearVerTicketsPropios();  // Limpiar el estado después de aplicar el filtro
+      }
+    });
+    this.ticketActionsService.verTodosLosTickets$.subscribe(verTodos => {
+      if (verTodos) {
+        this.filtroCargarTickets();
+        this.ticketActionsService.clearVerTodosLosTickets();  // Limpiar el estado después de aplicar el filtro
+      }
+    });
+    /*
+    this.ticketActionsService.verTicketsAbiertos$.subscribe(verAbiertos => {
+      if (verAbiertos) {
+        this.verTicketsRecibidos();
+        this.ticketActionsService.clearVerTicketsRecibidos();  // Limpiar el estado después de aplicar el filtro
+      }
+    });
+    this.ticketActionsService.verTicketsRevisados$.subscribe(verRevisados => {
+      if (verRevisados) {
+        this.verTicketsRevisados();
+        this.ticketActionsService.clearVerTicketsRevisados();  // Limpiar el estado después de aplicar el filtro
+      }
+    });
+    this.ticketActionsService.verTicketsEnProceso$.subscribe(verProceso => {
+      if (verProceso) {
+        this.verTicketsEnProceso();
+        this.ticketActionsService.clearVerTicketsEnProceso();  // Limpiar el estado después de aplicar el filtro
+      }
+    });
+    this.ticketActionsService.verTicketsCerrados$.subscribe(verCerrado => {
+      if (verCerrado) {
+        this.verTicketsCerrados();
+        this.ticketActionsService.clearVerTicketsCerrados();  // Limpiar el estado después de aplicar el filtro
+      }
+    });
+    */
   }
   
   
@@ -752,5 +792,57 @@ manejarErrorImagen(ticket: Ticket): void {
       return null;
     }
   }
+
+  verTicketsPropios() {
+    this.limpiarFiltros();
+    const pidm = this.userDetail?.pidm || ''; // PIDM para tickets asignados
+    const idUsuarioAdd = this.userDetail?.idUsuario || ''; // ID Usuario para tickets creados
+    const unidCodi = this.unid_codi; 
+    const page = 1;
+    const pageSize = 10; 
+    
+    this.tickets = [];
+    this.filteredTickets=[];
+
+    console.log("PROPIOS")
+
+    
+    if (pidm && idUsuarioAdd) {
+      // Llamada para los tickets creados por el usuario
+      this.ticketService.getTicketsByUsuarioAndCreadorWithPagination(pidm, idUsuarioAdd, unidCodi, page, pageSize).subscribe({
+        next: (response: PaginatedResponse) => {
+          this.tickets = response.tickets;
+          this.processTicketDates(this.tickets);
+          this.totalItems = response.totalItems;
+          this.filteredTickets = [...this.tickets];
+          this.procesarTickets(this.filteredTickets);
+          this.cdr.detectChanges();
+        },
+        error: err => console.error('Error al obtener tickets creados:', err)
+      });
+    } else {
+      console.error('No se encontraron los parámetros necesarios.');
+    }
+  }
+  
+  verTicketsRecibidos(){
+    this.selectedEstado = "Recibido"
+    this.aplicarFiltros();
+  }
+  verTicketsRevisados(){
+    this.selectedEstado = "Revisado"
+    this.aplicarFiltros();
+  }
+  verTicketsEnProceso(){
+    this.selectedEstado = "En Proceso"
+    this.aplicarFiltros();
+  }
+  verTicketsCerrados(){
+    this.selectedEstado = "Cerrado"
+    this.aplicarFiltros();
+  }
+  
+  
+  
   
 }

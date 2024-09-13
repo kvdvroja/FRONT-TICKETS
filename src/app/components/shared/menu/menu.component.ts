@@ -35,4 +35,15 @@ export class MenuComponent implements OnInit {
     this.userDetail?.cargo_codi == "2";
     return ocultarCreate;
   }
+
+  showCreateUser(): boolean {
+    const ocultarCreate = 
+    this.userDetail?.cate_codi === '1' || 
+    this.userDetail?.rols_codi === '1' || 
+    this.userDetail?.rols_codi === '2' ||
+    this.userDetail?.cargo_codi == "1" ||
+    this.userDetail?.cargo_codi == "2" ||
+    this.userDetail?.rols_codi == "4";
+    return ocultarCreate;
+  }
 }

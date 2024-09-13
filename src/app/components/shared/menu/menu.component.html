@@ -10,6 +10,15 @@
           <a routerLink="/menu/create-ticket" class="btn cursor-pointer"><span>Nuevo Ticket</span></a>
         </div>
     </div>
+    <div class="cardd" *ngIf="showCreateUser()">
+      <div class="content">
+        <p class="heading">NUEVO TICKET
+        </p><p class="para">
+          Ingrese los detalles de su problema o consulta para obtener ayuda de nuestro equipo de soporte técnico. Proporcione toda la información relevante para que podamos asistirle de la manera más eficiente posible.
+        </p>
+        <a routerLink="/menu/create-ticket-user" class="btn cursor-pointer"><span>Nuevo Ticket</span></a>
+      </div>
+  </div>
     
     <div class="cardd">
         <div class="content">

@@ -204,6 +204,18 @@ getTicketsByUsuarioAsignado(pidm: string, unidCodi?: string): Observable<Ticket[
     return this.http.put<void>(`${this.ticketUrl}/updateEstado/${id}`, ticket);
   }
   
+  getTicketsByUsuarioAndCreadorWithPagination(pidm: string, idUsuarioAdd: string, unidCodi: string, page: number, pageSize: number): Observable<PaginatedResponse> {
+    let params = new HttpParams()
+      .set('pidm', pidm)
+      .set('idUsuarioAdd', idUsuarioAdd) // Aquí se usa idUsuarioAdd para obtener los tickets creados
+      .set('unidCodi', unidCodi)
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+  
+    return this.http.get<PaginatedResponse>(`${this.ticketUrl}/byUsuarioAndCreadorWithPagination`, { params });
+  }
+  
+  
   
   
 

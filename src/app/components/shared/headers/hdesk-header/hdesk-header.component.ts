@@ -12,6 +12,7 @@ export class HdeskHeaderComponent implements OnInit {
   showUserMenu = false;
   imagenUsuario = '';
   imgError = false;
+  mostrarUsuario = false;
 
   constructor(private authService: AuthService) { }
 
@@ -21,6 +22,7 @@ export class HdeskHeaderComponent implements OnInit {
       ? `https://static.upao.edu.pe/upload/f/${this.userDetail.idUsuario}.jpg`
       : 'assets/UserSinFoto.svg';
     //console.log(this.userDetail?.idUsuario);
+    this.toggleVerUsuario();
   }
 
   @HostListener('document:click', ['$event'])
@@ -40,5 +42,9 @@ export class HdeskHeaderComponent implements OnInit {
   cerrarSesion(): void {
     this.authService.logout();
     // Redirect to login or appropriate page
+  }
+
+  toggleVerUsuario(): boolean{
+    return !!(this.userDetail && (this.userDetail.rols_codi != '4'));
   }
 }
