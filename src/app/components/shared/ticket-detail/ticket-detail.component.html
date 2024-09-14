@@ -108,24 +108,29 @@
             <div class="flex flex-col gap-1">
               <br>
               <span class="text-blue-600"><b>Recepción:</b></span>
-              <span>{{ viaRecepcionMap[ticket.viaRecepcion] }}</span>
+              <span>{{ viaRecepcionMap[ticket.viaRecepcion] || "Sin Asignar" }}</span>
               <span class="text-blue-600"><b>Catálogo:</b></span>
-              <div style="font-weight: 400;" [innerHtml]="displayCatalogPath"></div>
+              <div style="font-weight: 400;" [innerHtml]="displayCatalogPath || 'Sin Asignar'"></div>
               <span class="text-blue-600"><b>Prioridad:</b></span>
-         <span class="flex flex-row text-center items-center gap-1" *ngIf="prioridadMap[ticket.prioridad].descripcion">
-          <img *ngIf="prioridadMap[ticket.prioridad]?.imagen" 
-          [src]="prioridadMap[ticket.prioridad].imagen" 
-          [alt]="prioridadMap[ticket.prioridad].descripcion" 
-          class="h-6 w-6">
-           {{ prioridadMap[ticket.prioridad].descripcion }}
-         </span>
+              <span class="flex flex-row text-center items-center gap-1">
+                <img *ngIf="prioridadMap[ticket.prioridad]?.imagen" 
+                     [src]="prioridadMap[ticket.prioridad].imagen" 
+                     [alt]="prioridadMap[ticket.prioridad]?.descripcion || 'Sin Asignar'" 
+                     class="h-6 w-6">
+                {{ prioridadMap[ticket.prioridad]?.descripcion || "Sin Asignar" }}
+              </span>
          
               
               <span class="text-blue-600"><b>Coordinación:</b></span>
               <span style="font-weight: 400;">
-                <ng-container *ngFor="let categoria of categorias; let i = index">
-                  <p class="text-sm m-0">■ {{ categoria.descripcion }}</p>
+                <ng-container *ngIf="categorias.length > 0; else noCoordinacion">
+                  <ng-container *ngFor="let categoria of categorias">
+                    <p class="text-sm m-0">■ {{ categoria.descripcion || "Sin Asignar" }}</p>
+                  </ng-container>
                 </ng-container>
+                <ng-template #noCoordinacion>
+                  <p class="text-sm m-0">■ Sin Asignar</p>
+                </ng-template>
               </span>
             </div>
           </div>

@@ -38,6 +38,10 @@ export class TicketService {
     return this.http.post<Ticket>(this.ticketUrl, ticket);
   }
 
+  createTicketUsuario(ticket: Ticket): Observable<Ticket> {
+    return this.http.post<Ticket>(`${this.ticketUrl}/usuario`, ticket);
+  }
+
   // PUT para actualizar un ticket
   updateTicket(id: string, ticket: Ticket): Observable<Ticket> {
     return this.http.put<Ticket>(`${this.ticketUrl}/${id}`, ticket);

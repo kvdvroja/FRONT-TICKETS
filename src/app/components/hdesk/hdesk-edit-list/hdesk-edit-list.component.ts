@@ -485,62 +485,36 @@ export class HdeskEditListComponent implements OnInit {
       const formData = new FormData();
       formData.append('TicketJson', JSON.stringify(this.ticket));
     
-      if (this.selectedFiles && this.selectedFiles.length > 0) {
-          this.selectedFiles.forEach(file => {
-              formData.append('files', file, file.name);
-          });
-      }
-    
-      this.respuestaService.getResponsesByTicketId(this.ticket.ticketID).subscribe({
-          next: (respuestas: Responses[]) => {
-              const respuestaPrincipal = respuestas.find(respuesta => respuesta.padre_codi === '0');
-              if (respuestaPrincipal) {
-                  respuestaPrincipal.descripcion = this.ticket.descripcion;
-    
-                  this.respuestaService.updateResponses(respuestaPrincipal.codi!, respuestaPrincipal).subscribe({
-                      next: () => {
-                          console.log('Respuesta principal actualizada');
-                      },
-                      error: (error) => {
-                          console.error('Error al actualizar la respuesta principal:', error);
-                      }
-                  });
-              }
-              if (this.selectedFiles.length > 0) {
-                this.ticketService.uploadFiles(this.selectedFiles).subscribe(
-                  (uploadResponse: FileUploadResponse) => {
-                    if (uploadResponse && uploadResponse.files && uploadResponse.files.length > 0) {
-                      const response_upload = uploadResponse.files.map((f) => {
-                        return {
-                          codi: f.sequence.toString(),
-                          breq_codi: '',
-                          desc: f.originalName,
-                          peso_adjunto: f.sizeInBytes.toString(),
-                          nombre: f.name,
-                          url: f.url,
-                          extension: f.extension,
-                          ind_estado: this.ticket.ind_estado_adjunto,
-                          n_descargas: '',
-                          fechaActividad: fechaYHora,
-                          idUsuario: '',
-                        };
-                      });
-                      this.ticket.adjuntos = [...response_upload]
-                    }
-                    this.finalizeTicketUpdate();
-                  },
-                  (error: any) => {
-                    console.error('Error al cargar archivos', error);
-                  }
-                );
-              } else {
-                this.finalizeTicketUpdate();
-              }
+      if (this.selectedFiles.length > 0) {
+        this.ticketService.uploadFiles(this.selectedFiles).subscribe(
+          (uploadResponse: FileUploadResponse) => {
+            if (uploadResponse && uploadResponse.files && uploadResponse.files.length > 0) {
+              const response_upload = uploadResponse.files.map((f) => {
+                return {
+                  codi: f.sequence.toString(),
+                  breq_codi: '',
+                  desc: f.originalName,
+                  peso_adjunto: f.sizeInBytes.toString(),
+                  nombre: f.name,
+                  url: f.url,
+                  extension: f.extension,
+                  ind_estado: this.ticket.ind_estado_adjunto,
+                  n_descargas: '',
+                  fechaActividad: fechaYHora,
+                  idUsuario: '',
+                };
+              });
+              this.ticket.adjuntos = [...response_upload]
+            }
+            this.finalizeTicketUpdate();
           },
-          error: (error) => {
-              console.error('Error al obtener respuestas del ticket:', error);
+          (error: any) => {
+            console.error('Error al cargar archivos', error);
           }
-      });
+        );
+      } else {
+        this.finalizeTicketUpdate();
+      }
     }
     
     finalizeTicketUpdate(): void {

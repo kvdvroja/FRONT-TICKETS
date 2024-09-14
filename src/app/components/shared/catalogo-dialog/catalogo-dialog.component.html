@@ -19,7 +19,7 @@
             color="primary">Seleccionar</button>
   
     <!-- Sugerencias -->
-    <div class="mt-6">
+    <div *ngIf="this.userDetail?.rols_codi != '4'" class="mt-6">
       <span class="text-blue-600 text-sm"><b>Sugerencias:</b></span>
       <div class="flex flex-row justify-start items-center flex-wrap mt-2">
         <div *ngFor="let usuario of usuariosAsignados" class="relative" (click)="toggleUsuarioSeleccionado(usuario)">

@@ -45,4 +45,5 @@ export const environment = {
   get historialApiUrl() { return `${this.apiBaseUrl}Historial`; },
   get vinculacionApiUrl() { return `${this.apiBaseUrl}Vinculacion`; },
   get unidadApiUrl() { return `${this.apiBaseUrl}Unidad/`; },
+  get respuestaUsuarioApiUrl() { return `${this.apiBaseUrl}RespuestaUsuario/`; },
 };

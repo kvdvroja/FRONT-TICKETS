@@ -29,6 +29,7 @@ import { ConfigurarCuentaComponent } from './components/shared/configurar-cuenta
 import { ConfigTrabajosComponent } from './components/config/config-trabajos/config-trabajos.component';
 import { ConfigProgresoComponent } from './components/config/config-progreso/config-progreso.component';
 import { HdeskCreateTicketUserComponent } from './components/hdesk/hdesk-create-ticket-user/hdesk-create-ticket-user.component';
+import { HdeskListUserComponent } from './components/hdesk/hdesk-list-user/hdesk-list-user.component';
 
 const routes: Routes = [
   { 
@@ -51,6 +52,7 @@ const routes: Routes = [
         //allowedUserId: '000005741'
       },
       { path: 'list-tickets', component: HdeskListComponent },
+      { path: 'list-tickets-user', component: HdeskListUserComponent },
       {
         path: 'edit-ticket/:id',
         component: HdeskEditListComponent,

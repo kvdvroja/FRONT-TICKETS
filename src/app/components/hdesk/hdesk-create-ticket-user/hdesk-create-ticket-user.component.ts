@@ -74,7 +74,7 @@ export class HdeskCreateTicketUserComponent implements OnInit {
     fechaCreacion: '',
     catalogo: '',
     mensaje_final: '',
-    estado: 'Recibido',
+    estado: 'Por Revisar',
     ind_estado_adjunto: '',
     idUsuario_adjunto: '',
     cate_codi_asignar: [],
@@ -84,10 +84,6 @@ export class HdeskCreateTicketUserComponent implements OnInit {
   };
 
   organizaciones: Organizacion[] = [];
-  categorias: Categoria[] = [];
-  prioridades: Prioridad[] = [];
-  tipologias: Tipologia[] = [];
-  vias: viaRecepcion[] = [];
   selectedUnidad: string = "";
   selectedFiles: File[] = [];
   catalogos: Catalogo[] = [];
@@ -262,14 +258,6 @@ export class HdeskCreateTicketUserComponent implements OnInit {
         this.handleCatalogChange(this.ticket.catalogo);
   
         // Usar `this.ticket.catalogo` como clave común
-        if (!this.selectedUsers[this.ticket.catalogo]) {
-          this.selectedUsers[this.ticket.catalogo] = [];
-        }
-        usuarios.forEach((usuario: Usuarios) => {
-          if (!this.selectedUsers[this.ticket.catalogo].some(u => u.idUsuario === usuario.idUsuario)) {
-            this.selectedUsers[this.ticket.catalogo].push(usuario);
-          }
-        });
       }
     });
   }
@@ -364,7 +352,7 @@ export class HdeskCreateTicketUserComponent implements OnInit {
       .then((sequenceNumber) => {
         this.ticket.ticketID = sequenceNumber.toString();
 
-        this.ticketService.createTicket(this.ticket).subscribe(
+        this.ticketService.createTicketUsuario(this.ticket).subscribe(
           (response) => {
             console.log('Ticket creado con éxito', response);
             this.snackBar.open('Ticket creado con éxito', 'Cerrar', {

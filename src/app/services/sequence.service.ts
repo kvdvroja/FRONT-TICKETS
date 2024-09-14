@@ -39,6 +39,10 @@ export class SequenceService {
     return this.http.get<string>(`${this.apiUrl}respuestaID`);
   }
 
+  getNextRespuestaUId(): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}respuestaUsuarioID`);
+  }
+
   getNextAdjuntoId(): Observable<string> {
     return this.http.get<string>(`${this.apiUrl}adjuntoID`);
   }

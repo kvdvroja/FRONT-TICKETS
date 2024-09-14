@@ -10,6 +10,8 @@ import { Usuarios } from 'src/app/interfaces/usersUPAO/usuarios';
 import { forkJoin } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Asignacion } from 'src/app/interfaces/Asignacion/Asignacion';
+import { AuthService } from 'src/app/services/Auth/auth.service';
+import { UserDetail } from 'src/app/interfaces/Login/userDetail';
 
 @Component({
   selector: 'app-catalogo-dialog',
@@ -18,6 +20,7 @@ import { Asignacion } from 'src/app/interfaces/Asignacion/Asignacion';
 })
 export class CatalogoDialogComponent implements OnInit {
   catalogHierarchy: Catalogo[] = [];
+  userDetail: UserDetail | null = null;
   catalogLevels: any[] = [];
   finalSelection?: Catalogo;
   displayedCatalogs: Catalogo[] = [];
@@ -29,10 +32,14 @@ export class CatalogoDialogComponent implements OnInit {
     private catalogoService: CatalogoService,
     private asignarCatalogoService: AsignarCatalogoService,
     private asignacionService: AsignacionService,
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private authService : AuthService
   ) {}
 
   ngOnInit() {
+    this.userDetail = this.authService.getCurrentUser();
+  
+    // Asegurarse de que unid_codi se inicializa desde userDetail
     this.loadAllCatalogs();
   }
 

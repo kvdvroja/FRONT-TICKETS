@@ -15,8 +15,7 @@ import { AdjuntoInfo } from 'src/app/interfaces/AdjuntoInfo';
 import { AdjuntoService } from 'src/app/services/Attach/adjunto.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PreviewComponent } from '../preview/preview.component';
-import { ResponsesService } from 'src/app/services/Responses/responses.service';
-import { Responses } from 'src/app/interfaces/Responses/responses';
+import { ResponsesU } from 'src/app/interfaces/Responses/responsesU';
 import { SequenceService } from 'src/app/services/sequence.service';
 import { AuthService } from 'src/app/services/Auth/auth.service';
 import { UserDetail } from 'src/app/interfaces/Login/userDetail';
@@ -40,6 +39,7 @@ import { forkJoin } from 'rxjs';
 import { Location } from '@angular/common';
 import { Historial } from 'src/app/interfaces/Historial/Historial';
 import { HistorialService } from 'src/app/services/Historial/historial.service';
+import { ResponsesUService } from 'src/app/services/ResponsesU/responses-u.service';
 import ImageResize from 'quill-image-resize-module';
 import { ImageDrop } from 'quill-image-drop-module';
 import { RegistrarTareasService } from 'src/app/services/RegistrarTareas/registrar-tareas.service';
@@ -76,7 +76,6 @@ export class TicketDetailComponent implements OnInit {
     private prioridadService: PrioridadService,
     private organizacionService: OrganizacionService,
     private tipologiaService: TipologiaService,
-    private responsesService: ResponsesService,
     private viasRecepcionService: ViaRecepcionService,
     private ticketService: TicketService,
     private adjuntoService: AdjuntoService,
@@ -95,7 +94,8 @@ export class TicketDetailComponent implements OnInit {
     private categoriaService: CategoriaService,
     private asignarTicketService: AsignarTicketService,
     private historialService : HistorialService,
-    private location: Location
+    private location: Location,
+    private responsesUService: ResponsesUService,
   ) {}
 
   displayCatalogPath: string = '';
@@ -106,7 +106,7 @@ export class TicketDetailComponent implements OnInit {
   prioridades: Prioridad[] = [];
   tipologias: Tipologia[] = [];
   selectedFiles: File[] = [];
-  respuestas: Responses[] = [];
+  respuestas: ResponsesU[] = [];
   historiales: Historial [] = [];
   historialesA: {} = {};
   imagenUsuario: string = '';
@@ -117,7 +117,7 @@ export class TicketDetailComponent implements OnInit {
   adjuntos: AdjuntoInfo[] = [];
   public editorInstance: Quill | null = null;
   adjuntosParaMostrar: AdjuntoInfo[] | null = null;
-  respuestaPrincipal: Responses | null = null;
+  respuestaPrincipal: ResponsesU | null = null;
   recepcionCorreo: string = '';
   asignadosCount: { [cateCodi: string]: number } = {};
   asignaciones: { [cateCodi: string]: any[] } = {};
@@ -131,9 +131,10 @@ export class TicketDetailComponent implements OnInit {
     }
   };
 
-  public nuevaRespuesta: Responses = {
+  public nuevaRespuesta: ResponsesU = {
     breq_codi: '',
     descripcion: '',
+    visto: 'NO',
     url: '', // Define cómo vas a manejar este campo.
     padre_codi: '', // Este se ajustará basado en las respuestas existentes.
     fechaActividad: '',
@@ -360,7 +361,7 @@ export class TicketDetailComponent implements OnInit {
     const textoPlano = this.descEditor;
 
     if (this.ticket && this.ticket.ticketID && this.userDetail && this.userDetail.idUsuario) {
-      this.sequenceService.getNextRespuestaId().subscribe(nextId => {
+      this.sequenceService.getNextRespuestaUId().subscribe(nextId => {
         const respuestaId = nextId.toString();
         const padreCodi = (this.respuestas.length + 1).toString();
         if (conAdjunto && this.selectedFiles.length > 0) {
@@ -403,7 +404,7 @@ export class TicketDetailComponent implements OnInit {
       formData.append('PadreCodi', padreCodi);
       formData.append('idUsuario', this.userDetail!.idUsuario);
 
-      this.responsesService.createResponseWithAttachments(formData).subscribe({
+      this.responsesUService.createResponseWithAttachments(formData).subscribe({
         next: (response) => {
           console.log('Respuesta con archivos enviada correctamente', response);
           this.cargarRespuestas(this.ticket!.ticketID);
@@ -429,7 +430,7 @@ export class TicketDetailComponent implements OnInit {
     this.nuevaRespuesta.idUsuario = this.userDetail!.idUsuario;
     this.nuevaRespuesta.url = urlArchivo || '';
 
-    this.responsesService.createResponses(this.nuevaRespuesta).subscribe(respuestaCreada => {
+    this.responsesUService.createResponses(this.nuevaRespuesta).subscribe(respuestaCreada => {
       if (this.ticket) {
         this.cargarRespuestas(this.ticket.ticketID);
       }
@@ -463,14 +464,14 @@ export class TicketDetailComponent implements OnInit {
 
   async cargarRespuestas(ticketId: string): Promise<void> {
     try {
-      const respuestas = await this.responsesService.getResponsesByTicketId(ticketId).toPromise();
+      const respuestas = await this.responsesUService.getResponsesByTicketId(ticketId).toPromise();
       if (!respuestas) {
         console.error('No se recibieron respuestas.');
         this.respuestas = [];
         this.respuestaPrincipal = null;
         return;
       }
-      const respuestasProcesadas: Responses[] = [];
+      const respuestasProcesadas: ResponsesU[] = [];
       for (const respuesta of respuestas) {
         if (!respuesta.codi) {
           continue;
@@ -628,7 +629,7 @@ export class TicketDetailComponent implements OnInit {
     return !ocultarEditor;
   }
 
-  editarRespuesta(respuesta: Responses) {
+  editarRespuesta(respuesta: ResponsesU) {
     const dialogRef = this.dialog.open(EditarRespuestaComponent, {
       width: '800px',
       data: { respuesta }
@@ -923,7 +924,7 @@ export class TicketDetailComponent implements OnInit {
       const confirmation = confirm("¿Desea eliminar el ticket y todas sus dependencias?");
       if (confirmation) {
         
-        this.responsesService.deleteResponsesByTicketId(this.ticket.ticketID).subscribe({
+        this.responsesUService.deleteResponsesByTicketId(this.ticket.ticketID).subscribe({
           next: () => {
             this.deleteAsignacionesYCategorias();
           },
