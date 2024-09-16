@@ -312,26 +312,17 @@ export class HdeskListUserComponent implements OnInit {
 
   filtroCargarTickets() {
     if (this.userDetail) {
-      const { rols_codi, cate_codi, cargo_codi, pidm } = this.userDetail;
+      const { rols_codi, cate_codi, cargo_codi, pidm, idUsuario } = this.userDetail;
       let observable: Observable<any>;
   
       console.log("Cargando tickets para unidad:", this.unid_codi);
   
-      if (rols_codi === '1' || rols_codi === '2' || cate_codi === '1') {
+      if (rols_codi === '1' || rols_codi === '2' || cate_codi === '1' || cargo_codi === '1' || cargo_codi === '2') {
         this.aplicarFiltroPidm = "todos";
-        observable = this.ticketService.getTicketsPaginado(this.currentPage, this.pageSize, rols_codi, cate_codi, this.unid_codi);
-      } else if (rols_codi === '3' && (cargo_codi === '1' || cargo_codi === '2' || cargo_codi === '3')) {
-        this.aplicarFiltroPidm = "coordinador";
-        observable = this.ticketService.getTicketsByCategoriesPaginado([cate_codi], this.currentPage, this.pageSize, rols_codi, cate_codi, this.unid_codi);
-      } else if (rols_codi === '3') {
-        this.aplicarFiltroPidm = "usuario";
-        observable = this.ticketService.getTicketsByUsuarioAsignado(pidm, this.unid_codi);
-      } else if (cargo_codi === '1' || cargo_codi === '2' || cargo_codi === '3') {
-        this.aplicarFiltroPidm = "coordinador";
-        observable = this.ticketService.getTicketsByCategoriesPaginado([cate_codi], this.currentPage, this.pageSize, rols_codi, cate_codi, this.unid_codi);
+        observable = this.ticketService.getTicketsPaginadoUser(this.currentPage, this.pageSize, rols_codi, cate_codi, this.unid_codi);
       } else {
         this.aplicarFiltroPidm = "usuario";
-        observable = this.ticketService.getTicketsByUsuarioAsignado(pidm, this.unid_codi);
+        observable = this.ticketService.getTicketsByUsuarioAndCreadorWithPaginationU(pidm,idUsuario, this.unid_codi,this.currentPage, this.pageSize);
       }
   
       observable.subscribe({
@@ -357,23 +348,9 @@ export class HdeskListUserComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
-  
-
-  
-cargarTicketsPorUsuarioAsignado(pidm: string, unidCodi: string) {
-  this.ticketService.getTicketsByUsuarioAsignado(pidm, unidCodi).subscribe({
-    next: (tickets) => {
-      this.tickets = tickets;
-      this.processTicketDates(this.tickets);
-      this.filteredTickets = [...this.tickets];
-      this.totalItems = this.tickets.length;
-    },
-    error: (error) => console.error('Error fetching tickets by user:', error)
-  });
-}
 
   cargarTodosLosTickets() {
-    this.ticketService.getTicketsPaginado(this.currentPage, this.pageSize, this.userDetail!.rols_codi, this.userDetail!.cate_codi).subscribe({
+    this.ticketService.getTicketsPaginadoUser(this.currentPage, this.pageSize, this.userDetail!.rols_codi, this.userDetail!.cate_codi).subscribe({
       next: (response) => {
         this.tickets = response.tickets;
         this.processTicketDates(this.tickets);
@@ -403,22 +380,6 @@ cargarTicketsPorUsuarioAsignado(pidm: string, unidCodi: string) {
     const fechaISO = `${fechaPartes[2]}-${mes}-${dia}T${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}:00`;
 
     return new Date(fechaISO);
-  }
-
-  cargarTicketsPorCateCodiAsignar(cateCodisAsignar: string[]) {
-    this.ticketService.getTicketsByCategoriesPaginado(cateCodisAsignar, this.currentPage, this.pageSize, this.userDetail!.rols_codi, this.userDetail!.cate_codi).subscribe({
-      next: (response) => {
-        this.tickets = response.tickets;
-        this.processTicketDates(this.tickets);
-        this.totalItems = response.totalItems;
-        this.filteredTickets = [...this.tickets];
-      },
-      error: (error) => {
-        console.error('Error fetching tickets by categories with pagination', error);
-        this.tickets = [];
-        this.filteredTickets = [];
-      }
-    });
   }
 
   handlePage(event: PageEvent): void {
@@ -551,7 +512,7 @@ manejarErrorImagen(ticket: Ticket): void {
       const searchTerm = this.searchTicketId.toLowerCase();
       const { rols_codi, cate_codi, pidm } = this.userDetail!;
   
-      this.ticketService.searchTicketsWithFilters(
+      this.ticketService.searchTicketsWithFiltersU(
         searchTerm,
         this.selectedOrganizacion ? this.selectedOrganizacion : '',
         this.selectedCategoria ? this.selectedCategoria : '',
@@ -634,7 +595,7 @@ manejarErrorImagen(ticket: Ticket): void {
 
     const { rols_codi, cate_codi, pidm, unid_codi } = this.userDetail!;
 
-    this.ticketService.searchTicketsWithFilters(
+    this.ticketService.searchTicketsWithFiltersU(
       this.searchTicketId ? this.searchTicketId.toLowerCase() : '',
       this.selectedOrganizacion ? this.selectedOrganizacion : '',
       this.selectedCategoria ? this.selectedCategoria : '',
@@ -809,7 +770,7 @@ manejarErrorImagen(ticket: Ticket): void {
     
     if (pidm && idUsuarioAdd) {
       // Llamada para los tickets creados por el usuario
-      this.ticketService.getTicketsByUsuarioAndCreadorWithPagination(pidm, idUsuarioAdd, unidCodi, page, pageSize).subscribe({
+      this.ticketService.getTicketsByUsuarioAndCreadorWithPaginationU(pidm, idUsuarioAdd, unidCodi, page, pageSize).subscribe({
         next: (response: PaginatedResponse) => {
           this.tickets = response.tickets;
           this.processTicketDates(this.tickets);

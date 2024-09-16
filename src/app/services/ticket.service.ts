@@ -123,6 +123,39 @@ export class TicketService {
       return this.http.get<PaginatedResponse>(`${this.ticketUrl}/searchWithFilters`, { params });
   }
 
+  searchTicketsWithFiltersU(
+    searchTerm: string,
+    selectedOrganizacion: string,
+    selectedCategoria: string,
+    selectedPrioridad: string,
+    selectedEstado: string,
+    selectedFechaInicio: Date | null,
+    rolsCodi: string,
+    cateCodi: string,
+    pidm: string,
+    aplicarFiltroPidm: string,
+    unidCodi: string,
+    currentPage: number,
+    pageSize: number
+  ): Observable<PaginatedResponse> {
+    const params = new HttpParams()
+      .set('searchTerm', searchTerm)
+      .set('selectedOrganizacion', selectedOrganizacion)
+      .set('selectedCategoria', selectedCategoria)
+      .set('selectedPrioridad', selectedPrioridad)
+      .set('selectedEstado', selectedEstado)
+      .set('selectedFechaInicio', selectedFechaInicio?.toISOString() ?? '')
+      .set('rolsCodi', rolsCodi)
+      .set('cateCodi', cateCodi)
+      .set('pidm', pidm)
+      .set('aplicarFiltroPidm', aplicarFiltroPidm)
+      .set('unidCodi', unidCodi)
+      .set('page', currentPage.toString())
+      .set('pageSize', pageSize.toString());
+  
+      return this.http.get<PaginatedResponse>(`${this.ticketUrl}/searchWithFiltersU`, { params });
+  }
+
   searchTicketsByTicketID(
     searchTerm: string,
     rolsCodi: string,
@@ -161,6 +194,24 @@ export class TicketService {
     }
     
     return this.http.get<PaginatedResponse>(`${this.ticketUrl}/AllTickets`, { params });
+}
+
+getTicketsPaginadoUser(page: number, pageSize: number, rolsCodi?: string, cateCodi?: string, unidCodi?: string): Observable<PaginatedResponse> {
+  let params = new HttpParams()
+    .set('page', page.toString())
+    .set('pageSize', pageSize.toString());
+  
+  if (rolsCodi) {
+      params = params.set('rolsCodi', rolsCodi);
+  }
+  if (cateCodi) {
+      params = params.set('cateCodi', cateCodi);
+  }
+  if (unidCodi) {
+      params = params.set('unidCodi', unidCodi);
+  }
+  
+  return this.http.get<PaginatedResponse>(`${this.ticketUrl}/AllTicketsUsers`, { params });
 }
   
 getTicketsByCategoriesPaginado(categories: string[], page: number, pageSize: number, rolsCodi?: string, cateCodi?: string, unidCodi?: string): Observable<PaginatedResponse> {
@@ -217,6 +268,17 @@ getTicketsByUsuarioAsignado(pidm: string, unidCodi?: string): Observable<Ticket[
       .set('pageSize', pageSize.toString());
   
     return this.http.get<PaginatedResponse>(`${this.ticketUrl}/byUsuarioAndCreadorWithPagination`, { params });
+  }
+
+  getTicketsByUsuarioAndCreadorWithPaginationU(pidm: string, idUsuarioAdd: string, unidCodi: string, page: number, pageSize: number): Observable<PaginatedResponse> {
+    let params = new HttpParams()
+      .set('pidm', pidm)
+      .set('idUsuarioAdd', idUsuarioAdd) // Aquí se usa idUsuarioAdd para obtener los tickets creados
+      .set('unidCodi', unidCodi)
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+  
+    return this.http.get<PaginatedResponse>(`${this.ticketUrl}/byUsuarioAndCreadorWithPaginationU`, { params });
   }
   
   

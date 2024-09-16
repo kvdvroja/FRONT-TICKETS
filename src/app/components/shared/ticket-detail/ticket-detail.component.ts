@@ -1154,6 +1154,50 @@ export class TicketDetailComponent implements OnInit {
   goBack(): void {
     this.location.back();
   }
+
+  revisarTicket(): void {
+    const fechaYHora = this.setFechaHora();
+  
+    // Verificar que el ticket y el ticketID existan
+    if (!this.ticket || !this.ticket.ticketID) {
+      console.error('TicketID es indefinido');
+      this.snackBar.open('No se puede actualizar un ticket sin ID', 'Cerrar', {
+        duration: 3000,
+      });
+      return;
+    }
+  
+    // Mostrar confirmación al usuario
+    const confirmation = confirm("¿Ya ha revisado este ticket?");
+    
+    // Si el usuario confirma, proceder con la actualización del ticket
+    if (confirmation) {
+      const updatedTicket: Ticket = {
+        ...this.ticket,
+        estado: "Recibido",
+        fechaActividad: fechaYHora,
+        ticketID: this.ticket.ticketID // Asegurar que ticketID no sea undefined
+      };
+  
+      // Llamada al servicio para actualizar el estado del ticket
+      this.ticketService.updateTicketEstado(this.ticket.id!, updatedTicket).subscribe({
+        next: (data) => {
+          this.snackBar.open('Estado del ticket actualizado', 'Cerrar', {
+            duration: 3000,
+          });
+          this.router.navigate(['/menu/list-tickets']);
+        },
+        error: (err) => {
+          console.error('Error al actualizar el estado del ticket:', err);
+          this.snackBar.open('Error al actualizar el ticket', 'Cerrar', {
+            duration: 3000,
+          });
+        }
+      });
+    }
+  }
+  
+  
   
 }
   
