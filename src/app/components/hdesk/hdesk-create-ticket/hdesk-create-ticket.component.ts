@@ -118,6 +118,9 @@ export class HdeskCreateTicketComponent implements OnInit {
 
   catalogPath: string = '';
 
+  ubicacionJerarquia: string = '';
+  campusF: string = '';
+
   constructor(
     private ticketService: TicketService,
     private matIconRegistry: MatIconRegistry,
@@ -698,6 +701,23 @@ cargarPrioridad(): void {
     const dialogRef = this.dialog.open(UbicacionDialogComponent, {
       width: '800px'
     });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const { codi, campus, pabellon, pabellon_desc, aula, aula_desc } = result;
+        if(campus == "M"){
+          this.campusF = "TRUJILLO"
+        }
+        else if(campus == "PI"){
+          this.campusF = "PIURA"
+        }
+        this.ticket.ubicacion = codi;
+        this.ubicacionJerarquia = `${this.campusF} > ${pabellon_desc} > ${aula} (${aula_desc})`;
+      }
+    });
   }
-
+  
 }
+  
+
+

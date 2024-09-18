@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UbicacionService } from 'src/app/services/Ubicacion/ubicacion.service';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Ubicacion } from 'src/app/interfaces/Ubicacion/Ubicacion'; // Asegúrate de tener esta interfaz creada
 
 @Component({
@@ -14,7 +15,9 @@ export class UbicacionDialogComponent implements OnInit {
   displayedCatalogs: Ubicacion[] = [];
   aulaDescSeleccionada: string = ''; // Propiedad para guardar la descripción del aula
 
-  constructor(private ubicacionService: UbicacionService) {}
+  constructor(private ubicacionService: UbicacionService,
+    public dialogRef: MatDialogRef<UbicacionDialogComponent>
+  ) {}
 
   ngOnInit() {
     this.loadAllUbicaciones();
@@ -92,6 +95,7 @@ export class UbicacionDialogComponent implements OnInit {
   selectFinalCatalog(): void {
     if (this.finalSelection) {
       console.log("Selección final: ", this.finalSelection);
+      this.dialogRef.close(this.finalSelection); 
       // Aquí puedes realizar alguna acción con la selección final
     }
   }

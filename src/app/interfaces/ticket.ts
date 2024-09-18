@@ -33,5 +33,6 @@ export interface Ticket {
     selected?: boolean,
     PrioridadImagen?: string;
     PrioridadDescripcion?: string;
+    ubicacion?: string;
   }
   
