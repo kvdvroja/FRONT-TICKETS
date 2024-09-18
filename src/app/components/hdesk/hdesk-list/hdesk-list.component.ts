@@ -312,7 +312,7 @@ export class HdeskListComponent implements OnInit {
 
   filtroCargarTickets() {
     if (this.userDetail) {
-      const { rols_codi, cate_codi, cargo_codi, pidm } = this.userDetail;
+      const { rols_codi,idUsuario, cate_codi, cargo_codi, pidm } = this.userDetail;
       let observable: Observable<any>;
   
       console.log("Cargando tickets para unidad:", this.unid_codi);
@@ -325,13 +325,13 @@ export class HdeskListComponent implements OnInit {
         observable = this.ticketService.getTicketsByCategoriesPaginado([cate_codi], this.currentPage, this.pageSize, rols_codi, cate_codi, this.unid_codi);
       } else if (rols_codi === '3') {
         this.aplicarFiltroPidm = "usuario";
-        observable = this.ticketService.getTicketsByUsuarioAsignado(pidm, this.unid_codi);
+        observable = this.ticketService.getTicketsByUsuarioAndCreadorWithPagination(pidm,this.userDetail.idUsuario, this.unid_codi,this.currentPage,this.pageSize);
       } else if (cargo_codi === '1' || cargo_codi === '2' || cargo_codi === '3') {
         this.aplicarFiltroPidm = "coordinador";
         observable = this.ticketService.getTicketsByCategoriesPaginado([cate_codi], this.currentPage, this.pageSize, rols_codi, cate_codi, this.unid_codi);
       } else {
         this.aplicarFiltroPidm = "usuario";
-        observable = this.ticketService.getTicketsByUsuarioAsignado(pidm, this.unid_codi);
+        observable = this.ticketService.getTicketsByUsuarioAndCreadorWithPagination(pidm,this.userDetail.idUsuario, this.unid_codi,this.currentPage,this.pageSize);
       }
   
       observable.subscribe({

@@ -1,6 +1,6 @@
 <div class="w-12/12">
-  <div class="flex flex-col">
-    <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+  <div class="flex flex-col" *ngIf="this.userDetail!.rols_codi !=='4'">
+    <div *ngIf="this.userDetail!.rols_codi !=='4'" class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
       <div class="cardd" *ngIf="showCreate()">
         <div class="content">
           <p class="heading">NUEVO TICKET
@@ -10,40 +10,29 @@
           <a routerLink="/menu/create-ticket" class="btn cursor-pointer"><span>Nuevo Ticket</span></a>
         </div>
     </div>
-    <div class="cardd" *ngIf="showCreateUser()">
-      <div class="content">
-        <p class="heading">NUEVO TICKET
-        </p><p class="para">
-          Ingrese los detalles de su problema o consulta para obtener ayuda de nuestro equipo de soporte técnico. Proporcione toda la información relevante para que podamos asistirle de la manera más eficiente posible.
-        </p>
-        <a routerLink="/menu/create-ticket-user" class="btn cursor-pointer"><span>Nuevo Ticket</span></a>
-      </div>
-  </div>
-    
     <div class="cardd">
+      <div class="content">
+        <p class="heading">VER TICKETS EN REVISION
+        </p><p class="para">
+          Vea y administre todos sus tickets de soporte abiertos y cerrados. Puede seguir el progreso de sus consultas, actualizar información adicional o cerrar tickets que ya han sido resueltos.
+        </p>
+        <a routerLink="/menu/list-tickets-user" class="btn cursor-pointer"><span>Listado</span></a>
+      </div>
+    </div>
+    <div class="cardd" *ngIf="this.userDetail!.rols_codi !=='4'">
         <div class="content">
-          <p class="heading">VER TICKETS
+          <p class="heading">BANDEJA DE TICKETS
           </p><p class="para">
             Vea y administre todos sus tickets de soporte abiertos y cerrados. Puede seguir el progreso de sus consultas, actualizar información adicional o cerrar tickets que ya han sido resueltos.
           </p>
           <a routerLink="/menu/list-tickets" class="btn cursor-pointer"><span>Listado</span></a>
         </div>
     </div>
-
-    <div class="cardd">
-      <div class="content">
-        <p class="heading">VER TICKETS U
-        </p><p class="para">
-          Vea y administre todos sus tickets de soporte abiertos y cerrados. Puede seguir el progreso de sus consultas, actualizar información adicional o cerrar tickets que ya han sido resueltos.
-        </p>
-        <a routerLink="/menu/list-tickets-user" class="btn cursor-pointer"><span>Listado</span></a>
-      </div>
-  </div>
     </div>
-    <div class="bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario()">
+    <div class="bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario() || (this.userDetail!.rols_codi !=='4' && this.userDetail!.rols_codi !== '3')">
       <div class="text-2xl text-white mx-4 m-2" style="font-weight: 600">CONFIGURACIONES</div>
     </div>
-    <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+    <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8" *ngIf="this.userDetail!.rols_codi !=='4'">
       <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionAdmin()" >
         <div class="content">
           <p class="heading2">CONFIGURAR ADMIN
@@ -82,9 +71,9 @@
     </div>
     </div>
     
-    <div class="w-full bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario()">
+    <div class="w-full bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario() || (this.userDetail!.rols_codi !== '4' && this.userDetail!.rols_codi !== '3')">
       <div class="text-2xl text-white mx-4 m-2" style="font-weight: 600">MANTENEDORES</div>
-    </div>
+    </div>    
     <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
       <div class="cardd w-full sm:w-1/2 lg:w-1/3 xl:w-1/4" *ngIf="showConfiguracionUsuario()">
         <div class="content">
@@ -168,6 +157,39 @@
       </div>
     </div>
     </div>
-    
+    </div>
+    <div class="flex flex-col">
+      <div class="bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="this.userDetail!.rols_codi !== '4' && this.userDetail!.rols_codi !== '3'">
+        <div class="text-2xl text-white mx-4 m-2" style="font-weight: 600">USUARIOS</div>
+      </div>
+      <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
+        <div class="cardd" *ngIf="showCreateUser()">
+          <div class="content">
+            <p class="heading">NUEVO TICKET
+            </p><p class="para">
+              Ingrese los detalles de su problema o consulta para obtener ayuda de nuestro equipo de soporte técnico. Proporcione toda la información relevante para que podamos asistirle de la manera más eficiente posible.
+            </p>
+            <a routerLink="/menu/create-ticket-user" class="btn cursor-pointer"><span>Nuevo Ticket</span></a>
+          </div>
+        </div>
+        <div class="cardd" *ngIf="this.userDetail?.rols_codi === '4'">
+          <div class="content">
+            <p class="heading">VER TICKETS EN REVISION
+            </p><p class="para">
+              Vea y administre todos sus tickets de soporte abiertos y cerrados. Puede seguir el progreso de sus consultas, actualizar información adicional o cerrar tickets que ya han sido resueltos.
+            </p>
+            <a routerLink="/menu/list-tickets-user" class="btn cursor-pointer"><span>Listado</span></a>
+          </div>
+        </div>
+        <div class="cardd" *ngIf="this.userDetail!.rols_codi ==='4'">
+            <div class="content">
+              <p class="heading">BANDEJA DE TICKETS
+              </p><p class="para">
+                Vea y administre todos sus tickets de soporte abiertos y cerrados. Puede seguir el progreso de sus consultas, actualizar información adicional o cerrar tickets que ya han sido resueltos.
+              </p>
+              <a routerLink="/menu/list-tickets" class="btn cursor-pointer"><span>Listado</span></a>
+            </div>
+        </div>
+      </div>
     </div>
 </div>

@@ -44,6 +44,7 @@ import Quill from 'quill';
 import ImageResize from 'quill-image-resize-module';
 import { ImageDrop } from 'quill-image-drop-module';
 import { UnidadService } from 'src/app/services/Unidad/unidad.service';
+import { UbicacionDialogComponent } from '../../shared/ubicacion-dialog/ubicacion-dialog.component';
 
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/imageResize', ImageResize);
@@ -692,4 +693,11 @@ cargarPrioridad(): void {
     const content = event.editor.root.innerHTML;
     this.ticket.descripcion = content;
   }
+
+  openUbicacion() {
+    const dialogRef = this.dialog.open(UbicacionDialogComponent, {
+      width: '800px'
+    });
+  }
+
 }

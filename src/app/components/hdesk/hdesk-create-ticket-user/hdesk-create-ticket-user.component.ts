@@ -362,7 +362,7 @@ export class HdeskCreateTicketUserComponent implements OnInit {
               panelClass: ['mat-toolbar', 'mat-primary']
             });
 
-            this.router.navigate(['/menu/list-tickets']);
+            this.router.navigate(['/menu/list-tickets-user']);
             this.loading = false; // Detener el spinner cuando se complete la creación
           },
           (error) => {

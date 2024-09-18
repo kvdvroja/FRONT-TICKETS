@@ -522,7 +522,9 @@ export class HdeskEditListComponent implements OnInit {
         next: (response: any) => {
             this.createAsignarTicketsAndTasks(this.ticket.ticketID);
             this.registrarHistorial("A","Edicion de Ticket","Se ha editado el ticket.")
-            this.router.navigate(['/menu/list-tickets']);
+            if(this.ticket.estado === "Por Revisar"){
+              this.router.navigate(['/menu/list-tickets-user']);
+            }else{this.router.navigate(['/menu/list-tickets']);}
         },
         error: (error) => {
             console.error('Error al actualizar el ticket:', error);

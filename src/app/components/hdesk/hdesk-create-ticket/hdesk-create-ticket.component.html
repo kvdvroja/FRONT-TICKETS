@@ -194,23 +194,31 @@
                     </mat-select>
                 </mat-form-field>
 
-                <div class="flex gap-2 border-t-2 border-gray-300 pt-3 justify-between">
-                  <button type="button" mat-raised-button (click)="openAssignDialog()" style="color: #166fd4">Asignar Responsables</button>
-                  <div class="flex justify-center items-center">
-                    <div class="flex items-center flex-wrap">
-                      <div *ngFor="let cateCodi of ticket.cate_codi_asignar">
-                        <div *ngFor="let user of selectedUsers[cateCodi]" class="relative">
-                          <img [src]="user.fotoUsuario" (error)="manejarErrorImagen(user)" alt="{{ user.nombre_completo }}" class="h-9 w-9 rounded-full" title="{{ user.nombre_completo }}">
-                          <button (click)="removeAssignedUser(user, cateCodi)" class="remove-button">&times;</button>
+                <div class="flex flex-row gap-2 border-t-2 border-gray-300 pt-3 justify-between">
+                  <div class="flex flex-col gap-2">
+                    <button type="button" mat-raised-button (click)="openAssignDialog()" style="color: #166fd4">Asignar Responsables</button>
+                    <button type="button" mat-raised-button (click)="openUbicacion()" style="color: #166fd4">Ubicación</button>
+                  </div>
+                  <div class="flex flex-col gap-2">
+                    <div class="flex justify-center items-center">
+                      <div class="flex items-center flex-wrap">
+                        <div *ngFor="let cateCodi of ticket.cate_codi_asignar">
+                          <div *ngFor="let user of selectedUsers[cateCodi]" class="relative">
+                            <img [src]="user.fotoUsuario" (error)="manejarErrorImagen(user)" alt="{{ user.nombre_completo }}" class="h-9 w-9 rounded-full" title="{{ user.nombre_completo }}">
+                            <button (click)="removeAssignedUser(user, cateCodi)" class="remove-button">&times;</button>
+                          </div>
+                        </div>
+                        <!-- Mostrar usuarios seleccionados del catálogo también -->
+                        <div *ngIf="selectedUsers[ticket.catalogo]">
+                          <div *ngFor="let user of selectedUsers[ticket.catalogo]" class="relative">
+                            <img [src]="user.fotoUsuario" (error)="manejarErrorImagen(user)" alt="{{ user.nombre_completo }}" class="h-9 w-9 rounded-full" title="{{ user.nombre_completo }}">
+                            <button (click)="removeAssignedUser(user, ticket.catalogo)" class="remove-button">&times;</button>
+                          </div>
                         </div>
                       </div>
-                      <!-- Mostrar usuarios seleccionados del catálogo también -->
-                      <div *ngIf="selectedUsers[ticket.catalogo]">
-                        <div *ngFor="let user of selectedUsers[ticket.catalogo]" class="relative">
-                          <img [src]="user.fotoUsuario" (error)="manejarErrorImagen(user)" alt="{{ user.nombre_completo }}" class="h-9 w-9 rounded-full" title="{{ user.nombre_completo }}">
-                          <button (click)="removeAssignedUser(user, ticket.catalogo)" class="remove-button">&times;</button>
-                        </div>
-                      </div>
+                    </div>
+                    <div>
+
                     </div>
                   </div>
                 </div>

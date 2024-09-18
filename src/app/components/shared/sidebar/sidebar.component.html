@@ -31,7 +31,7 @@
   </a>
 
   <!-- Botón "Ver Tickets" -->
-  <a (click)="toggleMisTickets()" routerLink="/menu/list-tickets" class="cursor-pointer xl:flex lg:hidden hidden" title="Ver todos los tickets">
+  <a *ngIf="this.userDetail!.rols_codi != '4'" (click)="toggleMisTickets()" routerLink="/menu/list-tickets" class="cursor-pointer xl:flex lg:hidden hidden" title="Ver todos los tickets">
     <div class="flex gap-2">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
         <path fill="#2563eb" d="M8 17q.425 0 .713-.288T9 16t-.288-.712T8 15t-.712.288T7 16t.288.713T8 17m0-4q.425 0 .713-.288T9 12t-.288-.712T8 11t-.712.288T7 12t.288.713T8 13m0-4q.425 0 .713-.288T9 8t-.288-.712T8 7t-.712.288T7 8t.288.713T8 9m3 8h6v-2h-6zm0-4h6v-2h-6zm0-4h6V7h-6zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21z"/>
@@ -40,7 +40,24 @@
     </div>
   </a>
 
-  <a (click)="toggleMisTickets()" routerLink="/menu/list-tickets" class="cursor-pointer xl:hidden lg:flex flex" title="Ver todos los tickets">
+  <a *ngIf="this.userDetail!.rols_codi != '4'" (click)="toggleMisTickets()" routerLink="/menu/list-tickets" class="cursor-pointer xl:hidden lg:flex flex" title="Ver todos los tickets">
+    <span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 512 512">
+        <path fill="#166fd4" d="m426.24 127.72l-10.94 10.94a29.67 29.67 0 0 1-42-42l10.94-10.94L314.52 16l-88 88l-4 12.09l-12.09 4L16 314.52l69.76 69.76l10.94-10.94a29.67 29.67 0 0 1 42 42l-10.94 10.94L197.48 496l194.4-194.4l4-12.09l12.09-4l88-88Zm-208.56 5.43l21.87-21.87l33 33l-21.88 21.87Zm43 43l21.88-21.88l32.52 32.52l-21.88 21.88Zm42.56 42.56l21.88-21.88l32.52 32.52l-21.84 21.93Zm75.57 75.56l-33-33l21.87-21.88l33 33Z"/>
+      </svg>
+    </span>
+  </a>
+
+  <a *ngIf="this.userDetail!.rols_codi === '4'" (click)="toggleMisTickets()" routerLink="/menu/list-tickets-user" class="cursor-pointer xl:flex lg:hidden hidden" title="Ver todos los tickets">
+    <div class="flex gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+        <path fill="#2563eb" d="M8 17q.425 0 .713-.288T9 16t-.288-.712T8 15t-.712.288T7 16t.288.713T8 17m0-4q.425 0 .713-.288T9 12t-.288-.712T8 11t-.712.288T7 12t.288.713T8 13m0-4q.425 0 .713-.288T9 8t-.288-.712T8 7t-.712.288T7 8t.288.713T8 9m3 8h6v-2h-6zm0-4h6v-2h-6zm0-4h6V7h-6zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h14q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21z"/>
+      </svg>
+      <span class="font-semibold" style="color: #2563eb;">Ver Tickets</span>
+    </div>
+  </a>
+
+  <a *ngIf="this.userDetail!.rols_codi === '4'" (click)="toggleMisTickets()" routerLink="/menu/list-tickets-user" class="cursor-pointer xl:hidden lg:flex flex" title="Ver todos los tickets">
     <span>
       <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 512 512">
         <path fill="#166fd4" d="m426.24 127.72l-10.94 10.94a29.67 29.67 0 0 1-42-42l10.94-10.94L314.52 16l-88 88l-4 12.09l-12.09 4L16 314.52l69.76 69.76l10.94-10.94a29.67 29.67 0 0 1 42 42l-10.94 10.94L197.48 496l194.4-194.4l4-12.09l12.09-4l88-88Zm-208.56 5.43l21.87-21.87l33 33l-21.88 21.87Zm43 43l21.88-21.88l32.52 32.52l-21.88 21.88Zm42.56 42.56l21.88-21.88l32.52 32.52l-21.84 21.93Zm75.57 75.56l-33-33l21.87-21.88l33 33Z"/>
@@ -49,7 +66,7 @@
   </a>
 
   <!-- Submenú para "Mis Tickets" -->
-  <div *ngIf="mostrarMisTickets">
+  <div *ngIf="mostrarMisTickets || this.userDetail!.rols_codi !='4'">
     <button (click)="verTicketsPropios()" class="cursor-pointer flex items-center gap-2" title="Ver mis tickets">
       <div class="flex flex-row gap-1 items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="#ea580c" d="m224.49 184.49l-48 48a12 12 0 0 1-17-17L187 188H72a12 12 0 0 1-12-12V32a12 12 0 0 1 24 0v132h103l-27.52-27.51a12 12 0 1 1 17-17l48 48a12 12 0 0 1 .01 17"/></svg>

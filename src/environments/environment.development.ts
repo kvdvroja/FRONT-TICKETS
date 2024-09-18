@@ -46,4 +46,5 @@ export const environment = {
   get vinculacionApiUrl() { return `${this.apiBaseUrl}Vinculacion`; },
   get unidadApiUrl() { return `${this.apiBaseUrl}Unidad/`; },
   get respuestaUsuarioApiUrl() { return `${this.apiBaseUrl}RespuestaUsuario/`; },
+  get ubicacionApiUrl() { return `${this.apiBaseUrl}Ubicacion/`; },
 };
