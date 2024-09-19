@@ -10,7 +10,7 @@
         <img src="/assets/escrito.png" class="fixed-size-image-router">
         Editar
        </button>
-      <button (click)="navigateToTicketSheet(ticket)" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+      <button *ngIf="this.userDetail!.rols_codi !== '4'" (click)="navigateToTicketSheet(ticket)" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
         <img src="/assets/tareas4.png" class="fixed-size-image-router">
         Tareas
       </button>
@@ -26,8 +26,8 @@
               Regresar
             </p>
           </button>
-          <button *ngIf="ticket?.estado === 'Por Revisar'" mat-raised-button type="button" (click)="revisarTicket();" class="text-white" style="background-color: #ec5700;">Revisado</button>
-          <button *ngIf="ticket?.estado !== 'Cerrado' || ticket?.estado !== 'Recibido' || ticket?.estado !== 'Revisado' || ticket?.estado !== 'Por Revisar'" mat-raised-button type="button" (click)="openMensajeFinal()" class="text-white" style="background-color: #da1010;">Cerrar</button>
+          <button *ngIf="shouldShowRevisarButton()" mat-raised-button type="button" (click)="revisarTicket();" class="text-white" style="background-color: #ec5700;">Revisado</button>
+          <button *ngIf="shouldShowCloseButton()"  mat-raised-button type="button" (click)="openMensajeFinal()" class="text-white" style="background-color: #da1010;">Cerrar</button>
           <button *ngIf="ticket?.estado == 'Cerrado' && shouldShowChangeStatusButton();" mat-raised-button type="button" (click)="abrirTicket()" class="text-white" style="background-color: #da1010;">Abrir</button>
           <button *ngIf="shouldShowDelete();" mat-raised-button type="button" (click)="Delete()" class="text-white" style="background-color: #000000;">Eliminar</button>
         </div>

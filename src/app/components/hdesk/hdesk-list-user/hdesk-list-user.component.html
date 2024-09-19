@@ -2,8 +2,10 @@
 
 <!-- hdesk-list.component.html -->
 <div class="container mt-4">
-  <div class="flex justify-between items-center mb-4 text-xl text-gray-500">
-    <b>Listado de Tickets por Revisar</b>
+  <div class="flex justify-between items-center mb-4 text-xl">
+    <div class="flex text-2xl">
+      <b style="color: #166fd4;">LISTADO DE TICKETS</b>&nbsp;<b class="text-gray-500">POR REVISAR</b>
+    </div>
     <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
         <mat-icon>arrow_back</mat-icon> Regresar
     </button>
@@ -140,7 +142,6 @@
             {{ ticket.estado }}
           </span>
         </div>
-        
       </div>
     <div class="flex justify-between">
       <div class="container text-xs break-all" style="margin-left: -10px;">
@@ -148,7 +149,7 @@
         <b>Prioridad:</b> {{ getPrioridadDescripcion(ticket.prioridad) }}<br>
         <b>Fecha:</b> {{ ticket.fechaCreacion }}
       </div>
-      <div>                
+      <div>
         <div class="flex">
         <button *ngIf="showCreate(ticket.estado)" [routerLink]="['../edit-ticket', ticket.id]">
           <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#166fd4" d="M3 21v-4.25L16.2 3.575q.3-.275.663-.425t.762-.15t.775.15t.65.45L20.425 5q.3.275.438.65T21 6.4q0 .4-.137.763t-.438.662L7.25 21zM17.6 7.8L19 6.4L17.6 5l-1.4 1.4z"/></svg>
@@ -156,7 +157,7 @@
         <button [routerLink]="['../ticket-detail', ticket.id]">
           <img src="/assets/ListDetail.svg" alt="Detalle">
         </button>
-        <button (click)="navigateToTicketSheetCreate(ticket)">
+        <button (click)="navigateToTicketSheetCreate(ticket)" *ngIf="this.userDetail!.rols_codi !== '4'">
           <img src="/assets/sheet-create.png" alt="Creacion de Tarea">
         </button>
         <!-- <button (click)="onDeleteTicket(ticket.id!)">
@@ -211,7 +212,7 @@
                   <button *ngIf="showCreate(ticket.estado)" [routerLink]="['../edit-ticket', ticket.id]" title="Editar">
                    <img src="/assets/escrito.png" alt="Creacion de Tarea" class="fixed-size-image">
                   </button>
-                  <button (click)="navigateToTicketSheet(ticket)" title="Tareas del Ticket">
+                  <button (click)="navigateToTicketSheet(ticket)" title="Tareas del Ticket" *ngIf="this.userDetail!.rols_codi !== '4'">
                     <img src="/assets/tareas4.png" alt="Creacion de Tarea" class="fixed-size-image"> 
                   </button>
                 </div>

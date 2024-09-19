@@ -3,7 +3,9 @@
 <!-- hdesk-list.component.html -->
 <div class="container mt-4">
   <div class="flex justify-between items-center mb-4 text-xl text-gray-500">
-    <b>Listado de Tickets</b>
+    <div class="flex text-2xl">
+      <b style="color: #166fd4;">LISTADO DE TICKETS</b>&nbsp;<b class="text-orange-500">REVISADOS</b>
+    </div>
     <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
         <mat-icon>arrow_back</mat-icon> Regresar
     </button>
@@ -156,7 +158,7 @@
         <button [routerLink]="['../ticket-detail', ticket.id]">
           <img src="/assets/ListDetail.svg" alt="Detalle">
         </button>
-        <button (click)="navigateToTicketSheetCreate(ticket)">
+        <button (click)="navigateToTicketSheetCreate(ticket)" *ngIf="this.userDetail!.rols_codi !== '4'">
           <img src="/assets/sheet-create.png" alt="Creacion de Tarea">
         </button>
         <!-- <button (click)="onDeleteTicket(ticket.id!)">
@@ -211,7 +213,7 @@
                   <button *ngIf="showCreate(ticket.estado)" [routerLink]="['../edit-ticket', ticket.id]" title="Editar">
                    <img src="/assets/escrito.png" alt="Creacion de Tarea" class="fixed-size-image">
                   </button>
-                  <button (click)="navigateToTicketSheet(ticket)" title="Tareas del Ticket">
+                  <button (click)="navigateToTicketSheet(ticket)" title="Tareas del Ticket" *ngIf="this.userDetail!.rols_codi !== '4'">
                     <img src="/assets/tareas4.png" alt="Creacion de Tarea" class="fixed-size-image"> 
                   </button>
                 </div>

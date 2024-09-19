@@ -22,6 +22,7 @@ import { AuthService } from 'src/app/services/Auth/auth.service';
 import { FileUploadResponse } from 'src/app/interfaces/FileUploafResponse';
 import { Catalogo } from 'src/app/interfaces/Catalogo/Catalogo';
 import { CatalogoDialogComponent } from '../../shared/catalogo-dialog/catalogo-dialog.component';
+import { UbicacionDialogComponent } from '../../shared/ubicacion-dialog/ubicacion-dialog.component';
 
 import Quill from 'quill';
 import ImageResize from 'quill-image-resize-module';
@@ -45,6 +46,8 @@ export class HdeskCreateTicketUserComponent implements OnInit {
   selectedUsers: { [cateCodi: string]: Usuarios[] } = {};
   loading: boolean = false;
   unidCodiFlag = '';
+  ubicacionJerarquia: string = '';
+  campusF: string = '';
 
   public editorInstance: Quill | null = null;
   descEditor: string = '';
@@ -401,5 +404,25 @@ export class HdeskCreateTicketUserComponent implements OnInit {
   public onEditorChange(event: any): void {
     const content = event.editor.root.innerHTML;
     this.ticket.descripcion = content;
+  }
+
+  openUbicacion() {
+    const dialogRef = this.dialog.open(UbicacionDialogComponent, {
+      width: '800px'
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const { codi, campus, pabellon, pabellon_desc, aula, aula_desc } = result;
+        if(campus == "M"){
+          this.campusF = "TRUJILLO"
+        }
+        else if(campus == "PI"){
+          this.campusF = "PIURA"
+        }
+        this.ticket.ubicacion = codi;
+        this.ubicacionJerarquia = `${this.campusF} > ${pabellon_desc} > ${aula} (${aula_desc})`;
+      }
+    });
   }
 }

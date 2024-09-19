@@ -711,6 +711,19 @@ export class TicketDetailComponent implements OnInit {
       return ''; // Maneja otros casos o retorna un valor por defecto
     }
   }
+
+  public shouldShowRevisarButton(): boolean {
+    if (this.ticket?.estado === 'Por Revisar') {
+      if (this.userDetail?.rols_codi === '1' || this.userDetail?.rols_codi === '2') {
+        return true; // Mostrar para roles 1 o 2
+      }
+      if (this.userDetail?.cate_codi === '1' && 
+          (this.userDetail?.cargo_codi === '1' || this.userDetail?.cargo_codi === '2')) {
+        return true; // Mostrar para cate_codi 1 y cargo_codi 1 o 2
+      }
+    }
+    return false; // No mostrar para el resto de casos
+  }
   
 
   cargarCoordinadoresAdicionales(cateCodi: string, unidCodi: string): void {
@@ -1167,6 +1180,14 @@ export class TicketDetailComponent implements OnInit {
       return;
     }
   
+    // Verificar que los campos requeridos estén llenos
+    if (!this.ticket.organizacion || !this.ticket.tipologia || !this.ticket.viaRecepcion || !this.ticket.prioridad) {
+      this.snackBar.open('No se puede marcar como revisado. Asegúrate de que la organización, tipología, vía de recepción y prioridad estén completos.', 'Cerrar', {
+        duration: 3000,
+      });
+      return;
+    }
+  
     // Mostrar confirmación al usuario
     const confirmation = confirm("¿Ya ha revisado este ticket?");
     
@@ -1174,7 +1195,7 @@ export class TicketDetailComponent implements OnInit {
     if (confirmation) {
       const updatedTicket: Ticket = {
         ...this.ticket,
-        estado: "Recibido",
+        estado: "Revisado",  // Actualiza el estado a "Revisado"
         fechaActividad: fechaYHora,
         ticketID: this.ticket.ticketID // Asegurar que ticketID no sea undefined
       };
@@ -1196,6 +1217,31 @@ export class TicketDetailComponent implements OnInit {
       });
     }
   }
+  
+
+  public shouldShowCloseButton(): boolean {
+    // Asegúrate de que userDetail y ticket no sean nulos
+    if (!this.userDetail || !this.ticket) {
+      return false;
+    }
+
+    if (this.userDetail.rols_codi === '1' || this.userDetail.rols_codi === '2') {
+      return true;
+    }
+  
+    if (this.userDetail.cate_codi === '1') {
+      return true;
+    }
+  
+    const estadosPermitidos = ['En Proceso', 'Revisado', 'Recibido'];
+    if (this.userDetail.rols_codi === '3' && estadosPermitidos.includes(this.ticket.estado)) {
+      return true;
+    }
+  
+    return false;
+  }
+  
+  
   
   
   
