@@ -171,8 +171,11 @@
   <mat-expansion-panel hideToggle class="break-all m-2">
     <mat-expansion-panel-header class="h-20 my-2">
       <mat-panel-title class="gap-4 w-full">
-        <div class="flex" style="width:5%">
+        <div class="flex gap-2" style="width:5%">
           <div class="text-gray-500 font-medium lg:text-xs xl:text-xs 2xl:text-sm text-center"><span>N° {{ ticket.ticketID }}</span></div>
+          <span *ngIf="ticket.mostrarIconoParpadeante" class="parpadeo" title="Mensajes Nuevos">
+            <i class="bi bi-exclamation-circle"></i> <!-- Usando el icono de Bootstrap -->
+          </span>
         </div>
         <div class="flex w-3/12">
           <div>

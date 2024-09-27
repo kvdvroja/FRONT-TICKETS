@@ -27,6 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UnidadService } from 'src/app/services/Unidad/unidad.service';
 import { Observable } from 'rxjs';
 import { PaginatedResponse } from 'src/app/interfaces/paginatedResponse';
+import { ResponsesUService } from 'src/app/services/ResponsesU/responses-u.service';
 import { SignalrService } from 'src/app/services/signalr.service';
 import { TicketActionsService } from 'src/app/services/actions/ticket-actions.service';
 
@@ -120,6 +121,7 @@ export class HdeskListUserComponent implements OnInit {
     private signalrService: SignalrService,
     private asignarCategoriaService: AsignarCategoriaService,
     private ticketActionsService: TicketActionsService,
+    private responsesUService:ResponsesUService,
   ) {}
 
   ngOnInit() {
@@ -322,11 +324,11 @@ export class HdeskListUserComponent implements OnInit {
         observable = this.ticketService.getTicketsPaginadoUser(this.currentPage, this.pageSize, rols_codi, cate_codi, this.unid_codi);
       } else {
         this.aplicarFiltroPidm = "usuario";
-        observable = this.ticketService.getTicketsByUsuarioAndCreadorWithPaginationU(pidm,idUsuario, this.unid_codi,this.currentPage, this.pageSize);
+        observable = this.ticketService.getTicketsByUsuarioAndCreadorWithPaginationU(pidm, idUsuario, this.unid_codi, this.currentPage, this.pageSize);
       }
   
       observable.subscribe({
-        next: (response: any) => {
+        next: async (response: any) => {
           if ('tickets' in response) {
             this.tickets = response.tickets;
             this.totalItems = response.totalItems;
@@ -336,10 +338,16 @@ export class HdeskListUserComponent implements OnInit {
           }
           this.processTicketDates(this.tickets);
           this.filteredTickets = [...this.tickets];
+  
+          // Lógica para obtener las respuestas de los tickets y determinar si mostrar el icono parpadeante
+          for (const ticket of this.tickets) {
+            await this.verificarRespuestasNoVistas(ticket);
+          }
+  
           this.procesarTickets(this.filteredTickets);
         },
         error: (error: any) => {
-          console.error('Failed to fetch tickets:', error);
+          console.error('Error al cargar los tickets:', error);
           this.tickets = [];
           this.filteredTickets = [];
         }
@@ -348,6 +356,25 @@ export class HdeskListUserComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
+  
+
+  async verificarRespuestasNoVistas(ticket: Ticket): Promise<void> {
+    try {
+      const respuestas = await this.responsesUService.getResponsesByTicketId(ticket.ticketID).toPromise();
+  
+      const hayRespuestasNoVistas = respuestas!.some(respuesta =>
+        respuesta.visto === 'NO' && respuesta.idUsuario !== this.userDetail!.idUsuario
+      );
+      
+      // Actualiza si hay respuestas no vistas
+      ticket.mostrarIconoParpadeante = hayRespuestasNoVistas;
+  
+      this.cdr.detectChanges(); // Forzar la detección de cambios para actualizar el DOM
+    } catch (error) {
+      console.error('Error al obtener respuestas:', error);
+    }
+  }
+  
 
   cargarTodosLosTickets() {
     this.ticketService.getTicketsPaginadoUser(this.currentPage, this.pageSize, this.userDetail!.rols_codi, this.userDetail!.cate_codi).subscribe({

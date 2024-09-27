@@ -74,5 +74,17 @@
   color:#DDB000;
 }
 
+.parpadeo {
+  animation: blink 1s infinite;
+  color: #ff0000; /* Color rojo para destacar */
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+
 
 

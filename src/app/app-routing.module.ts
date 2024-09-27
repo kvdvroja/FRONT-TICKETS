@@ -61,11 +61,22 @@ const routes: Routes = [
       },
       { path: 'ticket-detail/:id', component: TicketDetailComponent },
       { path: 'ticket-sheet-create/:id',
-        component: CreateTareaTicketComponent 
+        component: CreateTareaTicketComponent,
+        canActivate: [RoleGuard],
+        data: {roles:['1','2','3']}
       },
       { path: 'inicio', component: MenuComponent },
-      { path: 'reports', component: ReportsComponent },
-      { path: 'reports-tickets', component: ReportTicketsComponent },
+      { path: 'reports', 
+        component: ReportsComponent,
+        canActivate: [RoleGuard],
+        data: {roles:['1','2','3']}
+       },
+      { path: 'reports-tickets',
+        component: ReportTicketsComponent,
+        canActivate: [RoleGuard],
+        data: {roles:['1','2','3']}
+
+      },
       { path: 'dashboard', component: DashboardComponent },
       // ... otras rutas hijas ...
     ]

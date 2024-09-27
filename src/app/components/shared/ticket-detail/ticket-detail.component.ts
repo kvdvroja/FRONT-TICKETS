@@ -471,21 +471,36 @@ export class TicketDetailComponent implements OnInit {
         this.respuestaPrincipal = null;
         return;
       }
+      
       const respuestasProcesadas: ResponsesU[] = [];
       for (const respuesta of respuestas) {
         if (!respuesta.codi) {
           continue;
         }
-
+  
         const adjuntosRespuesta = await this.adjuntoService.getAdjuntosByRespuestaId(respuesta.codi).toPromise().catch(() => []);
         respuesta.adjuntosRespuesta = adjuntosRespuesta;
-
+  
         const { nombreCompleto, idUsuario } = await this.buscarUsuarioPorId(respuesta.idUsuario);
         const respuestaProcesada = {
           ...respuesta,
           nombreUsuario: nombreCompleto,
           imagenUsuarioR: this.obtenerUrlImagen(idUsuario, 1),
         };
+  
+        // Verificar si la respuesta necesita ser actualizada de "NO" a "SI"
+        if (respuesta.visto === 'NO' && respuesta.idUsuario !== this.userDetail!.idUsuario) {
+          // Actualizar el campo 'visto' de NO a SI
+          this.responsesUService.updateResponses(respuesta.codi, { ...respuesta, visto: 'SI' }).subscribe({
+            next: (updatedResponse) => {
+              console.log('Respuesta actualizada a VISTO=SI', updatedResponse);
+            },
+            error: (err) => {
+              console.error('Error al actualizar el estado de la respuesta a VISTO=SI', err);
+            }
+          });
+        }
+  
         if (respuesta.padre_codi === "0") {
           this.respuestaPrincipal = respuestaProcesada;
         } else {
@@ -498,6 +513,7 @@ export class TicketDetailComponent implements OnInit {
       this.respuestaPrincipal = null;
     }
   }
+  
 
   selectedFile: File | null = null;
 

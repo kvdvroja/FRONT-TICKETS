@@ -34,5 +34,6 @@ export interface Ticket {
     PrioridadImagen?: string;
     PrioridadDescripcion?: string;
     ubicacion?: string;
+    mostrarIconoParpadeante?: boolean;
   }
   
