@@ -84,6 +84,7 @@ export class HdeskCreateTicketUserComponent implements OnInit {
     url_adjunto:'',
     idUsuario_asignar: '',
     adjuntos: [],
+    ubicacion: '',
   };
 
   organizaciones: Organizacion[] = [];

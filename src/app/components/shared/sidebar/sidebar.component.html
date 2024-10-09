@@ -67,7 +67,7 @@
 
   <!-- Submenú para "Mis Tickets" -->
   <div *ngIf="mostrarMisTickets || this.userDetail!.rols_codi !='4'">
-    <button (click)="verTicketsPropios()" class="cursor-pointer flex items-center gap-2" title="Ver mis tickets">
+    <button (click)="verTicketsPropios()" class="cursor-pointer hidden xl:flex items-center gap-2" title="Ver mis tickets">
       <div class="flex flex-row gap-1 items-center">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="#ea580c" d="m224.49 184.49l-48 48a12 12 0 0 1-17-17L187 188H72a12 12 0 0 1-12-12V32a12 12 0 0 1 24 0v132h103l-27.52-27.51a12 12 0 1 1 17-17l48 48a12 12 0 0 1 .01 17"/></svg>
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
