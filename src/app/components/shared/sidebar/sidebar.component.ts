@@ -36,13 +36,13 @@ export class SidebarComponent implements OnInit {
   cargarUnidades() {
     this.unidadService.getUnidades().subscribe(unidades => {
       this.unidades = unidades;
-      console.log("Unidades cargadas:", this.unidades);
+      //console.log("Unidades cargadas:", this.unidades);
     });
   }
 
   onUnidadChange(unidadCodi: string) {
     if (unidadCodi && unidadCodi !== 'Seleccione') {
-      console.log("Unidad seleccionada cambiada a:", unidadCodi);
+      //console.log("Unidad seleccionada cambiada a:", unidadCodi);
       this.unid_codi = unidadCodi;
       this.unidadService.setUnidadSeleccionada(unidadCodi);
     }
@@ -54,7 +54,7 @@ export class SidebarComponent implements OnInit {
 
     // Configurar unidad inicial basada en userDetail.unid_codi
     if (this.userDetail?.unid_codi) {
-      console.log("Configurando unidad inicial desde userDetail:", this.userDetail.unid_codi);
+      //console.log("Configurando unidad inicial desde userDetail:", this.userDetail.unid_codi);
       this.unidadService.initializeUnidadSeleccionada(this.userDetail.unid_codi);
     }
 
@@ -118,7 +118,7 @@ export class SidebarComponent implements OnInit {
     if (this.userDetail) {
       const { rols_codi, cate_codi, cargo_codi, pidm } = this.userDetail;
   
-      console.log("Cargando tickets para unidad:", this.unid_codi);
+      //console.log("Cargando tickets para unidad:", this.unid_codi);
   
       if (rols_codi === '1' || rols_codi === '2' || cate_codi === '1') {
         this.aplicarFiltroPidm = "todos";

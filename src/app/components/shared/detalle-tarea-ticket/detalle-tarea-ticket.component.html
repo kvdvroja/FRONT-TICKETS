@@ -155,17 +155,6 @@
             <mat-icon class="cursor-pointer text-blue-600" *ngIf="solucion.descripcion" (click)="startEditingSolucion()">edit</mat-icon>
           </div>
         </div>
-        <div *ngIf="isEditingSolucion" class="editor-container">
-          <quill-editor class="break-all" [(ngModel)]="solucionEditor"
-            [modules]="editorConfig"
-            (onEditorCreated)="setEditorInstanceSolucion($event)"
-            style="height: 300px;">
-          </quill-editor>
-          <div class="flex justify-center items-center">
-            <button mat-raised-button type="button" class="text-white my-4 m-2" style="background-color: #166fd4;" (click)="saveOrUpdateSolucion()">Guardar Solución</button>
-            <button mat-raised-button style="color:#166fd4" (click)="cancelEditingSolucion()">Cancelar</button>
-          </div>
-        </div>
       </div>
     </div>
   </div>

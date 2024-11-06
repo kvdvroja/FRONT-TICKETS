@@ -97,6 +97,7 @@ import { AddSolucionComponent } from './components/shared/add-solucion/add-soluc
 import { HdeskCreateTicketUserComponent } from './components/hdesk/hdesk-create-ticket-user/hdesk-create-ticket-user.component';
 import { HdeskListUserComponent } from './components/hdesk/hdesk-list-user/hdesk-list-user.component';
 import { UbicacionDialogComponent } from './components/shared/ubicacion-dialog/ubicacion-dialog.component';
+import { EditSolucionComponent } from './components/shared/edit-solucion/edit-solucion.component';
 
 //import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
@@ -174,7 +175,8 @@ import { UbicacionDialogComponent } from './components/shared/ubicacion-dialog/u
     AddSolucionComponent,
     HdeskCreateTicketUserComponent,
     HdeskListUserComponent,
-    UbicacionDialogComponent
+    UbicacionDialogComponent,
+    EditSolucionComponent
   ],
   imports: [
     ReactiveFormsModule,

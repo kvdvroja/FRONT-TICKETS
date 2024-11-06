@@ -513,7 +513,6 @@ getTrabajoDescripcion(codi: string): string {
           this.registrarHistorial("A","Detalle de Tarea",("Se Asignaron más usuarios a la tarea: "+this.data.tareaCodi))
         });
       } else {
-        console.log('No se seleccionaron usuarios o el resultado no es un array.');
       }
     });
   }
@@ -633,7 +632,7 @@ getTrabajoDescripcion(codi: string): string {
             this.editorInstance!.root.innerHTML = this.originalSolucion;
         }
     });
-}
+  }
 
   saveSolucion() {
     this.isEditingSolucion = false;
@@ -813,7 +812,6 @@ getTrabajoDescripcion(codi: string): string {
         this.etiquetasFiltradas = this.etiquetas;
       },
       (error) => {
-        console.error('Error al cargar etiquetas seleccionadas:', error);
       }
     );
   }

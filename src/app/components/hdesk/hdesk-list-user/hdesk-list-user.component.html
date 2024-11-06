@@ -173,9 +173,6 @@
       <mat-panel-title class="gap-4 w-full">
         <div class="flex gap-2" style="width:5%">
           <div class="text-gray-500 font-medium lg:text-xs xl:text-xs 2xl:text-sm text-center"><span>N° {{ ticket.ticketID }}</span></div>
-          <span *ngIf="ticket.mostrarIconoParpadeante" class="parpadeo" title="Mensajes Nuevos">
-            <i class="bi bi-exclamation-circle"></i> <!-- Usando el icono de Bootstrap -->
-          </span>
         </div>
         <div class="flex w-3/12">
           <div>
@@ -223,6 +220,9 @@
             </div>
             <div class="text-center whitespace-nowrap text-sm font-medium">
               <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="#3b83f6" d="m12 15l-5-5h10z"/></svg>
+              <span *ngIf="ticket.mostrarIconoParpadeante" class="parpadeo" title="Mensajes Nuevos">
+                <i class="bi bi-exclamation-circle"></i> <!-- Usando el icono de Bootstrap -->
+              </span>
             </div>
         </div>
       </mat-panel-title>

@@ -11,11 +11,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserDetail } from 'src/app/interfaces/Login/userDetail';
 
 @Component({
-  selector: 'app-add-solucion',
-  templateUrl: './add-solucion.component.html',
-  styleUrls: ['./add-solucion.component.css']
+  selector: 'app-edit-solucion',
+  templateUrl: './edit-solucion.component.html',
+  styleUrls: ['./edit-solucion.component.css']
 })
-export class AddSolucionComponent implements OnInit {
+export class EditSolucionComponent implements OnInit {
   isEditingName: boolean = false;
   isEditingSolucion: boolean = false;
   selectedTypes: string[] = [];
@@ -64,7 +64,7 @@ export class AddSolucionComponent implements OnInit {
   }
 
   constructor(
-    public dialogRef: MatDialogRef<AddSolucionComponent>,
+    public dialogRef: MatDialogRef<EditSolucionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { cateCodi: string, tareaCodi: string, breqCodi: string },
     private snackBar: MatSnackBar,
     private solucionService: SolucionService,

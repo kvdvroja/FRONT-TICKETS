@@ -129,7 +129,7 @@ export class HdeskListComponent implements OnInit {
     this.unid_codi = this.userDetail?.unid_codi || '';
   
     if (this.unid_codi) {
-      console.log("Cargando tickets para unidad desde ngOnInit:", this.unid_codi);
+      //console.log("Cargando tickets para unidad desde ngOnInit:", this.unid_codi);
       this.filtroCargarTickets();
       this.cargarDependencias();
     }
@@ -137,7 +137,7 @@ export class HdeskListComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd && event.urlAfterRedirects.includes('/menu/list-tickets')) {
         this.unid_codi = this.userDetail?.unid_codi || '';
-        console.log("Cargando tickets para unidad después de la navegación:", this.unid_codi);
+        //console.log("Cargando tickets para unidad después de la navegación:", this.unid_codi);
         this.filtroCargarTickets();
       }
     });
@@ -315,7 +315,7 @@ export class HdeskListComponent implements OnInit {
       const { rols_codi,idUsuario, cate_codi, cargo_codi, pidm } = this.userDetail;
       let observable: Observable<any>;
   
-      console.log("Cargando tickets para unidad:", this.unid_codi);
+      //console.log("Cargando tickets para unidad:", this.unid_codi);
   
       if (rols_codi === '1' || rols_codi === '2' || cate_codi === '1') {
         this.aplicarFiltroPidm = "todos";

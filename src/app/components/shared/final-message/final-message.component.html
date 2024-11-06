@@ -16,7 +16,12 @@
       <!-- Botón para cambiar el estado del ticket -->
       <div class="flex gap-2 border-t-2 border-gray-300 pt-3 w-full justify-center flex-col">
         <span class="flex text-xl justify-center" style="font-weight: bold; color:#166fd4;">OPCIONES</span>
+        <button *ngIf="ticket?.estado !== 'Cerrado'" mat-raised-button type="button" (click)="openUbicacion();" class="text-white" style="background-color: #ea580c;">Cambiar Ubicación</button>
+        <div class="flex justify-center items-center text-center">
+          <label id="lblUbicacion" class="text-blue-600" for=""><b>{{ ubicacionJerarquia }}</b></label>
+        </div>
         <button *ngIf="ticket?.estado !== 'Cerrado'" mat-raised-button type="button" (click)="onChangeTicketStatus(true)" class="text-white" style="background-color: #166fd4;">Cerrar Ticket</button>
+        
       </div> 
   </div>
 </div>

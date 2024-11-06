@@ -1,0 +1,40 @@
+<div class="flex flex-col justify-center items-center">
+    <div>
+      <h2 class="flex p-4 font-bold">SOLUCIÓN DE LA TAREA</h2>
+    </div>
+    <div class="flex flex-row gap-2">
+      <div class="flex flex-col p-4">
+          <div class="flex justify-center items-center">
+              <label for="archivoAdjunto" class="form-label text-gray-500"><b>Tipo:</b></label>   
+              <mat-form-field appearance="fill" class="w-40 flex gap-2">
+                <mat-label>TIPO</mat-label>
+                <mat-select [(ngModel)]="selectedTypes" (ngModelChange)="onSelectionChange($event)" multiple>
+                  <mat-option value="PAQUETE">PAQUETE</mat-option>
+                  <mat-option value="SCRIPT">SCRIPT</mat-option>
+                  <mat-option value="BD">BD</mat-option>
+                  <mat-option value="FORMA">FORMA</mat-option>
+                  <mat-option value="OTRO">OTRO</mat-option>
+                </mat-select>
+              </mat-form-field>
+          </div>
+            <div class="mb-3">
+              <label for="archivoAdjunto" class="form-label text-gray-500"><b>Adjunto:</b></label>
+              <input type="file" id="archivoAdjunto" (change)="onFileSelected($event)" multiple>
+            </div>
+      </div>
+      <div class="p-4">
+                  <div class="editor-container">
+            <quill-editor class="break-all" [(ngModel)]="solucionEditor"
+              [modules]="editorConfig"
+              (onEditorCreated)="setEditorInstanceSolucion($event)"
+              style="height: 300px;">
+            </quill-editor>
+            <div class="flex justify-center items-center">
+              <button mat-raised-button type="button" class="text-white my-4 m-2" style="background-color: #166fd4;" (click)="saveOrUpdateSolucion()">Guardar Solución</button>
+              <!--<button mat-raised-button style="color:#166fd4">Cancelar</button>-->
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+  

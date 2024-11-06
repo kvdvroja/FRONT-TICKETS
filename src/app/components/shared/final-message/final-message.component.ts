@@ -11,6 +11,9 @@ import { AsignarCategoria } from 'src/app/interfaces/AsignarCategoria'; // Impor
 import Quill from 'quill';
 import ImageResize from 'quill-image-resize-module';
 import { ImageDrop } from 'quill-image-drop-module';
+import { MatDialog } from '@angular/material/dialog';
+import { UbicacionDialogComponent } from '../../shared/ubicacion-dialog/ubicacion-dialog.component';
+
 
 Quill.register('modules/imageDrop', ImageDrop);
 Quill.register('modules/imageResize', ImageResize);
@@ -33,6 +36,8 @@ export class FinalMessageComponent implements OnInit {
   selectedFiles: File[] = [];
   ticket: Ticket;
   isLoading: boolean = false;
+  ubicacionJerarquia: string = '';
+  campusF: string = '';
 
   constructor(
     private dialogRef: MatDialogRef<FinalMessageComponent>,
@@ -42,6 +47,7 @@ export class FinalMessageComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
   ) {
     this.ticket = data.ticket;
   }
@@ -140,5 +146,25 @@ export class FinalMessageComponent implements OnInit {
     } else {
       console.error('No se ha seleccionado ningún ticket o falta el ID del ticket.');
     }
+  }
+
+  openUbicacion() {
+    const dialogRef = this.dialog.open(UbicacionDialogComponent, {
+      width: '800px'
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const { codi, campus, pabellon, pabellon_desc, aula, aula_desc } = result;
+        if(campus == "M"){
+          this.campusF = "TRUJILLO"
+        }
+        else if(campus == "PI"){
+          this.campusF = "PIURA"
+        }
+        this.ticket.ubicacion = codi;
+        this.ubicacionJerarquia = `${this.campusF} > ${pabellon_desc} > ${aula} (${aula_desc})`;
+      }
+    });
   }
 }
