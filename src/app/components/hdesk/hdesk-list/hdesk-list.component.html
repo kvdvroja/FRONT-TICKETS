@@ -173,15 +173,15 @@
     <mat-expansion-panel-header class="h-20 my-2">
       <mat-panel-title class="gap-4 w-full">
         <div class="flex" style="width:5%">
-          <div class="text-gray-500 font-medium lg:text-xs xl:text-xs 2xl:text-sm text-center"><span>N° {{ ticket.ticketID }}</span></div>
+          <div class="text-gray-500 font-medium lg:text-xs xl:text-xs 2xl:text-sm text-center truncate"><span>N° {{ ticket.ticketID }}</span></div>
         </div>
         <div class="flex w-3/12">
           <div>
             <img [src]="ticket.urlImagenUsuario" (error)="manejarErrorImagen(ticket)" alt="{{ ticket.nombre }}" class="h-12 w-12 rounded-full mr-4" title="{{ ticket.nombre }}">
           </div>
-          <div class="flex flex-col">
+          <div class="flex flex-col align-middle">
             <span>{{ticket.idUsuario}}</span>
-            <span class="lg:text-xs xl:text-xs 2xl:text-sm">{{ticket.nombre}}</span>
+            <span class="lg:text-xs xl:text-xs 2xl:text-sm truncate overflow-hidden whitespace-nowrap max-w-xs">{{ticket.nombre}}</span>
           </div>
         </div>
         <div class="flex flex-row items-center justify-start h-full w-5/12 gap-1" style="width:40%">

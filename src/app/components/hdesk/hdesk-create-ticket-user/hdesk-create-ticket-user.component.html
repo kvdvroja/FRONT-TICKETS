@@ -5,32 +5,18 @@
   <div class="container lg:m-4 w-full">
     <div class="flex justify-between text-xl my-3 lg:my-5 text-gray-500">
       <b>REGISTRO TICKET USUARIO</b>
-      <div class="lg:mr-5">
+      <div class="flex lg:mr-5 gap-2">
+        <button (click)="openInstrucciones()" mat-raised-button type="button" title="Instrucciones"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 16 16"><path fill="#666666" d="M7 4.75c0-.412.338-.75.75-.75h.5c.412 0 .75.338.75.75v.5c0 .412-.338.75-.75.75h-.5A.753.753 0 0 1 7 5.25zM10 12H6v-1h1V8H6V7h3v4h1z"/><path fill="#666666" d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m0 14.5a6.5 6.5 0 1 1 0-13a6.5 6.5 0 0 1 0 13"/></svg></button>
         <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
             <p class="flex justify-center items-center text-center m-auto gap-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8l8 8l1.41-1.41L7.83 13H20z"/></svg>
                 Regresar
             </p>
-        </button></div>
+        </button>
+      </div>
   </div>
       <form #ticketForm="ngForm" (ngSubmit)="createTicket()">
         <div class="lg:flex lg:flex-wrap gap-5 w-full">
-            <div class="flex flex-col w-1/2 container justify-center text-center items-center">
-                <div class="text-justify">
-                    <div class="w-full justify-center text-center items-center p-2 mb-4" style="background-color: #2563eb;">
-                      <span class="text-white text-xl font-semibold">INSTRUCCIONES</span><br>
-                    </div>
-                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">1. ID DE USUARIO Y NOMBRE: </b>Asegúrate de que estos campos estén completados con tu información personal.</span><br>
-                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">2. ASUNTO: </b>Escribe un título breve y claro que resuma el problema o solicitud que deseas reportar.</span><br>
-                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">3. DESCRIPCIÓN: </b>En este campo, detalla tu problemática de la manera más clara y precisa posible. Asegúrate de incluir toda la información relevante, como los pasos que realizaste antes de encontrar el problema, y cualquier otro detalle que consideres importante para que podamos ayudarte mejor.</span><br>
-                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">4. CATÁLOGO DE SERVICIOS (OPCIONAL): </b>Si lo consideras necesario, selecciona un servicio del catálogo que esté relacionado con tu problema o solicitud.</span><br>
-                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">5. ADJUNTAR ARCHIVOS (OPCIONAL): </b>Si dispones de imágenes, documentos u otros archivos que ayuden a explicar tu caso, puedes adjuntarlos utilizando esta opción.</span><br>
-                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">6. UBICACIÓN (OPCIONAL): </b>Si lo consideras relevante para tu solicitud, puedes proporcionar la ubicación donde ocurrió el problema o donde se requiere asistencia.</span><br>
-                    <span style="font-size: 15px; line-height: 30px;"><b style="color: #2563eb;">7. CREAR TICKET: </b>Una vez completados todos los campos, haz clic en el botón "Crear Ticket" para enviar tu solicitud.</span><br>
-                </div>
-                <img class="flex justify-center items-center text-center" src="assets/banner-ticket-create.png" alt="" title="banner" style="width: 400px; height: 400px;">
-            </div>
-              <!-- Columna Derecha -->
               <div class="flex flex-col flex-1 gap-3 border p-3 h-100 shadow-border w-1/2">
                 <div class="flex flex-col flex-1 gap-3">
   
@@ -66,7 +52,7 @@
 
                 <div class="flex gap-2 pt-3">
                   <div class="text-md text-gray-500">
-                    <b>Catálogo de servicios </b>
+                    <b>Catálogo de servicios (Opcional)</b>
                   </div>
                 </div>
                 <div class="flex flex-col lg:flex-row gap-2 w-full">

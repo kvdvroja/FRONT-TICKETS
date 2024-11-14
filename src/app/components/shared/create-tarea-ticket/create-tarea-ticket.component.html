@@ -58,7 +58,7 @@
             </div> 
             <div class="flex w-full flex-col">
               <div *ngFor="let tarea of asignarTickets; let i = index" class="flex justify-between items-center border p-2 w-full my-2">
-                <div class="flex flex-row gap-2">
+                <div class="flex flex-row gap-2 w-9/12">
                   <div class="flex flex-col justify-center items-center">
                     <button *ngIf="i > 0" (click)="moveTaskUp(tarea)" title="Mover hacia arriba">
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
@@ -71,11 +71,22 @@
                       </svg>
                     </button>
                   </div>
-                  <div class="flex flex-row justify-center items-center">
-                    <span><b>REQ-{{ i + 1 }}</b></span> - <span>{{tarea.nombre}}</span>
+                  <div class="flex justify-between grow ">
+                    <div class="flex flex-row justify-center items-center">
+                      <span><b>REQ-{{ i + 1 }}</b></span>
+                    </div>
+                    <div class="flex">
+                      <span class="truncate overflow-hidden whitespace-nowrap max-w-xs">{{ tarea.nombre }}</span>
+                    </div>
+                    <div class="flex align-middle items-center mr-4">
+                      <div class="flex gap-1">
+                        <span class="text-red-600"><b>F.V:</b></span>
+                        <span>{{tarea.fecha_fin}}</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div class="flex flex-row gap-2">
+                <div class="flex flex-row gap-2 w-3/12 justify-end">
                   <div class="flex flex-row justify-center items-center">
                     <span *ngFor="let usuario of usuariosAsignadosPorTarea[tarea.codi]" class="">
                       <img [src]="usuario.fotoUsuario" (error)="manejarErrorImagenAsign(usuario)" alt="{{ usuario.nombre_completo }}" class="h-7 w-7 rounded-full" title="{{ usuario.nombre_completo }}">

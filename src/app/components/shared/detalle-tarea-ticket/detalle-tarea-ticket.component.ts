@@ -333,11 +333,8 @@ getTrabajoDescripcion(codi: string): string {
     const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
     const anio = fecha.getFullYear();
     const hora = fecha.getHours();
-    const minuto = fecha.getMinutes().toString().padStart(2, '0');
-    const periodo = hora >= 12 ? 'p. m.' : 'a. m.';
-    const horaFormato12 = hora % 12 || 12;
 
-    return `${dia}/${mes}/${anio} - ${horaFormato12}:${minuto} ${periodo}`;
+    return `${dia}/${mes}/${anio}`;
   }
 
   deleteAsignarTicket(): void {

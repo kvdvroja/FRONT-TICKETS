@@ -23,6 +23,7 @@ import { FileUploadResponse } from 'src/app/interfaces/FileUploafResponse';
 import { Catalogo } from 'src/app/interfaces/Catalogo/Catalogo';
 import { CatalogoDialogComponent } from '../../shared/catalogo-dialog/catalogo-dialog.component';
 import { UbicacionDialogComponent } from '../../shared/ubicacion-dialog/ubicacion-dialog.component';
+import { InstruccionesComponent } from '../../shared/instrucciones/instrucciones.component';
 
 import Quill from 'quill';
 import ImageResize from 'quill-image-resize-module';
@@ -263,6 +264,15 @@ export class HdeskCreateTicketUserComponent implements OnInit {
   
         // Usar `this.ticket.catalogo` como clave común
       }
+    });
+  }
+
+  openInstrucciones() {
+    const dialogRef = this.dialog.open(InstruccionesComponent, {
+      width: '600px',
+      height: '800px'
+    });
+    dialogRef.afterClosed().subscribe(() => {
     });
   }
   
