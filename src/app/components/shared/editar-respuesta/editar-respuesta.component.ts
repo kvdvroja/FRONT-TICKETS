@@ -9,8 +9,8 @@ import { AdjuntoService } from 'src/app/services/Attach/adjunto.service';
 import { AdjuntoInfo } from 'src/app/interfaces/AdjuntoInfo';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-Quill.register('modules/imageDrop', ImageDrop);
-Quill.register('modules/imageResize', ImageResize);
+// Quill.register('modules/imageDrop', ImageDrop);
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-editar-respuesta',

@@ -55,8 +55,8 @@ import { VinculacionConDetalles } from 'src/app/interfaces/Vinculacion/Vinculaci
 import { RegistroEtiquetasService } from 'src/app/services/Etiqueta/registro-etiquetas.service';
 import { EtiquetaService } from 'src/app/services/Etiqueta/etiqueta.service';
 
-Quill.register('modules/imageDrop', ImageDrop);
-Quill.register('modules/imageResize', ImageResize);
+// Quill.register('modules/imageDrop', ImageDrop);
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-create-tarea-ticket',

@@ -2,7 +2,7 @@
 <div mat-dialog-content>
   <div *ngFor="let cateCodi of coordinaciones" class="mb-4">
     <mat-form-field appearance="fill" class="w-full">
-      <mat-label>Responsable para {{ categorias[cateCodi]?.descripcion }}</mat-label>
+      <mat-label>Responsable para {{ categorias[cateCodi] ? categorias[cateCodi].descripcion : 'Sin Asignar' }}</mat-label>
       <mat-select [(ngModel)]="selectedUsers[cateCodi]" multiple (selectionChange)="openTaskDialog($event, cateCodi)">
         <mat-option *ngFor="let user of usuarios[cateCodi]" [value]="user">
           <div class="flex items-center">

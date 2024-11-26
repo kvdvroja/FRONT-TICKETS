@@ -41,13 +41,8 @@ import { RegistrarTareas } from 'src/app/interfaces/RegistrarTareas/RegistrarTar
 import { RegistrarTareasService } from 'src/app/services/RegistrarTareas/registrar-tareas.service';
 
 import Quill from 'quill';
-import ImageResize from 'quill-image-resize-module';
-import { ImageDrop } from 'quill-image-drop-module';
 import { UnidadService } from 'src/app/services/Unidad/unidad.service';
 import { UbicacionDialogComponent } from '../../shared/ubicacion-dialog/ubicacion-dialog.component';
-
-Quill.register('modules/imageDrop', ImageDrop);
-Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-hdesk-create-ticket',

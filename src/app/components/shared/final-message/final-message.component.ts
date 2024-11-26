@@ -15,8 +15,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { UbicacionDialogComponent } from '../../shared/ubicacion-dialog/ubicacion-dialog.component';
 
 
-Quill.register('modules/imageDrop', ImageDrop);
-Quill.register('modules/imageResize', ImageResize);
+// Quill.register('modules/imageDrop', ImageDrop);
+// Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-final-message',

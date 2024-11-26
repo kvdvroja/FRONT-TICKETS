@@ -40,14 +40,9 @@ import { Location } from '@angular/common';
 import { Historial } from 'src/app/interfaces/Historial/Historial';
 import { HistorialService } from 'src/app/services/Historial/historial.service';
 import { ResponsesUService } from 'src/app/services/ResponsesU/responses-u.service';
-import ImageResize from 'quill-image-resize-module';
-import { ImageDrop } from 'quill-image-drop-module';
 import { RegistrarTareasService } from 'src/app/services/RegistrarTareas/registrar-tareas.service';
 import { PreviewSolucionComponent } from '../preview-solucion/preview-solucion.component';
 import { AsignarCategoriaDialogComponent } from '../asignar-categoria-dialog/asignar-categoria-dialog.component';
-
-Quill.register('modules/imageDrop', ImageDrop);
-Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-ticket-detail',

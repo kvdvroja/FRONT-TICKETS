@@ -116,9 +116,9 @@
               <span class="flex flex-row text-center items-center gap-1">
                 <img *ngIf="prioridadMap[ticket.prioridad]?.imagen" 
                      [src]="prioridadMap[ticket.prioridad].imagen" 
-                     [alt]="prioridadMap[ticket.prioridad]?.descripcion || 'Sin Asignar'" 
+                     [alt]="prioridadMap[ticket.prioridad] ? prioridadMap[ticket.prioridad].descripcion : 'Sin Asignar'"
                      class="h-6 w-6">
-                {{ prioridadMap[ticket.prioridad]?.descripcion || "Sin Asignar" }}
+                {{ prioridadMap[ticket.prioridad] ? prioridadMap[ticket.prioridad].descripcion : 'Sin Asignar' }}
               </span>
          
               
@@ -165,10 +165,10 @@
                 <span class="hidden md:flex lg:flex xl:flex 2xl:flex"><b>Coordinador</b></span>
                 <span class="text-xs text-blue-500" *ngIf="hasCoordinadoresAdicionales(asignacion.cate_codi)">
                   <button class="hidden md:flex lg:flex xl:flex 2xl:flex" (click)="openAsignadosDetalle(ticket!.ticketID, asignacion.cate_codi)">
-                    ({{ coordinadoresAdicionales[asignacion.cate_codi]?.length || 0 }} usuarios más...)
+                    ({{ coordinadoresAdicionales[asignacion.cate_codi].length || 0 }} usuarios más...)
                   </button>
                   <button class="flex md:hidden lg:hidden xl:hidden 2xl:hidden" (click)="openAsignadosDetalle(ticket!.ticketID, asignacion.cate_codi)">
-                    ({{ coordinadoresAdicionales[asignacion.cate_codi]?.length || 0 }}+)
+                    ({{ coordinadoresAdicionales[asignacion.cate_codi].length || 0 }}+)
                   </button>
                 </span>
               </div>

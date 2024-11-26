@@ -26,12 +26,7 @@ import { UbicacionDialogComponent } from '../../shared/ubicacion-dialog/ubicacio
 import { InstruccionesComponent } from '../../shared/instrucciones/instrucciones.component';
 
 import Quill from 'quill';
-import ImageResize from 'quill-image-resize-module';
-import { ImageDrop } from 'quill-image-drop-module';
 import { UnidadService } from 'src/app/services/Unidad/unidad.service';
-
-Quill.register('modules/imageDrop', ImageDrop);
-Quill.register('modules/imageResize', ImageResize);
 
 @Component({
   selector: 'app-hdesk-create-ticket-user',

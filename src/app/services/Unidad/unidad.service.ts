@@ -56,7 +56,7 @@ export class UnidadService {
   }
   
   initializeUnidadSeleccionada(unid_codi: string) {
-    console.log("Inicializando unidad seleccionada con:", unid_codi);
+    //console.log("Inicializando unidad seleccionada con:", unid_codi);
     this.unidadSeleccionada.next(unid_codi);
     localStorage.setItem('unidadSeleccionada', unid_codi);  // Guarda en localStorage
   }
