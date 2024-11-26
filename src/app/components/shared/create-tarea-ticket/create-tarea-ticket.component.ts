@@ -287,12 +287,12 @@ export class CreateTareaTicketComponent implements OnInit {
     }
     this.catalogoService.getCatalogoByCodi(catalogId).subscribe({
       next: (catalogo) => {
-        if (catalogo.codi !== "1") {
-          const catalogNameHtml = `<div>■ ${catalogo.nombre}</div>`;
+        if (catalogo?.codi !== "1") {
+          const catalogNameHtml = `<div>■ ${catalogo?.nombre}</div>`;
           this.displayCatalogPath = catalogNameHtml + this.displayCatalogPath;
         }
-        if (catalogo.padre) {
-          this.loadCatalogHierarchy(catalogo.padre);
+        if (catalogo?.padre) {
+          this.loadCatalogHierarchy(catalogo?.padre);
         }
       },
       error: (error) => console.error('Error al obtener el catálogo:', error)
@@ -816,7 +816,7 @@ export class CreateTareaTicketComponent implements OnInit {
     return etiquetasUnicas;
 }
 
-showCreate(ticketEstado: string): boolean {
+showCreate(ticketEstado: string | undefined): boolean {
   if (ticketEstado === 'Cerrado') {
     return false;
   }

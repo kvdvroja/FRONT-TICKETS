@@ -17,6 +17,7 @@ export class AuthService {
   private apiUrl = environment.authApiUrl;
   private isAuthenticated = false;
   private currentUser: UserDetail | null = null;
+  private urlApiSSO3 = environment.urlSSO + '/Token/Index';
 
   constructor(private http: HttpClient, private router: Router) {
     this.initializeLoginStatus();
@@ -49,6 +50,10 @@ export class AuthService {
 
   getCurrentUser(): UserDetail | null {
     return this.currentUser;
+  }
+
+  public postToken(params: any): Observable<any> {
+    return this.http.post<any>(this.urlApiSSO3, params);
   }
 
   logout(): void {

@@ -6,7 +6,7 @@
     <div class="flex flex-row gap-2">
       <span class="text-gray-500 hidden lg:flex xl:flex 2xl:flex my-auto text-lg"><b>Detalle de Ticket: {{ticket?.ticketID}}</b>
       </span>
-      <button *ngIf="showCreate(ticket!.estado)" [routerLink]="['../../edit-ticket', ticket!.id]" title="Editar" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+      <button *ngIf="showCreate(ticket?.estado)" [routerLink]="['../../edit-ticket', ticket?.id]" title="Editar" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
         <img src="/assets/escrito.png" class="fixed-size-image-router">
         Editar
        </button>

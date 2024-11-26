@@ -1,5 +1,5 @@
 <div class="w-12/12">
-  <div class="flex flex-col" *ngIf="this.userDetail!.rols_codi !=='4'">
+  <div class="flex flex-col ml-0 md:ml-10" *ngIf="this.userDetail!.rols_codi !=='4'">
     <div *ngIf="this.userDetail!.rols_codi !=='4'" class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
       <div class="cardd" *ngIf="showCreate()">
         <div class="content">
@@ -29,7 +29,7 @@
         </div>
     </div>
     </div>
-    <div class="bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario() || (this.userDetail!.rols_codi !=='4' && this.userDetail!.rols_codi !== '3')">
+    <div class="bg-blue-600 ml-0 md:ml-4 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario() || (this.userDetail!.rols_codi !=='4' && this.userDetail!.rols_codi !== '3')">
       <div class="text-2xl text-white mx-4 m-2" style="font-weight: 600">CONFIGURACIONES</div>
     </div>
     <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8" *ngIf="this.userDetail!.rols_codi !=='4'">
@@ -71,7 +71,7 @@
     </div>
     </div>
     
-    <div class="w-full bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario() || (this.userDetail!.rols_codi !== '4' && this.userDetail!.rols_codi !== '3')">
+    <div class="w-full ml-0 md:ml-4 bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="showConfiguracionUsuario() || (this.userDetail!.rols_codi !== '4' && this.userDetail!.rols_codi !== '3')">
       <div class="text-2xl text-white mx-4 m-2" style="font-weight: 600">MANTENEDORES</div>
     </div>    
     <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">
@@ -158,8 +158,8 @@
     </div>
     </div>
     </div>
-    <div class="flex flex-col">
-      <div class="bg-blue-600 border-2 border-t-orange-500 rounded-lg" *ngIf="this.userDetail!.rols_codi !== '4' && this.userDetail!.rols_codi !== '3'">
+    <div class="flex flex-col ml-0 md:ml-10">
+      <div class="bg-blue-600 border-2 ml-0 md:ml-4 border-t-orange-500 rounded-lg" *ngIf="this.userDetail!.rols_codi !== '4' && this.userDetail!.rols_codi !== '3'">
         <div class="text-2xl text-white mx-4 m-2" style="font-weight: 600">USUARIOS</div>
       </div>
       <div class="flex flex-wrap m-4 gap-4 md:gap-6 lg:gap-8">

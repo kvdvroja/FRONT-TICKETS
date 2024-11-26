@@ -794,9 +794,6 @@ getTrabajoDescripcion(codi: string): string {
         }));
         this.etiquetasFiltradas = this.etiquetas;
         this.cargarEtiquetasSeleccionadas();
-      },
-      (error) => {
-        console.error('Error al cargar etiquetas:', error);
       }
     );
   }

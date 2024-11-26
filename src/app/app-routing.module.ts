@@ -30,6 +30,7 @@ import { ConfigTrabajosComponent } from './components/config/config-trabajos/con
 import { ConfigProgresoComponent } from './components/config/config-progreso/config-progreso.component';
 import { HdeskCreateTicketUserComponent } from './components/hdesk/hdesk-create-ticket-user/hdesk-create-ticket-user.component';
 import { HdeskListUserComponent } from './components/hdesk/hdesk-list-user/hdesk-list-user.component';
+import { TraerLoginComponent } from './components/shared/traer-login/traer-login.component';
 
 const routes: Routes = [
   { 
@@ -82,6 +83,7 @@ const routes: Routes = [
     ]
   },
   { path: 'login', component: LoginComponent },
+  { path: 'traer', component: TraerLoginComponent },
   { path: 'register', component: RegisterComponent},
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {

@@ -4,6 +4,7 @@ import { UserLogin } from 'src/app/interfaces/Login/UserLogin';
 import { Router } from '@angular/router';
 import { ApiSSOService } from 'src/app/services/SSO/apissoservice.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -35,10 +36,11 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router, private apissoService : ApiSSOService,private snackBar: MatSnackBar) {}
 
   ngOnInit() {
+    this.onLogin();
     // this.ingresarSSO('');
   }
 
-  onLogin(): void {
+  onLogin2(): void {
     this.authService.login(this.loginData).subscribe({
       next: (userDetail) => {
         //console.log('Inicio de sesión exitoso', userDetail);
@@ -62,57 +64,20 @@ export class LoginComponent {
     this.router.navigate(['/register']);
   }
 
-  // async  ingresarSSO(rol :string) {
-    
-  //   const parametros = {
-  //     code: '+uijn7BO5SJKMZdKEE5ay6h+mOMUMRPNamRRVlr5toU=',
-  //     client_id: 'canvas_2345',
-  //     client_secret: 'aXQnc2FzZWNyZXRmb3JjYW52YXN1cGFvMjAyMw==',
-  //     redirect_uri:
-  //       'https%3a%2f%2fsso.beta.canvaslms.com%2flogin%2foauth2%2fcallback',
-  //     grant_type: 'authorization_code',
-  //     refresh_token: '15000',
-  //   };
-  
-  //   this.apissoService.postSSOToken(parametros).subscribe({
-  //    next: response => {
-  //      console.log(response);
-  //      this.token_access = response.access_token;
+  onLogin() {
+    this.llamarSSO();
+  }
 
-
-  //      if ((<any>response).status == 200) {
-  //        console.log(200);
-  //        this.resp = response;
-
-
-  //      }
-  //      if ((<any>response).success == '2') {
-  //        //         this.msgDatosPer = "Experiencia Laboral no registrada.";
-  //      }
-  //    },
-  //    complete: () => {
-  //      this.loginWithCanvas(this.token_access, rol);
-  //    },
-
-  //    error: err => { console.error('ERR Error en la solicitud HTTP:', err); }
-  //  })
-
-  // } 
-
-  // async loginWithCanvas(token: string, rol: string) {
-  //   const clientId = 'canvas_2345';
-  //   const redirectUri = encodeURIComponent('http://localhost:4200/Login/');
-  //   const responseType = 'code';
-  //   const scope = 'openid';
-  //   const state = token; // Reemplazar con el token obtenido de la API
-  //   const authUrl = `client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${state}`;
-
-  //   const urlApiSSO2 = "http://localhost:7681/Account/Login?"
-
-  //   localStorage.setItem("ROL", rol);
-
-  //   window.location.href = urlApiSSO2 + authUrl;
-  // }
-
+  async llamarSSO(){
+      const clientId = environment.clientAdmi;
+      const redirectUri = encodeURIComponent(environment.urlAngular + '/traer');
+      const grant_type = 'authorization_code';
+      const scope = 'openid';
+      const responseType = 'code';
+      const state = '';
+      const authUrl = `client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${state}`;
+      const urlApiSSO2 = '/Account/Login?';
+      window.location.href = environment.urlSSO + urlApiSSO2 + authUrl;
+  }
   
 }

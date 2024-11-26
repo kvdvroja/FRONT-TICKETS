@@ -5,7 +5,7 @@
   <div class="flex container justify-center lg:justify-between xl:justify-between 2xl:justify-between text-center items-center lg:px-2 xl:px-2 2xl:px-2 my-4 bg-white">
   <div class="flex flex-row gap-2">
     <span class="text-gray-500 hidden lg:flex xl:flex 2xl:flex my-auto text-lg"><b>Ticket: {{asignacionCategoria?.breq_codi}} - {{asignacionCategoria?.cate_codi}}</b></span>
-    <button *ngIf="showCreate(ticket!.estado)" [routerLink]="['../../edit-ticket', ticket!.id]" title="Editar" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
+    <button *ngIf="showCreate(ticket?.estado)" [routerLink]="['../../edit-ticket', ticket?.id]" title="Editar" type="button" class="bg-gray-200 flex flex-row p-1 font-semibold rounded-md justify-center items-center gap-1">
       <img src="/assets/escrito.png" class="fixed-size-image-router">
       Editar
     </button>
@@ -163,12 +163,12 @@
               <span class="text-blue-600"><b>Catálogo:</b></span>
               <div style="font-weight: 400;" [innerHtml]="displayCatalogPath"></div>
               <span class="text-blue-600"><b>Prioridad:</b></span>
-              <span class="flex flex-row text-center items-center gap-1" *ngIf="prioridadMap[ticket.prioridad].descripcion">
+              <span class="flex flex-row text-center items-center gap-1" *ngIf="prioridadMap[ticket.prioridad]?.descripcion">
                 <img *ngIf="prioridadMap[ticket.prioridad]?.imagen" 
-                [src]="prioridadMap[ticket.prioridad].imagen" 
-                [alt]="prioridadMap[ticket.prioridad].descripcion" 
+                [src]="prioridadMap[ticket.prioridad]?.imagen" 
+                [alt]="prioridadMap[ticket.prioridad]?.descripcion" 
                 class="h-6 w-6">
-                 {{ prioridadMap[ticket.prioridad].descripcion }}
+                 {{ prioridadMap[ticket.prioridad]?.descripcion }}
                </span>
                <span class="text-blue-600"><b>Etiquetas:</b></span>
                <div class="flex flex-col flex-wrap">

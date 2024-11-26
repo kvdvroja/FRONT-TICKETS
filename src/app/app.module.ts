@@ -99,6 +99,7 @@ import { HdeskListUserComponent } from './components/hdesk/hdesk-list-user/hdesk
 import { UbicacionDialogComponent } from './components/shared/ubicacion-dialog/ubicacion-dialog.component';
 import { EditSolucionComponent } from './components/shared/edit-solucion/edit-solucion.component';
 import { InstruccionesComponent } from './components/shared/instrucciones/instrucciones.component';
+import { TraerLoginComponent } from './components/shared/traer-login/traer-login.component';
 
 //import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
@@ -178,7 +179,8 @@ import { InstruccionesComponent } from './components/shared/instrucciones/instru
     HdeskListUserComponent,
     UbicacionDialogComponent,
     EditSolucionComponent,
-    InstruccionesComponent
+    InstruccionesComponent,
+    TraerLoginComponent
   ],
   imports: [
     ReactiveFormsModule,

@@ -1,10 +1,10 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
 <!-- hdesk-list.component.html -->
-<div class="container mt-4">
+<div class="container mt-4 ml-0 sm:ml-10 md:ml-10">
   <div class="flex justify-between items-center mb-4 text-xl">
-    <div class="flex text-2xl">
-      <b style="color: #166fd4;">LISTADO DE TICKETS</b>&nbsp;<b class="text-gray-500">POR REVISAR</b>
+    <div class="flex flex-col sm:flex-row text-2xl">
+      <b style="color: #166fd4;">LISTADO DE TICKETS</b><span class="hidden sm:inline">&nbsp;</span><b class="text-gray-500">POR REVISAR</b>
     </div>
     <button routerLink="/menu/inicio" mat-raised-button type="button" class="text-white" style="background-color: #166fd4; width:150px;">
         <mat-icon>arrow_back</mat-icon> Regresar

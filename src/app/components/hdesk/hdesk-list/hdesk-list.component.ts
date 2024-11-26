@@ -148,7 +148,6 @@ export class HdeskListComponent implements OnInit {
     // Suscribirse al observable de UnidadService para detectar cambios en la unidad seleccionada
     this.unidadService.unidadSeleccionada$.subscribe(unid_codi => {
       if (unid_codi && unid_codi !== 'Seleccione') {
-        console.log("Cambio de unidad detectado:", unid_codi);
         this.unid_codi = unid_codi;
         this.filtroCargarTickets(); 
         this.cargarDependencias(); // Recargar los tickets basados en la nueva unidad seleccionada
