@@ -74,8 +74,10 @@ import { EtiquetaService } from 'src/app/services/Etiqueta/etiqueta.service';
 export class CreateTareaTicketComponent implements OnInit {
   organizacionMap: { [codigo: string]: string } = {};
   tipologiaMap: { [codigo: string]: string } = {};
+  private userDataCache: Map<string, { nombreCompleto: string, idUsuario: string }> = new Map();
   prioridadMap: { [key: string]: { descripcion: string; imagen: string } } = {};
   viaRecepcionMap: { [codigo: string]: string } = {};
+
 
   asignacionesCategorias: AsignarCategoria[] = [];
   categorias: Categoria[] = [];
@@ -122,6 +124,7 @@ export class CreateTareaTicketComponent implements OnInit {
   asignarTickets: AsignarTicket[] = [];
   ticketsVinculados: VinculacionConDetalles[]=[];
   selectedFiles: File[] = [];
+  isLoading: boolean = true;
   historiales: Historial [] = [];
   historialesA: {} = {};
   respuestas: Responses[] = [];
@@ -197,11 +200,10 @@ export class CreateTareaTicketComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.isLoading = true;
     this.userDetail = this.authService.getCurrentUser();
     this.cargarDataTicket();
     this.setupSignalR();
-    console.log('Asignar Tickets:', this.asignarTickets);
-    console.log('Etiquetas Seleccionadas:', this.etiquetasSeleccionadas);
   }
   setupSignalR() {
     this.signalrService.startConnection().then(() => {
@@ -287,15 +289,19 @@ export class CreateTareaTicketComponent implements OnInit {
     }
     this.catalogoService.getCatalogoByCodi(catalogId).subscribe({
       next: (catalogo) => {
-        if (catalogo?.codi !== "1") {
-          const catalogNameHtml = `<div>■ ${catalogo?.nombre}</div>`;
-          this.displayCatalogPath = catalogNameHtml + this.displayCatalogPath;
+        if (catalogo?.nombre && catalogo?.codi) {
+          if (catalogo?.codi !== "1") {
+            const catalogNameHtml = `<div>■ ${catalogo?.nombre}</div>`;
+            this.displayCatalogPath = catalogNameHtml + this.displayCatalogPath;
+          }
         }
         if (catalogo?.padre) {
           this.loadCatalogHierarchy(catalogo?.padre);
         }
       },
-      error: (error) => console.error('Error al obtener el catálogo:', error)
+      error: (err) => {
+        console.error("Error al cargar el catálogo", err);
+      }
     });
   }
 
@@ -463,11 +469,7 @@ export class CreateTareaTicketComponent implements OnInit {
                 this.imagenUsuario = this.obtenerUrlImagen(ticket.idUsuario, 1);
                 this.cargarRespuestas(ticket.ticketID);
                 this.cargarAsignacionesCategorias(ticket, ticket.ticketID);
-                this.cargarViasRecepcion();
-                this.cargarOrganizaciones();
-                this.cargarTipologias();
-                this.cargarPrioridades();
-                this.cargarHistorial(ticket.ticketID);
+                //this.cargarHistorial(ticket.ticketID);
                 this.cargarAsignarTickets(asignacion.breq_codi, asignacion.cate_codi);
                 this.cargarUsuariosAsignados();
                 this.cargarEtiquetas();
@@ -481,6 +483,7 @@ export class CreateTareaTicketComponent implements OnInit {
         error: (error) => console.error('Error al obtener la asignación de categoria:', error)
       });
     }
+    this.isLoading = false;
   }
 
   cargarEtiquetas() {
@@ -555,61 +558,6 @@ export class CreateTareaTicketComponent implements OnInit {
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = html;
     return tempDiv.textContent || tempDiv.innerText || '';
-  }
-
-  cargarViasRecepcion(): void {
-    this.viasRecepcionService.getVias().subscribe({
-      next: (data) => {
-        this.vias = data;
-        this.viaRecepcionMap = {};
-        data.forEach((via) => {
-          this.viaRecepcionMap[via.codi!] = via.descripcion;
-        });
-      },
-      error: (error) => console.error('Error al obtener vías de recepción', error)
-    });
-  }
-
-  cargarOrganizaciones(): void {
-    this.organizacionService.getOrganizaciones().subscribe({
-      next: (data) => {
-        this.organizaciones = data;
-        this.organizacionMap = {};
-        data.forEach((organizacion) => {
-          this.organizacionMap[organizacion.codi!] = organizacion.descripcion;
-        });
-      },
-      error: (error) => console.error('Error al obtener organizaciones', error)
-    });
-  }
-
-  cargarTipologias(): void {
-    this.tipologiaService.getTipologia().subscribe({
-      next: (data) => {
-        this.tipologias = data;
-        this.tipologiaMap = {};
-        data.forEach((tipologia) => {
-          this.tipologiaMap[tipologia.codi!] = tipologia.descripcion;
-        });
-      },
-      error: (error) => console.error('Error al obtener tipologías', error)
-    });
-  }
-
-  cargarPrioridades(): void {
-    this.prioridadService.getPrioridad().subscribe({
-      next: (data) => {
-        this.prioridadMap = {};
-        data.forEach((prioridad) => {
-          this.prioridadMap[prioridad.codi!] = {
-            descripcion: prioridad.descripcion,
-            imagen: prioridad.imagen // Asegúrate de que `imagen` sea parte de los datos que recibes
-          };
-        });
-      },
-      error: (error) => console.error('Error al obtener prioridades', error)
-    });
-    
   }
 
   get adjuntosParaMostrarSafe(): AdjuntoInfo[] {
@@ -718,35 +666,7 @@ export class CreateTareaTicketComponent implements OnInit {
       usuario.fotoUsuario = 'assets/UserSinFoto.svg';
     }
   }
-/*
-  cargarAsignarTickets(breqCodi: string, cateCodi: string): void {
-    this.asignarTicketService.getAsignarTicketsByBreqCodiAndCateCodi(breqCodi, cateCodi).subscribe({
-      next: (asignarTickets) => {
-        this.asignarTickets = asignarTickets.sort((a, b) => a.codi.localeCompare(b.codi));
-        this.asignarTickets.forEach(tarea => {
-          this.registrarTareasService.getRegistrarTareasByRan1Codi(tarea.codi).subscribe({
-            next: (registrarTareas) => {
-              const usuariosAsignados: Usuarios[] = [];
-              registrarTareas.forEach(regTarea => {
-                this.usuariosService.getUsuariosByPidm(regTarea.pidm).subscribe({
-                  next: (usuario) => {
-                    if (usuario && usuario.length > 0) {
-                      usuariosAsignados.push(usuario[0]);
-                    }
-                  },
-                  error: (error) => console.error('Error al obtener usuarios por PIDM:', error)
-                });
-              });
-              this.usuariosAsignadosPorTarea[tarea.codi] = usuariosAsignados;
-            }
-          });
-        });
-        this.actualizarEstadoTicket();
-      },
-      error: (error) => console.error('Error al obtener AsignarTickets:', error)
-    });
-  }
-  */
+  
   cargarAsignarTickets(breqCodi: string, cateCodi: string): void {
     this.asignarTicketService.getAsignarTicketsByBreqCodiAndCateCodi(breqCodi, cateCodi).subscribe({
       next: (asignarTickets) => {
@@ -891,21 +811,6 @@ goBack(): void {
       })
     );
   }
-
-  async buscarUsuarioPorpidm(pidm: string): Promise<{ nombreCompleto: string, idUsuario: string }> {
-    try {
-      const usuarios = await this.usuariosService.getUsuariosByPidm(pidm).toPromise();
-      if (usuarios && usuarios.length > 0) {
-        this.recepcionCorreo = usuarios[0].email;
-        return { nombreCompleto: usuarios[0].nombre_completo, idUsuario: usuarios[0].idUsuario };
-      }
-      return { nombreCompleto: '', idUsuario: '' };
-    } catch (err) {
-      console.error(err);
-      return { nombreCompleto: '', idUsuario: '' };
-    }
-  }
-
   cargarUsuariosAsignados(): void {
     const cateCodi = this.asignacionCategoria?.cate_codi;
     const breqCodi = this.asignacionCategoria?.breq_codi;
@@ -1016,25 +921,54 @@ goBack(): void {
   }
 
   selectTab(tab: string): void {
+    this.cargarHistorial(this.ticket!.ticketID)
     this.selectedTab = tab;
   }
 
-  cargarHistorial(ticketID: string): void {
+  async buscarUsuarioPorpidm(pidm: string): Promise<{ nombreCompleto: string, idUsuario: string } | null> {
+    if (this.userDataCache.has(pidm)) {
+      return this.userDataCache.get(pidm)!;
+    }
+
+    try {
+      const usuarios = await this.usuariosService.getUsuariosByPidm(pidm).toPromise();
+
+      if (usuarios && usuarios.length > 0) {
+        const result = {
+          nombreCompleto: usuarios[0].nombre_completo,
+          idUsuario: usuarios[0].idUsuario
+        };
+        this.userDataCache.set(pidm, result);
+        return result;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      console.error(`Error al consultar API para PIDM: ${pidm}`, error);
+      return null;
+    }
+  }
+
+  async cargarHistorial(ticketID: string): Promise<void> {
     this.historialService.getHistorialesByBreqCodi(ticketID).subscribe({
       next: async (historiales) => {
         if (historiales && historiales.length > 0) {
-          const historialesModificados = await Promise.all(historiales.map(async (historial) => {
-            const { nombreCompleto, idUsuario } = await this.buscarUsuarioPorpidm(historial.pidm);
-            return {
-              ...historial,
-              nombreUsuarioH: nombreCompleto,
-              imagenUsuarioH: this.obtenerUrlImagen(idUsuario, 1),
-              idUsuarioH: idUsuario
-            };
-          }));
-          this.historiales = historialesModificados;
+          for (const historial of historiales) {
+            const usuario = await this.buscarUsuarioPorpidm(historial.pidm);
+
+            // Si encontramos un usuario, procedemos con los datos
+            if (usuario) {
+              historial.nombreUsuarioH = usuario.nombreCompleto;
+              historial.imagenUsuarioH = this.obtenerUrlImagen(usuario.idUsuario, 1);
+              historial.idUsuarioH = usuario.idUsuario;
+            } 
+          }
+
+          // Asignamos los historiales modificados
+          this.historiales = historiales;
         }
-      }
+      },
+      error: (error) => console.log("Error al cargar el Historial", error)
     });
   }
   
@@ -1323,6 +1257,11 @@ goBack(): void {
         console.error('Error al redirigir al detalle del ticket:', error);
       });
     }
+  }
+
+  finalizarCarga(): void {
+    // Verifica si ambas tareas han terminado
+    this.isLoading = false;
   }
   
   desvincularRequerimiento(vinculacion: Vinculacion) {

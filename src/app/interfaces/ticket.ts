@@ -31,8 +31,12 @@ export interface Ticket {
     fechaCreacionFormatted?: string,
     adjuntos: AdjuntoInfo[],
     selected?: boolean,
-    PrioridadImagen?: string;
-    PrioridadDescripcion?: string;
+    prioridadImagen?: string;
+    prioridadDescripcion?: string;
+    organizacionDescripcion?: string;
+    catalogoDescripcion?: string;
+    tipologiaDescripcion?: string;
+    viaDescripcion?: string;
     ubicacion?: string;
     mostrarIconoParpadeante?: boolean;
   }

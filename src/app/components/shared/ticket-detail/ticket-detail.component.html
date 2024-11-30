@@ -55,13 +55,13 @@
           <div class="flex flex-row gap-2 justify-end" style="width: 20%;">
             <div class="flex flex-col 2xl:flex-row gap-2 justify-center items-center">
               <span>
-                <img *ngIf="tipologiaMap[ticket.tipologia] == 'SERVICIOS'" src="assets/SquareGreen.png" alt="Servicios" class="h-6 w-6">
-                <img *ngIf="tipologiaMap[ticket.tipologia] == 'REQUERIMIENTOS'" src="assets/SquareYellow.png" alt="Requerimientos" class="h-6 w-6">
-                <img *ngIf="tipologiaMap[ticket.tipologia] == 'MANTENIMIENTO'" src="assets/SquareBlue.png" alt="Mantenimiento" class="h-6 w-6">
-                <img *ngIf="tipologiaMap[ticket.tipologia] == 'INCIDENTE'" src="assets/SquareOrange.png" alt="Incidente" class="h-6 w-6">
+                <img *ngIf="ticket.tipologiaDescripcion == 'SERVICIOS'" src="assets/SquareGreen.png" alt="Servicios" class="h-6 w-6">
+                <img *ngIf="ticket.tipologiaDescripcion == 'REQUERIMIENTOS'" src="assets/SquareYellow.png" alt="Requerimientos" class="h-6 w-6">
+                <img *ngIf="ticket.tipologiaDescripcion == 'MANTENIMIENTO'" src="assets/SquareBlue.png" alt="Mantenimiento" class="h-6 w-6">
+                <img *ngIf="ticket.tipologiaDescripcion == 'INCIDENTE'" src="assets/SquareOrange.png" alt="Incidente" class="h-6 w-6">
               </span>
               <span class="text-xs lg:text-xs xl:text-xs 2xl:text-sm">
-                {{ tipologiaMap[ticket.tipologia] }}
+                {{ ticket.tipologiaDescripcion }}
               </span>
             </div>
             <div>
@@ -109,16 +109,16 @@
             <div class="flex flex-col gap-1">
               <br>
               <span class="text-blue-600"><b>Recepción:</b></span>
-              <span>{{ viaRecepcionMap[ticket.viaRecepcion] || "Sin Asignar" }}</span>
+              <span>{{ ticket.viaDescripcion }}</span>
               <span class="text-blue-600"><b>Catálogo:</b></span>
               <div style="font-weight: 400;" [innerHtml]="displayCatalogPath || 'Sin Asignar'"></div>
               <span class="text-blue-600"><b>Prioridad:</b></span>
               <span class="flex flex-row text-center items-center gap-1">
-                <img *ngIf="prioridadMap[ticket.prioridad]?.imagen" 
-                     [src]="prioridadMap[ticket.prioridad].imagen" 
-                     [alt]="prioridadMap[ticket.prioridad] ? prioridadMap[ticket.prioridad].descripcion : 'Sin Asignar'"
+                <img *ngIf="ticket.prioridadImagen" 
+                     [src]="ticket.prioridadImagen" 
+                     [alt]="ticket.prioridadDescripcion"
                      class="h-6 w-6">
-                {{ prioridadMap[ticket.prioridad] ? prioridadMap[ticket.prioridad].descripcion : 'Sin Asignar' }}
+                {{ ticket.prioridadDescripcion }}
               </span>
          
               

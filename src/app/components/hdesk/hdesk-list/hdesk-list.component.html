@@ -42,15 +42,6 @@
         </div>
       </div>
       <div class="buttons-row flex lg:flex-row flex-col mb-3 gap-3 items-start">
-        <!-- <mat-form-field appearance="fill" class="w-40">
-          <mat-label>Organización</mat-label>
-          <mat-select [(ngModel)]="selectedOrganizacion" (ngModelChange)="aplicarFiltros()" name="organizacion">
-            <mat-option *ngFor="let organizacion of organizaciones" [value]="organizacion.codi">
-              {{ organizacion.descripcion }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field> -->
-        
         <div class="relative" (click)="toogleORGNMenu($event)">
           <button class="flex items-center bg-gray-100 h-14 w-40 rounded-sm justify-center border-b border-gray-500">
             <span class="text-gray-500" style="font-size: 16px;">Organización</span>
@@ -147,7 +138,7 @@
     <div class="flex justify-between">
       <div class="container text-xs break-all" style="margin-left: -10px;">
         <b>Asunto:</b> {{ ticket.asunto }}<br>
-        <b>Prioridad:</b> {{ getPrioridadDescripcion(ticket.prioridad) }}<br>
+        <b>Prioridad:</b> {{ ticket.prioridadDescripcion }}<br>
         <b>Fecha:</b> {{ ticket.fechaCreacion }}
       </div>
       <div>                
@@ -177,11 +168,16 @@
         </div>
         <div class="flex w-3/12">
           <div>
-            <img [src]="ticket.urlImagenUsuario" (error)="manejarErrorImagen(ticket)" alt="{{ ticket.nombre }}" class="h-12 w-12 rounded-full mr-4" title="{{ ticket.nombre }}">
+            <img 
+              [src]="ticket.urlImagenUsuario" 
+              (error)="manejarErrorImagen(ticket)" 
+              alt="{{ ticket.nombre }}" 
+              class="h-12 w-12 md:h-10 md:w-10 lg:h-10 lg:w-10 xl:h-12 xl:w-12 rounded-full mr-4" 
+              title="{{ ticket.nombre }}">
           </div>
           <div class="flex flex-col align-middle">
             <span>{{ticket.idUsuario}}</span>
-            <span class="lg:text-xs xl:text-xs 2xl:text-sm truncate overflow-hidden whitespace-nowrap max-w-xs">{{ticket.nombre}}</span>
+            <span class="lg:text-xs xl:text-xs 2xl:text-sm truncate overflow-hidden max-w-xs">{{ticket.nombre}}</span>
           </div>
         </div>
         <div class="flex flex-row items-center justify-start h-full w-5/12 gap-1" style="width:40%">
@@ -229,13 +225,13 @@
       <div class="flex flex-col p-4 text-sm text-gray-500 break-all w-5/12 lg:text-xs xl:text-xs 2xl:text-sm">
         <div class="flex flex-col whitespace-nowrap text-sm text-gray-500 justify-center text-center items-center">
           <span class="font-medium text-blue-600">Organización:&nbsp;</span>
-          {{ getOrganizacionDescripcion(ticket.organizacion) }}
+          {{ ticket.organizacionDescripcion }}
         </div>
       </div>
       <div class="w-2/12 p-4 lg:text-xs xl:text-xs 2xl:text-sm">
         <div class="flex flex-col whitespace-nowrap text-sm text-gray-500 justify-center text-center items-center">
           <span class="font-medium text-blue-600">Tipología:&nbsp;</span>
-          {{ getTipologiaDescripcion(ticket.tipologia) }}
+          {{ ticket.tipologiaDescripcion }}
         </div>
       </div>
       <div class="w-2/12 p-4 lg:text-xs xl:text-xs 2xl:text-sm">
@@ -243,12 +239,9 @@
           <span class="font-medium text-blue-500 lg:text-xs xl:text-xs 2xl:text-sm">Prioridad:&nbsp;</span>
           <div class="flex flex-row">
             <div class="ml-4">
-              <img *ngIf="getPrioridadDescripcion(ticket.prioridad) == 'MEDIA'" src="assets/Prioridad_Media.svg" alt="Prioridad Media" class="h-6 w-6">
-              <img *ngIf="getPrioridadDescripcion(ticket.prioridad) === 'BAJA'" src="assets/Prioridad_Baja.svg" alt="Prioridad Baja" class="h-6 w-6">
-              <img *ngIf="getPrioridadDescripcion(ticket.prioridad) === 'IMPORTANTE'" src="assets/Prioridad_Importante.svg" alt="Prioridad Importante" class="h-6 w-6">
-              <img *ngIf="getPrioridadDescripcion(ticket.prioridad) === 'URGENTE'" src="assets/Prioridad_Urgente.svg" alt="Prioridad Urgente" class="h-6 w-6">
+              <img *ngIf="ticket.prioridadImagen" [src]="ticket.prioridadImagen" alt="Prioridad" class="h-6 w-6">
             </div>
-            <span class="ml-2 text-gray-500 lg:text-sm xl:text-sm 2xl:text-sm text-sm justify-center items-center">{{ getPrioridadDescripcion(ticket.prioridad) }}</span>
+            <span class="ml-2 text-gray-500 lg:text-sm xl:text-sm 2xl:text-sm text-sm justify-center items-center">{{ ticket.prioridadDescripcion }}</span>
           </div>
         </div>
       </div>

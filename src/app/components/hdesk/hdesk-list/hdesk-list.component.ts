@@ -166,37 +166,8 @@ export class HdeskListComponent implements OnInit {
         this.ticketActionsService.clearVerTodosLosTickets();  // Limpiar el estado después de aplicar el filtro
       }
     });
-    /*
-    this.ticketActionsService.verTicketsAbiertos$.subscribe(verAbiertos => {
-      if (verAbiertos) {
-        this.verTicketsRecibidos();
-        this.ticketActionsService.clearVerTicketsRecibidos();  // Limpiar el estado después de aplicar el filtro
-      }
-    });
-    this.ticketActionsService.verTicketsRevisados$.subscribe(verRevisados => {
-      if (verRevisados) {
-        this.verTicketsRevisados();
-        this.ticketActionsService.clearVerTicketsRevisados();  // Limpiar el estado después de aplicar el filtro
-      }
-    });
-    this.ticketActionsService.verTicketsEnProceso$.subscribe(verProceso => {
-      if (verProceso) {
-        this.verTicketsEnProceso();
-        this.ticketActionsService.clearVerTicketsEnProceso();  // Limpiar el estado después de aplicar el filtro
-      }
-    });
-    this.ticketActionsService.verTicketsCerrados$.subscribe(verCerrado => {
-      if (verCerrado) {
-        this.verTicketsCerrados();
-        this.ticketActionsService.clearVerTicketsCerrados();  // Limpiar el estado después de aplicar el filtro
-      }
-    });
-    */
   }
   
-  
-  
-
   ngOnDestroy() {
     this.signalrService.removeNewTicketListener();
     this.signalrService.removeTicketDeletedListener();
@@ -457,17 +428,17 @@ cargarTicketsPorUsuarioAsignado(pidm: string, unidCodi: string) {
     }
   }
 
-  getOrganizacionDescripcion(codigo: string): string {
-    return this.organizacionMap[codigo] || '';
-  }
+  // getOrganizacionDescripcion(codigo: string): string {
+  //   return this.organizacionMap[codigo] || '';
+  // }
 
-  getPrioridadDescripcion(codigo: string): string {
-    return this.prioridadMap[codigo] || '';
-  }
+  // getPrioridadDescripcion(codigo: string): string {
+  //   return this.prioridadMap[codigo] || '';
+  // }
 
-  getTipologiaDescripcion(codigo: string): string {
-    return this.tipologiaMap[codigo] || '';
-  }
+  // getTipologiaDescripcion(codigo: string): string {
+  //   return this.tipologiaMap[codigo] || '';
+  // }
 
   showCreate(ticketEstado: string): boolean {
     if (ticketEstado === 'Cerrado') {

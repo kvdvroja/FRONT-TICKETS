@@ -43,6 +43,7 @@ import { ResponsesUService } from 'src/app/services/ResponsesU/responses-u.servi
 import { RegistrarTareasService } from 'src/app/services/RegistrarTareas/registrar-tareas.service';
 import { PreviewSolucionComponent } from '../preview-solucion/preview-solucion.component';
 import { AsignarCategoriaDialogComponent } from '../asignar-categoria-dialog/asignar-categoria-dialog.component';
+import { ConsoleLogger } from '@microsoft/signalr/dist/esm/Utils';
 
 @Component({
   selector: 'app-ticket-detail',
@@ -58,13 +59,14 @@ export class TicketDetailComponent implements OnInit {
   asignacionesCategorias: AsignarCategoria[] = [];
   categorias: Categoria[] = [];
   coordinadores: { [cate_codi: string]: any } = {};
-  coordinadoresAdicionales: { [cate_codi: string]: any[] } = {}; // Para guardar los coordinadores adicionales
+  coordinadoresAdicionales: { [cate_codi: string]: any[] } = {};
   expandedPanels: { [cate_codi: string]: boolean } = {};
 
   usuariosAsignadosPorTarea: { [ran1Codi: string]: Usuarios[] } = {};
   tareas: { [ticket_codi: string]: RegistrarTareas[] } = {};
   combinacionesMostradas: Set<string> = new Set();
   asignarTickets: { [cate_codi: string]: AsignarTicket[] } = {};
+  private userDataCache: Map<string, { nombreCompleto: string, idUsuario: string }> = new Map();
 
 
   constructor(
@@ -130,10 +132,10 @@ export class TicketDetailComponent implements OnInit {
     breq_codi: '',
     descripcion: '',
     visto: 'NO',
-    url: '', // Define cómo vas a manejar este campo.
-    padre_codi: '', // Este se ajustará basado en las respuestas existentes.
+    url: '',
+    padre_codi: '',
     fechaActividad: '',
-    idUsuario: '', // Asegúrate de que este dato se inicialice correctamente.
+    idUsuario: '',
   };
 
   public nuevoHistorial: Historial = {
@@ -141,9 +143,9 @@ export class TicketDetailComponent implements OnInit {
     breq_codi: '',
     pidm: '',
     descripcion: '',
-    tipo: '', // Este se ajustará basado en las respuestas existentes.
+    tipo: '',
     fechaActividad: '',
-    idUsuario: '', // Asegúrate de que este dato se inicialice correctamente.
+    idUsuario: '',
   };
 
   setFechaHora(): string {
@@ -171,21 +173,10 @@ export class TicketDetailComponent implements OnInit {
       const ticketId = params.get('id');
       if (ticketId && ticketId !== this.ticketId) {
           this.ticketId = ticketId;
-          this.cargarDataTicket(); // Cargar los datos del ticket basado en el nuevo ID
+          this.cargarDataTicket();
       }
   });
-    this.cargarOrganizaciones();
-    this.cargarTipologias();
-    this.cargarViasRecepcion();
-    this.cargarPrioridades();
     this.crearRespuesta(false);
-
-    // const ticketUpdated = localStorage.getItem(`ticketUpdated_${this.ticketId}`);
-    // if (!ticketUpdated) {
-    //   // Llamar al método para actualizar el estado si es necesario
-    //   this.actualizarEstadoTicket();
-    // }
-  
   }
 
   actualizarEstadoTicket(): void {
@@ -200,8 +191,7 @@ export class TicketDetailComponent implements OnInit {
         const updatedTicket = { ...this.ticket, estado: nuevoEstado };
         this.ticketService.updateTicketState(this.ticket.id!, updatedTicket).subscribe({
           next: (data) => {
-            console.log('Estado del ticket actualizado', data);
-            // localStorage.setItem(`ticketUpdated_${this.ticket!.ticketID}`, 'true');
+            //console.log('Estado del ticket actualizado', data);
           },
           error: (err) => {
             console.error('Error al actualizar el estado del ticket:', err);
@@ -211,7 +201,6 @@ export class TicketDetailComponent implements OnInit {
     }
   }
   
-
   public setEditorInstance(editor: Quill): void {
     this.editorInstance = editor;
     this.editorInstance.on('text-change', () => {
@@ -234,13 +223,18 @@ export class TicketDetailComponent implements OnInit {
     }
     this.catalogoService.getCatalogoByCodi(catalogId).subscribe({
       next: (catalogo) => {
-        if (catalogo?.codi !== "1") {
-          const catalogNameHtml = `<div>■ ${catalogo?.nombre}</div>`;
-          this.displayCatalogPath = catalogNameHtml + this.displayCatalogPath;
+        if (catalogo?.nombre && catalogo?.codi) {
+          if (catalogo?.codi !== "1") {
+            const catalogNameHtml = `<div>■ ${catalogo?.nombre}</div>`;
+            this.displayCatalogPath = catalogNameHtml + this.displayCatalogPath;
+          }
         }
         if (catalogo?.padre) {
           this.loadCatalogHierarchy(catalogo?.padre);
         }
+      },
+      error: (err) => {
+        console.error("Error al cargar el catálogo", err);
       }
     });
   }
@@ -288,8 +282,6 @@ export class TicketDetailComponent implements OnInit {
     return false
   }
   
-
-
   obtenerUrlImagen(idUsuario: string, intento: number): string {
     if (intento === 1) {
       return `https://static.upao.edu.pe/upload/f1/${idUsuario}.jpg`;
@@ -337,18 +329,51 @@ export class TicketDetailComponent implements OnInit {
     }
   }
 
-  async buscarUsuarioPorpidm(pidm: string): Promise<{ nombreCompleto: string, idUsuario: string }> {
+  async buscarUsuarioPorpidm(pidm: string): Promise<{ nombreCompleto: string, idUsuario: string } | null> {
+    if (this.userDataCache.has(pidm)) {
+      return this.userDataCache.get(pidm)!;
+    }
+
     try {
       const usuarios = await this.usuariosService.getUsuariosByPidm(pidm).toPromise();
+
       if (usuarios && usuarios.length > 0) {
-        this.recepcionCorreo = usuarios[0].email;
-        return { nombreCompleto: usuarios[0].nombre_completo, idUsuario: usuarios[0].idUsuario };
+        const result = {
+          nombreCompleto: usuarios[0].nombre_completo,
+          idUsuario: usuarios[0].idUsuario
+        };
+        this.userDataCache.set(pidm, result);
+        return result;
+      } else {
+        return null;
       }
-      return { nombreCompleto: '', idUsuario: '' };
-    } catch (err) {
-      console.error(err);
-      return { nombreCompleto: '', idUsuario: '' };
+    } catch (error) {
+      console.error(`Error al consultar API para PIDM: ${pidm}`, error);
+      return null;
     }
+  }
+
+  async cargarHistorial(ticketID: string): Promise<void> {
+    this.historialService.getHistorialesByBreqCodi(ticketID).subscribe({
+      next: async (historiales) => {
+        if (historiales && historiales.length > 0) {
+          for (const historial of historiales) {
+            const usuario = await this.buscarUsuarioPorpidm(historial.pidm);
+
+            // Si encontramos un usuario, procedemos con los datos
+            if (usuario) {
+              historial.nombreUsuarioH = usuario.nombreCompleto;
+              historial.imagenUsuarioH = this.obtenerUrlImagen(usuario.idUsuario, 1);
+              historial.idUsuarioH = usuario.idUsuario;
+            } 
+          }
+
+          // Asignamos los historiales modificados
+          this.historiales = historiales;
+        }
+      },
+      error: (error) => console.log("Error al cargar el Historial", error)
+    });
   }
 
   crearRespuesta(conAdjunto: boolean): void {
@@ -401,7 +426,6 @@ export class TicketDetailComponent implements OnInit {
 
       this.responsesUService.createResponseWithAttachments(formData).subscribe({
         next: (response) => {
-          console.log('Respuesta con archivos enviada correctamente', response);
           this.cargarRespuestas(this.ticket!.ticketID);
         },
         error: (error) => {
@@ -409,7 +433,6 @@ export class TicketDetailComponent implements OnInit {
         }
       });
     } else {
-      console.log('No hay archivos seleccionados para cargar.');
       this.enviarRespuesta(textoPlano, fechaYHora, null, respuestaId, padreCodi);
     }
     this.descEditor = '';
@@ -438,16 +461,17 @@ export class TicketDetailComponent implements OnInit {
     if (ticketId) {
       this.ticketService.getTicketById(ticketId).subscribe({
         next: (ticket) => {
+          // console.log("TICKET: " + JSON.stringify(ticket, null, 2));
           this.ticket = ticket;
           this.displayCatalogPath = '';
           if (ticket.catalogo) {
             this.loadCatalogHierarchy(ticket.catalogo);
           }
           this.imagenUsuario = this.obtenerUrlImagen(ticket.idUsuario, 1);
+          this.cargarAsignacionesCategorias(ticket, ticket.ticketID);
           this.loadAdjuntos(ticket.ticketID);
           this.cargarRespuestas(ticket.ticketID);
-          this.cargarHistorial(ticket.ticketID);
-          this.cargarAsignacionesCategorias(ticket, ticket.ticketID);
+          //this.cargarHistorial(ticket.ticketID);
           this.unid_codi = ticket.unidCodi;
           // this.actualizarEstadoTicket(); // Llamar a la actualización del estado
         },
@@ -529,62 +553,6 @@ export class TicketDetailComponent implements OnInit {
     return tempDiv.textContent || tempDiv.innerText || '';
   }
 
-  cargarViasRecepcion(): void {
-    this.viasRecepcionService.getVias().subscribe({
-      next: (data) => {
-        this.vias = data;
-        this.viaRecepcionMap = {};
-        data.forEach((via) => {
-          this.viaRecepcionMap[via.codi!] = via.descripcion;
-        });
-      },
-      error: (error) => console.error('Error al obtener vías de recepción', error)
-    });
-  }
-
-  cargarOrganizaciones(): void {
-    this.organizacionService.getOrganizaciones().subscribe({
-      next: (data) => {
-        this.organizaciones = data;
-        this.organizacionMap = {};
-        data.forEach((organizacion) => {
-          this.organizacionMap[organizacion.codi!] = organizacion.descripcion;
-        });
-      },
-      error: (error) => console.error('Error al obtener organizaciones', error)
-    });
-  }
-
-  cargarTipologias(): void {
-    this.tipologiaService.getTipologia().subscribe({
-      next: (data) => {
-        this.tipologias = data;
-        this.tipologiaMap = {};
-        data.forEach((tipologia) => {
-          this.tipologiaMap[tipologia.codi!] = tipologia.descripcion;
-        });
-      },
-      error: (error) => console.error('Error al obtener tipologías', error)
-    });
-  }
-
-  cargarPrioridades(): void {
-    this.prioridadService.getPrioridad().subscribe({
-      next: (data) => {
-        this.prioridadMap = {};
-        data.forEach((prioridad) => {
-          this.prioridadMap[prioridad.codi!] = {
-            descripcion: prioridad.descripcion,
-            imagen: prioridad.imagen // Asegúrate de que `imagen` sea parte de los datos que recibes
-          };
-        });
-      },
-      error: (error) => console.error('Error al obtener prioridades', error)
-    });
-    
-  }
-  
-
   get adjuntosParaMostrarSafe(): AdjuntoInfo[] {
     return this.adjuntosParaMostrar ?? [];
   }
@@ -628,7 +596,6 @@ export class TicketDetailComponent implements OnInit {
     const element = event.target as HTMLInputElement;
     if (element.files && element.files.length > 0) {
       this.selectedFiles = Array.from(element.files);
-      console.log('Archivos seleccionados:', this.selectedFiles);
     } else {
       console.log('No se seleccionaron archivos.');
       this.selectedFiles = [];
@@ -736,7 +703,6 @@ export class TicketDetailComponent implements OnInit {
     return false; // No mostrar para el resto de casos
   }
   
-
   cargarCoordinadoresAdicionales(cateCodi: string, unidCodi: string): void {
     const cargCodi = this.getCargCodi(unidCodi);
     if (!cargCodi) {
@@ -749,11 +715,12 @@ export class TicketDetailComponent implements OnInit {
         if (asignaciones && asignaciones.length > 1) {
           const coordinadores = [];
           for (const asignacion of asignaciones.slice(1)) { // Omitir el primer coordinador
-            const { nombreCompleto, idUsuario } = await this.buscarUsuarioPorpidm(asignacion.pidm);
+            const usuario = await this.buscarUsuarioPorpidm(asignacion.pidm);
+            const idUsuario = usuario?.idUsuario
             coordinadores.push({
               ...asignacion,
-              nombreCoordinador: nombreCompleto,
-              imagenUrl: this.obtenerUrlImagen(idUsuario, 1),
+              nombreCoordinador: usuario?.nombreCompleto,
+              imagenUrl: this.obtenerUrlImagen(idUsuario!, 1),
               idUsuario
             });
           }
@@ -775,11 +742,12 @@ export class TicketDetailComponent implements OnInit {
       next: async (asignaciones) => {
         if (asignaciones && asignaciones.length > 0) {
           const asignacion = asignaciones[0];
-          const { nombreCompleto, idUsuario } = await this.buscarUsuarioPorpidm(asignacion.pidm);
+          const usuario = await this.buscarUsuarioPorpidm(asignacion.pidm);
+          const idUsuario = usuario?.idUsuario
           this.coordinadores[cateCodi] = {
             ...asignacion,
-            nombreCoordinador: nombreCompleto,
-            imagenUrl: this.obtenerUrlImagen(idUsuario, 1),
+            nombreCoordinador: usuario?.nombreCompleto,
+            imagenUrl: this.obtenerUrlImagen(usuario!.idUsuario, 1),
             idUsuario
           };
         }
@@ -787,8 +755,6 @@ export class TicketDetailComponent implements OnInit {
     });
   }
   
-  
-
   manejarErrorImagenCoordinador(cateCodi: string): void {
     if (this.coordinadores[cateCodi]?.imagenUrl.includes('/f1/')) {
       this.coordinadores[cateCodi].imagenUrl = `https://static.upao.edu.pe/upload/f/${this.coordinadores[cateCodi].idUsuario}.jpg`;
@@ -805,7 +771,7 @@ export class TicketDetailComponent implements OnInit {
   openAsignadosDetalle(breq_codi: string, cate_codi: string) {
     this.dialog.open(AsignadosDetalleComponent, {
       width: '600px',
-      data: { breq_codi, coordinaciones: [cate_codi], coordinadoresAdicionales: this.coordinadoresAdicionales[cate_codi] } // Pasar los coordinadores adicionales al modal
+      data: { breq_codi, coordinaciones: [cate_codi], coordinadoresAdicionales: this.coordinadoresAdicionales[cate_codi] } 
     });
   }
 
@@ -992,7 +958,6 @@ export class TicketDetailComponent implements OnInit {
   private deleteTicketOnly(): void {
     this.ticketService.deleteTicket(this.ticket!.id!).subscribe({
       next: (response) => {
-        console.log('Ticket eliminado exitosamente', response);
         this.snackBar.open('Ticket y sus dependencias eliminados', 'Cerrar', {
           duration: 3000,
         });
@@ -1015,27 +980,8 @@ export class TicketDetailComponent implements OnInit {
   }
 
   selectTab(tab: string): void {
+    this.cargarHistorial(this.ticket!.ticketID);
     this.selectedTab = tab;
-  }
-
-  cargarHistorial(ticketID: string): void {
-    this.historialService.getHistorialesByBreqCodi(ticketID).subscribe({
-      next: async (historiales) => {
-        if (historiales && historiales.length > 0) {
-          const historialesModificados = await Promise.all(historiales.map(async (historial) => {
-            const { nombreCompleto, idUsuario } = await this.buscarUsuarioPorpidm(historial.pidm);
-            return {
-              ...historial,
-              nombreUsuarioH: nombreCompleto,
-              imagenUsuarioH: this.obtenerUrlImagen(idUsuario, 1),
-              idUsuarioH: idUsuario
-            };
-          }));
-          this.historiales = historialesModificados;
-        }
-      },
-      error: (error) => console.log("Error al cargar el Historial", error)
-    });
   }
   
 
@@ -1157,7 +1103,7 @@ export class TicketDetailComponent implements OnInit {
       const asignaciones = await this.asignarCategoriaService.getAsignarCategoriaByBreqCodiAndCateCodi(ticket.ticketID, this.userDetail!.cate_codi).toPromise();
       if (asignaciones && asignaciones.length > 0) {
         const asignacion = asignaciones.find(a => a.cate_codi === this.userDetail!.cate_codi);
-        console.log("ID"+asignacion!.id)
+        //console.log("ID"+asignacion!.id)
         return asignacion ? asignacion.id ?? null : null;
       }
       return null;
@@ -1202,16 +1148,14 @@ export class TicketDetailComponent implements OnInit {
     // Mostrar confirmación al usuario
     const confirmation = confirm("¿Ya ha revisado este ticket?");
     
-    // Si el usuario confirma, proceder con la actualización del ticket
     if (confirmation) {
       const updatedTicket: Ticket = {
         ...this.ticket,
-        estado: "Revisado",  // Actualiza el estado a "Revisado"
+        estado: "Revisado",
         fechaActividad: fechaYHora,
-        ticketID: this.ticket.ticketID // Asegurar que ticketID no sea undefined
+        ticketID: this.ticket.ticketID 
       };
   
-      // Llamada al servicio para actualizar el estado del ticket
       this.ticketService.updateTicketEstado(this.ticket.id!, updatedTicket).subscribe({
         next: (data) => {
           this.snackBar.open('Estado del ticket actualizado', 'Cerrar', {
@@ -1229,7 +1173,6 @@ export class TicketDetailComponent implements OnInit {
     }
   }
   
-
   public shouldShowCloseButton(): boolean {
     // Asegúrate de que userDetail y ticket no sean nulos
     if (!this.userDetail || !this.ticket) {

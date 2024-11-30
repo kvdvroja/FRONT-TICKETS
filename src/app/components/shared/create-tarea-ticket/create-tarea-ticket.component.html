@@ -1,4 +1,7 @@
-<div class="container w-full">
+<div *ngIf="isLoading" class="loader">
+  <div class="spinner"></div>
+</div>
+<div *ngIf="!isLoading" class="container w-full">
     <div class="w-full flex lg:hidden xl:hidden 2xl:hidden justify-center items-center" style="background-color:#3b83f6;">
         <span class="text-white flex my-auto text-lg"><b>Ticket: {{asignacionCategoria?.breq_codi}} - {{asignacionCategoria?.cate_codi}}</b></span>
       </div>
@@ -89,7 +92,17 @@
                 <div class="flex flex-row gap-2 w-3/12 justify-end">
                   <div class="flex flex-row justify-center items-center">
                     <span *ngFor="let usuario of usuariosAsignadosPorTarea[tarea.codi]" class="">
-                      <img [src]="usuario.fotoUsuario" (error)="manejarErrorImagenAsign(usuario)" alt="{{ usuario.nombre_completo }}" class="h-7 w-7 rounded-full" title="{{ usuario.nombre_completo }}">
+                      <img *ngIf="usuario.fotoUsuario" 
+                          [src]="usuario.fotoUsuario"
+                          (error)="manejarErrorImagenAsign(usuario)" 
+                          alt="{{ usuario.nombre_completo }}" 
+                          class="h-7 w-7 rounded-full" 
+                          title="{{ usuario.nombre_completo }}" 
+                          [class.hidden]="!imagenUsuario">
+                      <img *ngIf="!usuario.fotoUsuario" 
+                          src="assets/UserSinFoto.svg" 
+                          alt="Imagen no disponible" 
+                          class="h-7 w-7 rounded-full">
                     </span>
                   </div>
                   <button title="Detalle de Tarea" type="button" (click)="openDetalleTareaDialog(tarea.codi);">
@@ -159,16 +172,16 @@
           <div class="flex flex-col">
             <div class="flex flex-col gap-1">
               <span class="text-blue-600"><b>Recepción:</b></span>
-              <span>{{ viaRecepcionMap[ticket.viaRecepcion] }}</span>
+              <span>{{ ticket.viaDescripcion }}</span>
               <span class="text-blue-600"><b>Catálogo:</b></span>
               <div style="font-weight: 400;" [innerHtml]="displayCatalogPath"></div>
               <span class="text-blue-600"><b>Prioridad:</b></span>
-              <span class="flex flex-row text-center items-center gap-1" *ngIf="prioridadMap[ticket.prioridad]?.descripcion">
-                <img *ngIf="prioridadMap[ticket.prioridad]?.imagen" 
-                [src]="prioridadMap[ticket.prioridad] ? prioridadMap[ticket.prioridad].imagen : 'ruta/imagen_por_defecto.png'"
-                [alt]="prioridadMap[ticket.prioridad] ? prioridadMap[ticket.prioridad].descripcion : 'Sin Asignar'" 
+              <span class="flex flex-row text-center items-center gap-1" *ngIf="ticket.prioridadDescripcion">
+                <img *ngIf="ticket.prioridadImagen" 
+                [src]="ticket.prioridadDescripcion ? ticket.prioridadImagen : 'ruta/imagen_por_defecto.png'"
+                [alt]="ticket.prioridadDescripcion ? ticket.prioridadDescripcion : 'Sin Asignar'" 
                 class="h-6 w-6">
-                 {{ prioridadMap[ticket.prioridad] ? prioridadMap[ticket.prioridad].descripcion : 'Sin Asignar' }}
+                 {{ ticket.prioridadDescripcion ? ticket.prioridadDescripcion : 'Sin Asignar' }}
                </span>
                <span class="text-blue-600"><b>Etiquetas:</b></span>
                <div class="flex flex-col flex-wrap">
