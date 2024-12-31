@@ -100,6 +100,7 @@ import { UbicacionDialogComponent } from './components/shared/ubicacion-dialog/u
 import { EditSolucionComponent } from './components/shared/edit-solucion/edit-solucion.component';
 import { InstruccionesComponent } from './components/shared/instrucciones/instrucciones.component';
 import { TraerLoginComponent } from './components/shared/traer-login/traer-login.component';
+import { MenuMobileComponent } from './components/shared/menu-mobile/menu-mobile.component';
 
 //import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
@@ -180,7 +181,8 @@ import { TraerLoginComponent } from './components/shared/traer-login/traer-login
     UbicacionDialogComponent,
     EditSolucionComponent,
     InstruccionesComponent,
-    TraerLoginComponent
+    TraerLoginComponent,
+    MenuMobileComponent
   ],
   imports: [
     ReactiveFormsModule,

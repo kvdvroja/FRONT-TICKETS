@@ -414,7 +414,7 @@ export class HdeskCreateTicketUserComponent implements OnInit {
 
   openUbicacion() {
     const dialogRef = this.dialog.open(UbicacionDialogComponent, {
-      width: '800px'
+      width: '1000px'
     });
   
     dialogRef.afterClosed().subscribe((result) => {

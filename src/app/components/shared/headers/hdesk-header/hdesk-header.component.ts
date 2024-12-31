@@ -13,6 +13,7 @@ export class HdeskHeaderComponent implements OnInit {
   imagenUsuario = '';
   imgError = false;
   mostrarUsuario = false;
+  menuPanel = false;
 
   constructor(private authService: AuthService) { }
 
