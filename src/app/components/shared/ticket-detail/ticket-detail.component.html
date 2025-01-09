@@ -48,11 +48,11 @@
     <mat-expansion-panel hideToggle class="break-all m-2" (opened)="actualizarEstadoTicket()">
       <mat-expansion-panel-header class="h-40 lg:h-20 xl:h-20 2xl:h-20 my-2">
         <mat-panel-title class="gap-4 w-full flex justify-between flex-col lg:flex-row xl:flex-row 2xl:flex-row">
-          <div class="flex flex-col break-all" style="width: 80%;">
-            <span class="text-sm text-gray-500">Asunto:</span>
-            <span class="text-sm lg:text-lg xl:text-lg 2xl:text-lg text-black"><b>{{ticket.asunto}}</b></span>
+          <div class="flex flex-col break-all">
+            <span class="text-sm mobile:text-center sm:text-start text-gray-500">Asunto:</span>
+            <span class="text-sm mobile:text-center sm:text-start lg:text-md xl:text-lg 2xl:text-lg text-black"><b>{{ticket.asunto}}</b></span>
           </div>
-          <div class="flex flex-row gap-2 justify-end" style="width: 20%;">
+          <div class="flex flex-col mobile:flex-row sm:flex-row lg:flex-row gap-2 justify-end">
             <div class="flex flex-col 2xl:flex-row gap-2 justify-center items-center">
               <span>
                 <img *ngIf="ticket.tipologiaDescripcion == 'SERVICIOS'" src="assets/SquareGreen.png" alt="Servicios" class="h-6 w-6">
@@ -60,13 +60,13 @@
                 <img *ngIf="ticket.tipologiaDescripcion == 'MANTENIMIENTO'" src="assets/SquareBlue.png" alt="Mantenimiento" class="h-6 w-6">
                 <img *ngIf="ticket.tipologiaDescripcion == 'INCIDENTE'" src="assets/SquareOrange.png" alt="Incidente" class="h-6 w-6">
               </span>
-              <span class="text-xs lg:text-xs xl:text-xs 2xl:text-sm">
+              <span class="text-xs lg:text-xs xl:text-xs 2xl:text-sm truncate">
                 {{ ticket.tipologiaDescripcion }}
               </span>
             </div>
-            <div>
+            <div class="flex justify-center">
               <button class="flex flex-row justify-center items-center gap-2">
-                <img src="assets/detalle.jpeg" alt="Detalle">
+                <img src="assets/detalle.jpeg" alt="Detalle" class="truncate">
                 <span class="hidden md:hidden lg:hidden xl:hidden 2xl:flex text-sm">Detalle:</span>
               </button>
             </div>
@@ -174,14 +174,14 @@
               </div>
             </div>
             <div class="w-2/12 mx-2 my-1 justify-center items-center text-gray-400 hidden md:flex lg:flex xl:flex 2xl:flex">
-              <span class="text-xl"><b>{{ getCategoriaDescripcion(asignacion.cate_codi) }}</b></span>
+              <span class="lg:text-base xl:text-lg 2xl:text-lg"><b>{{ getCategoriaDescripcion(asignacion.cate_codi) }}</b></span>
             </div>
             <div class="flex flex-row w-7/12 lg:w-5/12 xl:w-5/12 2xl:w-5/12 mx-2 my-1 justify-center items-center gap-1 lg:gap-3 xl:gap-3 2xl:gap-3">
               <div class="w-9/12">
                 <mat-progress-bar mode="determinate" [value]="calcularProgreso(asignacion.cate_codi)"></mat-progress-bar>
               </div>
               <div class="flex w-3/12 lg:w-2/12 xl:w-2/12 2xl:w-2/12 justify-center items-center">
-                <span class="text-xs lg:text-xl xl:text-xl 2xl:text-2xl ">{{ calcularProgreso(asignacion.cate_codi) | number:'1.2-2' }}%</span>
+                <span class="text-xs lg:text-md xl:text-lg 2xl:text-2xl ">{{ calcularProgreso(asignacion.cate_codi) | number:'1.2-2' }}%</span>
               </div>
             </div>
             <div class="flex w-1/12 mx-2 my-1 justify-center items-center">

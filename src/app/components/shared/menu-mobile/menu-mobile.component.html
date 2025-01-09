@@ -1,3 +1,16 @@
-<div class="flex bg-red-400">
-    <p>menu-mobile works!</p>
-</div>
+<div [ngClass]="{'hidden': !isMenuOpen}" class="sidebar">
+    <!-- Botón para cerrar el menú -->
+    <button (click)="closeMenu()" class="absolute top-4 right-4 text-white text-xl font-bold">
+      &times;
+    </button>
+  
+    <ul class="space-y-4 mt-8">
+      <li><a href="/menu/inicio" class="flex flex-row gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#ffffff" d="M4 21V9l8-6l8 6v12h-6v-7h-4v7z"/></svg>Inicio</a></li>
+      <li *ngIf="showCreate()"><a href="/menu/create-ticket" class="flex flex-row gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#ffffff" d="M11 13H5v-2h6V5h2v6h6v2h-6v6h-2z"/></svg>Nuevo Ticket</a></li>
+      <li><a href="/menu/list-tickets-user" class="flex flex-row gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#ffffff" d="M18.6 19.5H21v2h-6v-6h2v2.73c1.83-1.47 3-3.71 3-6.23c0-4.07-3.06-7.44-7-7.93V2.05c5.05.5 9 4.76 9 9.95c0 2.99-1.32 5.67-3.4 7.5M4 12c0-2.52 1.17-4.77 3-6.23V8.5h2v-6H3v2h2.4A9.97 9.97 0 0 0 2 12c0 5.19 3.95 9.45 9 9.95v-2.02c-3.94-.49-7-3.86-7-7.93m12.24-3.89l-5.66 5.66l-2.83-2.83l-1.41 1.41l4.24 4.24l7.07-7.07z"/></svg>Ver Tickets En Revisión</a></li>
+      <li *ngIf="this.userDetail!.rols_codi !=='4'"><a href="/menu/list-tickets" class="flex flex-row gap-1"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="#ffffff" d="m426.24 127.72l-10.94 10.94a29.67 29.67 0 0 1-42-42l10.94-10.94L314.52 16l-88 88l-4 12.09l-12.09 4L16 314.52l69.76 69.76l10.94-10.94a29.67 29.67 0 0 1 42 42l-10.94 10.94L197.48 496l194.4-194.4l4-12.09l12.09-4l88-88Zm-208.56 5.43l21.87-21.87l33 33l-21.88 21.87Zm43 43l21.88-21.88l32.52 32.52l-21.88 21.88Zm42.56 42.56l21.88-21.88l32.52 32.52l-21.84 21.93Zm75.57 75.56l-33-33l21.87-21.88l33 33Z"/></svg>Bandeja De Tickets</a></li>
+      <li><a routerLink="/menu/dashboard" *ngIf="toggleVerUsuario();" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="#ffffff" d="M64 64c0-17.7-14.3-32-32-32S0 46.3 0 64V400c0 44.2 35.8 80 80 80H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H80c-8.8 0-16-7.2-16-16V64zm406.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L320 210.7l-57.4-57.4c-12.5-12.5-32.8-12.5-45.3 0l-112 112c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L240 221.3l57.4 57.4c12.5 12.5 32.8 12.5 45.3 0l128-128z"/></svg><span>Dashboard</span></a></li>
+      <li><a routerLink="/menu/reports-tickets" *ngIf="toggleVerUsuario();" class="cursor-pointer flex items-center gap-1 text-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#ffffff" d="m20 8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2zM9 19H7v-9h2zm4 0h-2v-6h2zm4 0h-2v-3h2zM14 9h-1V4l5 5z"/></svg><span>Reportes</span></a></li>
+    </ul>
+  </div>
+  

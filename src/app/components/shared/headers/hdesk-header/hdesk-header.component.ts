@@ -1,6 +1,7 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { UserDetail } from 'src/app/interfaces/Login/userDetail';
 import { AuthService } from 'src/app/services/Auth/auth.service';
+import { SidebarService } from 'src/app/services/sidebar.service';
 
 @Component({
   selector: 'app-hdesk-header',
@@ -15,7 +16,7 @@ export class HdeskHeaderComponent implements OnInit {
   mostrarUsuario = false;
   menuPanel = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private sidebarService: SidebarService) { }
 
   ngOnInit(): void {
     this.userDetail = this.authService.getCurrentUser();
@@ -47,5 +48,9 @@ export class HdeskHeaderComponent implements OnInit {
 
   toggleVerUsuario(): boolean{
     return !!(this.userDetail && (this.userDetail.rols_codi != '4'));
+  }
+
+  toggleSidebar(): void {
+    this.sidebarService.toggleMenu();
   }
 }
