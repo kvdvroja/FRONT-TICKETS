@@ -167,7 +167,7 @@
           <div class="text-gray-500 font-medium lg:text-xs xl:text-xs 2xl:text-sm text-center truncate"><span>N° {{ ticket.ticketID }}</span></div>
         </div>
         <div class="flex w-3/12">
-          <div>
+          <div class="flex-shrink-0">
             <img 
               [src]="ticket.urlImagenUsuario" 
               (error)="manejarErrorImagen(ticket)" 
@@ -177,7 +177,7 @@
           </div>
           <div class="flex flex-col align-middle">
             <span>{{ticket.idUsuario}}</span>
-            <span class="lg:text-xs xl:text-xs 2xl:text-sm truncate overflow-hidden max-w-xs">{{ticket.nombre}}</span>
+            <span class="text-xs truncate overflow-hidden whitespace-nowrap max-w-[10rem] lg:max-w-[8rem] xl:max-w-[12rem]">{{ticket.nombre}}</span>
           </div>
         </div>
         <div class="flex flex-row items-center justify-start h-full w-5/12 gap-1" style="width:40%">
@@ -185,7 +185,7 @@
             <span class="font-medium text-blue-500 lg:text-xs xl:text-xs 2xl:text-sm">Asunto:</span>
           </div>
           <div class="w-10/12">
-            <span class="flex break-all text-gray-500 lg:text-xs xl:text-xs 2xl:text-sm text-justify">{{ticket.asunto}}</span>
+            <span class="flex break-all text-gray-500 lg:text-xs xl:text-xs text-justify">{{ticket.asunto}}</span>
           </div>
         </div>
         <div class="flex h-full gap-2" style="width:30%">

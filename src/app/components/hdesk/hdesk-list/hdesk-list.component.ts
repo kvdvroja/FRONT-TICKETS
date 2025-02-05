@@ -444,7 +444,7 @@ cargarTicketsPorUsuarioAsignado(pidm: string, unidCodi: string) {
     if (ticketEstado === 'Cerrado') {
       return false;
     }
-    const puedeCrear = this.userDetail?.cate_codi === '1' || this.userDetail?.rols_codi === '1' || this.userDetail?.rols_codi === '2'||this.userDetail?.idUsuario=="000005741";
+    const puedeCrear = this.userDetail?.cate_codi === '1' || this.userDetail?.rols_codi === '1' || this.userDetail?.rols_codi === '2'||this.userDetail?.idUsuario=="000005741"|| this.userDetail?.cargo_codi === '3';
     return puedeCrear;
   }
 

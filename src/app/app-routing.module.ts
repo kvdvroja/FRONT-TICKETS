@@ -42,7 +42,7 @@ const routes: Routes = [
         path: 'create-ticket',
         component: HdeskCreateTicketComponent,
         canActivate: [RoleGuard],
-        data: {roles: ['1','2'], categories: ['1'], cargos: ['1','2'] }  // Solo permite acceso a usuarios con categoría "1"
+        data: {roles: ['1','2'], categories: ['1'], cargos: ['1','2','3'] }  // Solo permite acceso a usuarios con categoría "1"
         //allowedUserId: '000005741'
       },
       {
@@ -58,7 +58,7 @@ const routes: Routes = [
         path: 'edit-ticket/:id',
         component: HdeskEditListComponent,
         canActivate: [RoleGuard],
-        data: {roles: ['1','2'], categories: ['1'],cargos: ['1','2'] }// Solo permite acceso a usuarios con categoría "1"
+        data: {roles: ['1','2'], categories: ['1'],cargos: ['1','2','3'] }// Solo permite acceso a usuarios con categoría "1"
       },
       { path: 'ticket-detail/:id', component: TicketDetailComponent },
       { path: 'ticket-sheet-create/:id',
